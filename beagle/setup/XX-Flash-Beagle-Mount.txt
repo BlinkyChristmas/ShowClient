@@ -1,0 +1,24 @@
+
+// ********************************************************************************
+// Preparing the BeagleBone
+// *******************************************************************************
+
+1. Flash the BeagleBone with the image made in step 3
+2. Log on as root
+3. Enable mounting of the SD Card. Add the following by entering: nano /etc/fstab
+    /dev/mmcblk0p1 /media  auto auto,rw,async,user,nofail 0 0
+    NOTE: this line should be added to the bottom
+4. Save the file
+5. Restart the daemon: systemctl daemon-reload
+
+// ********************************************************************************
+// Enabling SD cards to mount on boot
+// *******************************************************************************
+1. On the SD card that should be mounted on boot, add the following file to that SD card:
+   File name: uEnv.txt
+   Contents:
+        mmcdev=1
+        bootpart=1:2
+        mmcroot=/dev/mmcblk1p2 ro
+        optargs=quiet
+

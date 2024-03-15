@@ -1,0 +1,183 @@
+// **********************************************************************************
+// Preparing the card before flashing
+// **********************************************************************************
+
+After booting on the SD card, will update the card, before we make it a "flasher"
+
+// **********************************************************************************
+// Updating debian
+// **********************************************************************************
+
+1. Login to the BeagleBone with debian/temppwd  // (this is the default)
+2. Change to super user: su  // (the password for root is: root)
+3. Enter: cd ~   // (just get to a clean spot)
+4. Enter: apt update
+5. Enter: apt full-upgrade   // The BeagleBone is now up to date with Debian
+6. Enter: apt clean
+7. Enter: apt autoremove --purge
+
+// **********************************************************************************
+// Installing needed debian software (optional, sound and cmake needed for our items)
+// **********************************************************************************
+
+1. Enter: apt install cmake alsa-firmware-loaders alsa-utils alsa-tools libasound2-dev
+
+// **********************************************************************************
+// Setting up timezone
+// **********************************************************************************
+
+1. enter: dpkg-reconfigure tzdata  (and then select your timezone)
+
+// **********************************************************************************
+// Changing the passwords
+// **********************************************************************************
+
+1. To change a password on uses the "passwd user" command.
+2. Enter: passwd debian  (and then enter, when prompted, the new password)
+3. Enter: passwd root    (and then enter, when prompted, the new password)
+
+// **********************************************************************************
+// Changing the Login messages
+// **********************************************************************************
+
+1. The files: /etc/motd /etc/issue /etc/issue.net all contain messages that are displayed when one log's in
+2. edit those files are appropriate
+
+// **********************************************************************************
+// Adding debian to sudo
+// **********************************************************************************
+
+1. Enter: adduser debian sudo
+
+// **********************************************************************************
+// Enabling Root access via SSH (OPTIONAL)
+// **********************************************************************************
+
+1. Edit the /etc/ssh/sshd_config file. Enter: nano /etc/ssh/sshd_config
+2. In the authentication section find this line (it will be commented out)
+        PermitRootLogin prohibit_password
+3. Directly below it add this line:
+        PermitRootLogin yes
+4. Save the file
+5. Restart the ssh daemon: systemctl restart ssh
+
+// **********************************************************************************
+// Disabling uneeded device overlays (optional, configuraiton dependent)
+// **********************************************************************************
+
+1. Edit the /boot/uEnv.txt file: nano /boot/uEnv.txt
+2. uncomment the following lines:
+    disable_uboot_overlay_video=1
+    disable_uboot_overlay_audio=1
+    disable_uboot_overlay_adc=1
+3. Save the file
+
+// **********************************************************************************
+// Setting up ALSA sound (optional)
+// **********************************************************************************
+
+1. Optional (only if one wants to verify the device id)
+    Insert the USB audio device
+    look at the contents of /proc/asound/cards : cat /proc/asound/cards
+    Your card should be listed, probably device: 0
+2. Create /etc/asound.conf : nano /etc/asound.conf
+3. Add the following (using your device # for the 0 if different):
+
+pcm.!default {
+    type hw
+    card 0
+}
+
+ctl.!default {
+    type hw
+    card 0
+}
+
+4. Save the file
+
+// **********************************************************************************
+// Installing TI pru compilier/assembler/linker
+// **********************************************************************************
+
+0. Ensure you are in the root home directory: cd ~
+1. The ti pru compilier is located:  https://www.ti.com/tool/PRU-CGT#downloads
+
+   // OLD:  One wants the ARM-A8 installer for PRU CGT:  https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-FaNNGkDH7s/2.3.3/ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+   // Current:
+    https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-FaNNGkDH7s/2.3.3/ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+2. Enter: wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-FaNNGkDH7s/2.3.3/ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+3. Change the file to be executable: chmod a+x ./ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+4. Now execute the installer. Enter: ./ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+5. Remove the installer: rm ./ti_cgt_pru_2.3.3_armlinuxa8hf_busybox_installer.sh
+
+// **********************************************************************************
+// Setting up needed symbols
+// **********************************************************************************
+
+0. Ensure you are in the root home directory: cd ~
+1. edit .bashrc:  nano .bashrc
+
+At the bottom of the file, add the following lines:
+
+# PRU helpers
+export MYPRU0=/sys/class/remoteproc/remoteproc1
+export MYPRU1=/sys/class/remoteproc/remoteproc2
+export PINS=/sys/kernel/debug/pinctrl/44e10800.pinmux-pinctrl-single/pins
+export PRU_CGT=/usr/share/ti/cgt-pru
+export PRU_SUPPORT=/usr/lib/ti/pru-software-support-package
+
+# See what overlays got loaded
+export CHOOSEN=/proc/device-tree/chosen/overlays
+    
+# LED access
+export LED0=/sys/class/leds/beaglebone\:green\:usr0
+export LED1=/sys/class/leds/beaglebone\:green\:usr1
+export LED2=/sys/class/leds/beaglebone\:green\:usr2
+export LED3=/sys/class/leds/beaglebone\:green\:usr3
+
+
+Save the file
+
+2. Make the symbols available:  source .bashrc
+3. Make some symbolic links:
+    cd $PRU_CGT
+    mkdir -p bin
+    cd bin
+    ln -s `which clpru` .
+    ln -s `which lnkpru` .
+
+// **********************************************************************************
+// Setting up pru support software
+// **********************************************************************************
+
+1. Make the /usr/lib/ti directory:  mkdir /usr/lib/ti
+2. Change to that directory: cd /usr/lib/ti
+3. Download the support softare
+    NOTE: The latest pru support software no longer supports kernel 5. Only use if using kernal 6  (currently we are not)
+    git clone git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+    
+    NOTE: If using kernel 5, then
+    git clone --depth=1 --branch v5.9.0 git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+    
+4. Change to the support package directory: cd pru-software-support-package
+5. Build it: make  (this may error out on the pru cape, that is ok)
+
+// **********************************************************************************
+// Setting up device overlay development
+// **********************************************************************************
+
+NOTE: The system device tree is located:
+        /opt/source/dtb-5.10-ti
+        this is from (for reference, a shallow copy):
+            git clone -b v5.10.x-ti-unified https://git.beagleboard.org/beagleboard/BeagleBoard-DeviceTrees.git ; \
+
+1. Setup git ownership of the /opt/source/dtb directory
+    git config --global --add safe.directory /opt/source/dtb-5.10-ti    // This adds ownership rights to update
+2. Go to the directory: cd /opt/source/dtb-5.10-ti
+3. Update it: git pull
+4. Make the device overlays. Enter: make
+
+// **********************************************************************************
+// At this point, you should have a PRU/Device overlay development environment
+// **********************************************************************************
+

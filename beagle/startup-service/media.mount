@@ -1,0 +1,11 @@
+[Unit]
+Description=This is a mount unit for the /media SD card
+
+[Mount]
+What=/dev/mmcblk0p1
+Where=/media
+Type=auto
+Options=auto,rw,async,user,nofail
+
+[Install]
+WantedBy=multi-user.target

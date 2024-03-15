@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{80fc2f65-c105-44ef-afae-6b816a764ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty">
+      <UniqueIdentifier>{64a7b5e3-51c5-4f42-9cee-41faab0b7217}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\network">
+      <UniqueIdentifier>{a1f20d0d-c5e4-4880-807e-d829c745423d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\utility">
+      <UniqueIdentifier>{03dc26a6-1bd7-496e-8f92-5a686f0cb825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\network\packets">
+      <UniqueIdentifier>{70c8897b-9a88-427b-a7ef-e92ac2db2752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\rtaudio">
+      <UniqueIdentifier>{e1438982-ed64-43f1-b7e7-479d08d59548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\wavfile">
+      <UniqueIdentifier>{a5efaf54-ef3c-4f5a-95c5-7b70d65b21d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lightfile">
+      <UniqueIdentifier>{8ae26f78-110c-4e6a-b9bd-ac486ddf18de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="common\utility\buffer.cpp">
+      <Filter>common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\mapfile.cpp">
+      <Filter>common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\timeutil.cpp">
+      <Filter>common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\ErrorPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\IdentPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\LoadPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\NopPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\Packet.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\PacketType.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\PlayPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\ShowPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\packets\SyncPacket.cpp">
+      <Filter>common\network\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\Connection.cpp">
+      <Filter>common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\Timer.cpp">
+      <Filter>common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\rtaudio\RtAudio.cpp">
+      <Filter>thirdparty\rtaudio</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\chunkheader.cpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\fileheader.cpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\mwavfile.cpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\wavfmtchunk.cpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\Configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\LightController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\MusicController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\PRUConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\StatusController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\lightfile\lightfile.cpp">
+      <Filter>Source Files\lightfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\lightfile\lightheader.cpp">
+      <Filter>Source Files\lightfile</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\utility\buffer.hpp">
+      <Filter>common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\dbgutil.hpp">
+      <Filter>common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\mapfile.hpp">
+      <Filter>common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\strutil.hpp">
+      <Filter>common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\timeutil.hpp">
+      <Filter>common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\allpackets.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\ErrorPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\IdentPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\LoadPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\NopPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\Packet.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\PacketType.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\PlayPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\ShowPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\packets\SyncPacket.hpp">
+      <Filter>common\network\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\Connection.hpp">
+      <Filter>common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\Timer.hpp">
+      <Filter>common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\rtaudio\RtAudio.h">
+      <Filter>thirdparty\rtaudio</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\chunkheader.hpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\fileheader.hpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\mwavfile.hpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\wavfmtchunk.hpp">
+      <Filter>Source Files\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\Configuration.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\LightController.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\MusicController.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\PRUConfig.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\StatusController.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\lightfile\lightfile.hpp">
+      <Filter>Source Files\lightfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\lightfile\lightheader.hpp">
+      <Filter>Source Files\lightfile</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

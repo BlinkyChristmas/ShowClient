@@ -1,0 +1,35 @@
+// *****************************************************************************
+// Enable services
+// *****************************************************************************
+
+// *****************************************************************************
+// Automount /media
+// *****************************************************************************
+
+Normally one would add the following to /etc/fstab
+        /dev/mmcblk0p1 /media  auto auto,rw,async,user,nofail 0 0
+And have the uEnv.txt on the SD card to auto mount
+
+However, that doesnt seem to survive a SD card flasher/flasher
+
+I dont know yet if as a service works across a flash, but here goes:
+
+1. Copy the media.mount service to /usr/lib/systemd/system:
+    cp ~/ShowClient/beagle/startup-service/media.mount /usr/lib/systemd/system
+2. Enable the mount:
+    systemctl enable media.mount
+    
+// *****************************************************************************
+// Starting our client
+// *****************************************************************************
+1. Copy the service to the system library
+    cp ~/ShowClient/beagle/startup-service/showclient.service /usr/lib/systemd/system
+2. Enable the service:
+    systemctl enable showclient.service
+
+// *****************************************************************************
+// Reloading the daemon
+// *****************************************************************************
+1. Enter:
+    systemctl daemon-reload
+
