@@ -1,9 +1,190 @@
-// 
-
+//
+#include <cstdlib>
 #include <iostream>
+#include <stdexcept>
+#include <string>
+#include <filesystem>
+#include <thread>
+#include <functional>
+
+#include "packets/allpackets.hpp"
+#include "utility/dbgutil.hpp"
+
+#include "ClientConfiguration.hpp"
+#include "StatusController.hpp"
+#include "Client.hpp"
+
+using namespace std::string_literals ;
+
+auto runLoop(ClientConfiguration &config) -> bool ;
+
+StatusController ledController ;
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+    ClientConfiguration configuration ;
+    auto exitcode = EXIT_SUCCESS ;
+    try {
+        ledController.clear() ;
+        ledController.setState(StatusLed::RUN, LedState::FLASH);
+        if (argc < 2) { throw std::runtime_error("Missing configuration file!");}
+        if (!configuration.load(std::filesystem::path(argv[1]))){
+            throw std::runtime_error("Unable to process: "s + argv[1]);
+        }
+        // We are now have our configuration file, lets start our run loop
+        ledController.setState(StatusLed::RUN, LedState::OFF);
+        if(!runLoop(configuration)) {
+            throw std::runtime_error("Error occurred while running!") ;
+        }
+        
+    }
+    catch(const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        exitcode = EXIT_FAILURE ;
+    }
+    catch(...) {
+        std::cerr << "Unknown error!" << std::endl;
+        exitcode = EXIT_FAILURE ;
+    }
+    if (exitcode == EXIT_FAILURE) {
+        ledController.flash();
+        
+    }
+    else {
+        ledController.clear();
+    }
+    return exitcode;
+}
+
+
+// =============================================================================================================
+// Our main runloop
+// ============================================================================================================
+
+auto processLoad(ClientPointer connection,PacketPointer packet) -> bool;
+auto processSync(ClientPointer connection,PacketPointer packet) -> bool;
+auto processPlay(ClientPointer connection,PacketPointer packet) -> bool;
+auto processShow(ClientPointer connection,PacketPointer packet) -> bool;
+auto processNop(ClientPointer connection,PacketPointer packet) -> bool;
+// ====================================================================
+auto runLoop(ClientConfiguration &config) -> bool {
+    PacketRoutines routines ;
+    routines.insert_or_assign(PacketType::LOAD,std::bind(&processLoad,std::placeholders::_1,std::placeholders::_2)) ;
+    routines.insert_or_assign(PacketType::SYNC,std::bind(&processSync,std::placeholders::_1,std::placeholders::_2)) ;
+    routines.insert_or_assign(PacketType::PLAY,std::bind(&processPlay,std::placeholders::_1,std::placeholders::_2)) ;
+    routines.insert_or_assign(PacketType::SHOW,std::bind(&processShow,std::placeholders::_1,std::placeholders::_2)) ;
+    routines.insert_or_assign(PacketType::NOP,std::bind(&processNop,std::placeholders::_1,std::placeholders::_2)) ;
+    
+    std::shared_ptr<Client> client = std::make_shared<Client>(config.name,routines) ;
+    
+    while (config.runSpan.inRange()) {
+        ledController.setState(StatusLed::RUN, LedState::ON) ;
+        try {
+            if (config.refresh()) {
+                // We shoud set anything we need to becasue the config file changed
+            }
+        }
+        catch(...) {
+            // We had an error processing the config file, but we aren't going to worry about it, we did it initially, we will assume we can continue
+        }
+        if (config.connectTime.inRange()) {
+            // We should be connected!
+            if (!client->is_open()) {
+                ledController.setState(StatusLed::CONNECT, LedState::FLASH) ;
+                
+                // we are not open!
+                if (client->connect(config.serverIP, config.serverPort, config.clientPort)) {
+                    // We connected!
+                    DBGMSG(std::cout,"Connected to "s + config.serverIP+":"s+std::to_string(config.serverPort));
+                    ledController.setState(StatusLed::CONNECT, LedState::ON) ;
+                    // We need to setup everything!
+                }
+                else {
+                    // We didn't connect, could because we are still holding onto the port we binded to,
+                    // that takes about 40 to 60 seconds to release
+                    std::this_thread::sleep_for(std::chrono::minutes(1));
+                }
+            }
+            if (client->is_open()){
+                
+                // this is where our action is
+                
+                if (client->expire(180)) {
+                    // It has been three minutes since we got something, we probably should just disconnect
+                    client->close() ;
+                }
+            }
+        }
+        else {
+            // We should not be closed down
+            if (client->is_open()){
+                client->close() ;
+                DBGMSG(std::cout,"Disconnecting from: "s + client->ip());
+                
+                ledController.setState(StatusLed::CONNECT, LedState::OFF) ;
+            }
+        }
+        
+        
+        
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    ledController.setState(StatusLed::RUN, LedState::OFF) ;
+    
+    if (client->is_open()){
+        client->close();
+    }
+    client = nullptr ;
+    return true ;
+}
+
+// ==============================================================================================
+// Packet routines
+// ==============================================================================================
+
+// ==============================================================================================
+auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
+    auto payload = static_cast<LoadPacket*>(packet.get()) ;
+    
+    auto music = payload->musicName() ;
+    auto light = payload->lightName() ;
+    
+    return true ;
+}
+
+// ==============================================================================================
+auto processSync(ClientPointer connection,PacketPointer packet) -> bool {
+    auto payload = static_cast<SyncPacket*>(packet.get()) ;
+    
+    auto frame = payload->syncFrame() ;
+    
+    return true ;
+}
+
+// ==============================================================================================
+auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
+    auto payload = static_cast<PlayPacket*>(packet.get()) ;
+    auto state = payload->state() ;
+    auto frame = payload->frame() ;
+    
+    ledController.setState(StatusLed::PLAY, (state?LedState::ON: LedState::OFF)) ;
+    
+    return true ;
+}
+
+// ==============================================================================================
+auto processShow(ClientPointer connection,PacketPointer packet) -> bool {
+    auto payload = static_cast<ShowPacket*>(packet.get()) ;
+    auto state = payload->state() ;
+    ledController.setState(StatusLed::SHOW, (state?LedState::ON: LedState::OFF)) ;
+    return true ;
+}
+
+// ==============================================================================================
+auto processNop(ClientPointer connection,PacketPointer packet) -> bool {
+    auto payload = static_cast<NopPacket*>(packet.get()) ;
+    auto respond = payload->respond() ;
+    if (respond) {
+        connection->send(NopPacket()) ;
+    }
+    return true ;
 }
