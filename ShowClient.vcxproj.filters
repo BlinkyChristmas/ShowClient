@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ShowClient">
+      <UniqueIdentifier>{95d164bd-a52a-46e9-99e7-7cee6de216d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShowClient\bone">
+      <UniqueIdentifier>{103eb6ba-d2b7-4f5e-b5d7-d65bdf427ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShowClient\lightfile">
+      <UniqueIdentifier>{38c34b52-aa58-4dbd-9f40-3b85e5967089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShowClient\wavfile">
+      <UniqueIdentifier>{5642f041-01c2-449b-aea9-83b304052238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{a31221a9-706e-42f3-a7a0-a85a44abb6ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\thirdparty">
+      <UniqueIdentifier>{f23d414e-b752-4749-8e1c-32905ebdd15b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common\network">
+      <UniqueIdentifier>{b5a373c6-0e56-49b4-8520-cb860fd3f2a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common\packets">
+      <UniqueIdentifier>{577cc1eb-c582-4c3e-9749-fc41874f2c66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common\utility">
+      <UniqueIdentifier>{9ed1593b-0877-4b3c-b6c5-20d786a88e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\thirdparty\asio-1.28">
+      <UniqueIdentifier>{3ceddb14-02e0-46d7-9692-e211735e8d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\thirdparty\rtaudio-6.0.1">
+      <UniqueIdentifier>{e1fb9b69-069b-4b13-8792-9de1b961e66b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ShowClient\Client.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\ClientConfiguration.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\main.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\PRUConfig.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\StatusController.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\rtaudio-6.0.1\RtAudio.cpp">
+      <Filter>Source Files\thirdparty\rtaudio-6.0.1</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\Connection.cpp">
+      <Filter>Source Files\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="common\network\FrameValue.cpp">
+      <Filter>Source Files\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\BaseConfiguration.cpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\buffer.cpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\mapfile.cpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utility\timeutil.cpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\ErrorPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\IdentPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\LoadPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\NopPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\Packet.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\PacketType.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\PlayPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\ShowPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="common\packets\SyncPacket.cpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\bone\BeagleLed.cpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\bone\BeaglePru.cpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\bone\BlinkPru.cpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\chunkheader.cpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\fileheader.cpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\mwavfile.cpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\wavfile\wavfmtchunk.cpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\lightfile\lightfile.cpp">
+      <Filter>Source Files\ShowClient\lightfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\lightfile\lightheader.cpp">
+      <Filter>Source Files\ShowClient\lightfile</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ShowClient\Client.hpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\ClientConfiguration.hpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\PRUConfig.hpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\StatusController.hpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\rtaudio-6.0.1\RtAudio.h">
+      <Filter>Source Files\thirdparty\rtaudio-6.0.1</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\Connection.hpp">
+      <Filter>Source Files\common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="common\network\FrameValue.hpp">
+      <Filter>Source Files\common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\BaseConfiguration.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\buffer.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\dbgutil.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\mapfile.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\strutil.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utility\timeutil.hpp">
+      <Filter>Source Files\common\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\allpackets.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\ErrorPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\IdentPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\LoadPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\NopPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\Packet.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\PacketType.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\PlayPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\ShowPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="common\packets\SyncPacket.hpp">
+      <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\bone\BeagleLed.hpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\bone\BeaglePru.hpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\bone\BlinkPru.hpp">
+      <Filter>Source Files\ShowClient\bone</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\chunkheader.hpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\fileheader.hpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\mwavfile.hpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\wavfile\wavfmtchunk.hpp">
+      <Filter>Source Files\ShowClient\wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\lightfile\lightfile.hpp">
+      <Filter>Source Files\ShowClient\lightfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\lightfile\lightheader.hpp">
+      <Filter>Source Files\ShowClient\lightfile</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

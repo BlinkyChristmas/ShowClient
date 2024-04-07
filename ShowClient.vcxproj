@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="common\network\Connection.cpp" />
+    <ClCompile Include="common\network\FrameValue.cpp" />
+    <ClCompile Include="common\packets\ErrorPacket.cpp" />
+    <ClCompile Include="common\packets\IdentPacket.cpp" />
+    <ClCompile Include="common\packets\LoadPacket.cpp" />
+    <ClCompile Include="common\packets\NopPacket.cpp" />
+    <ClCompile Include="common\packets\Packet.cpp" />
+    <ClCompile Include="common\packets\PacketType.cpp" />
+    <ClCompile Include="common\packets\PlayPacket.cpp" />
+    <ClCompile Include="common\packets\ShowPacket.cpp" />
+    <ClCompile Include="common\packets\SyncPacket.cpp" />
+    <ClCompile Include="common\utility\BaseConfiguration.cpp" />
+    <ClCompile Include="common\utility\buffer.cpp" />
+    <ClCompile Include="common\utility\mapfile.cpp" />
+    <ClCompile Include="common\utility\timeutil.cpp" />
+    <ClCompile Include="ShowClient\bone\BeagleLed.cpp" />
+    <ClCompile Include="ShowClient\bone\BeaglePru.cpp" />
+    <ClCompile Include="ShowClient\bone\BlinkPru.cpp" />
+    <ClCompile Include="ShowClient\Client.cpp" />
+    <ClCompile Include="ShowClient\ClientConfiguration.cpp" />
+    <ClCompile Include="ShowClient\lightfile\lightfile.cpp" />
+    <ClCompile Include="ShowClient\lightfile\lightheader.cpp" />
+    <ClCompile Include="ShowClient\main.cpp" />
+    <ClCompile Include="ShowClient\PRUConfig.cpp" />
+    <ClCompile Include="ShowClient\StatusController.cpp" />
+    <ClCompile Include="ShowClient\wavfile\chunkheader.cpp" />
+    <ClCompile Include="ShowClient\wavfile\fileheader.cpp" />
+    <ClCompile Include="ShowClient\wavfile\mwavfile.cpp" />
+    <ClCompile Include="ShowClient\wavfile\wavfmtchunk.cpp" />
+    <ClCompile Include="thirdparty\rtaudio-6.0.1\RtAudio.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\network\Connection.hpp" />
+    <ClInclude Include="common\network\FrameValue.hpp" />
+    <ClInclude Include="common\packets\allpackets.hpp" />
+    <ClInclude Include="common\packets\ErrorPacket.hpp" />
+    <ClInclude Include="common\packets\IdentPacket.hpp" />
+    <ClInclude Include="common\packets\LoadPacket.hpp" />
+    <ClInclude Include="common\packets\NopPacket.hpp" />
+    <ClInclude Include="common\packets\Packet.hpp" />
+    <ClInclude Include="common\packets\PacketType.hpp" />
+    <ClInclude Include="common\packets\PlayPacket.hpp" />
+    <ClInclude Include="common\packets\ShowPacket.hpp" />
+    <ClInclude Include="common\packets\SyncPacket.hpp" />
+    <ClInclude Include="common\utility\BaseConfiguration.hpp" />
+    <ClInclude Include="common\utility\buffer.hpp" />
+    <ClInclude Include="common\utility\dbgutil.hpp" />
+    <ClInclude Include="common\utility\mapfile.hpp" />
+    <ClInclude Include="common\utility\strutil.hpp" />
+    <ClInclude Include="common\utility\timeutil.hpp" />
+    <ClInclude Include="ShowClient\bone\BeagleLed.hpp" />
+    <ClInclude Include="ShowClient\bone\BeaglePru.hpp" />
+    <ClInclude Include="ShowClient\bone\BlinkPru.hpp" />
+    <ClInclude Include="ShowClient\Client.hpp" />
+    <ClInclude Include="ShowClient\ClientConfiguration.hpp" />
+    <ClInclude Include="ShowClient\lightfile\lightfile.hpp" />
+    <ClInclude Include="ShowClient\lightfile\lightheader.hpp" />
+    <ClInclude Include="ShowClient\PRUConfig.hpp" />
+    <ClInclude Include="ShowClient\StatusController.hpp" />
+    <ClInclude Include="ShowClient\wavfile\chunkheader.hpp" />
+    <ClInclude Include="ShowClient\wavfile\fileheader.hpp" />
+    <ClInclude Include="ShowClient\wavfile\mwavfile.hpp" />
+    <ClInclude Include="ShowClient\wavfile\wavfmtchunk.hpp" />
+    <ClInclude Include="thirdparty\rtaudio-6.0.1\RtAudio.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4264269c-c9f8-44f9-8a10-c6011b0815f9}</ProjectGuid>
+    <RootNamespace>ShowClient</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;WIN32_LEAN_AND_MEAN;ASIO_STANDALONE;__WINDOWS_DS__;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WIN32_WINNT=0x0A00</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);dsound.lib;ole32.lib</AdditionalDependencies>
+   </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;WIN32_LEAN_AND_MEAN;ASIO_STANDALONE;__WINDOWS_DS__;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WIN32_WINNT=0x0A00</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);dsound.lib;ole32.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
