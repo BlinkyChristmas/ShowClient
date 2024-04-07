@@ -9,6 +9,7 @@
 
 #include "packets/allpackets.hpp"
 #include "utility/dbgutil.hpp"
+#include "utility/strutil.hpp"
 
 #include "ClientConfiguration.hpp"
 #include "StatusController.hpp"
@@ -65,6 +66,7 @@ auto processSync(ClientPointer connection,PacketPointer packet) -> bool;
 auto processPlay(ClientPointer connection,PacketPointer packet) -> bool;
 auto processShow(ClientPointer connection,PacketPointer packet) -> bool;
 auto processNop(ClientPointer connection,PacketPointer packet) -> bool;
+auto stopCallback(ClientPointer client) -> void ;
 // ====================================================================
 auto runLoop(ClientConfiguration &config) -> bool {
     PacketRoutines routines ;
@@ -75,12 +77,12 @@ auto runLoop(ClientConfiguration &config) -> bool {
     routines.insert_or_assign(PacketType::NOP,std::bind(&processNop,std::placeholders::_1,std::placeholders::_2)) ;
     
     std::shared_ptr<Client> client = std::make_shared<Client>(config.name,routines) ;
-    
+    client->setStopCallback(std::bind(&stopCallback,std::placeholders::_1));
     while (config.runSpan.inRange()) {
         ledController.setState(StatusLed::RUN, LedState::ON) ;
         try {
             if (config.refresh()) {
-                // We shoud set anything we need to becasue the config file changed
+                // We shoud set anything we need to because the config file changed
             }
         }
         catch(...) {
@@ -101,7 +103,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
                 else {
                     // We didn't connect, could because we are still holding onto the port we binded to,
                     // that takes about 40 to 60 seconds to release
-                    std::this_thread::sleep_for(std::chrono::minutes(1));
+                    std::this_thread::sleep_for(std::chrono::seconds(10));
                 }
             }
             if (client->is_open()){
@@ -147,7 +149,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
     
     auto music = payload->musicName() ;
     auto light = payload->lightName() ;
-    
+    DBGMSG(std::cout, util::format("Load: %s, %s",music.c_str(),light.c_str()));
     return true ;
 }
 
@@ -187,4 +189,13 @@ auto processNop(ClientPointer connection,PacketPointer packet) -> bool {
         connection->send(NopPacket()) ;
     }
     return true ;
+}
+
+// ================================================================================================
+auto stopCallback(ClientPointer client) -> void {
+    // We stopped, so we have some cleanup, but lets do a few things
+    // We should turn of playing
+    ledController.setState(StatusLed::PLAY, LedState::OFF) ;
+    // We should turn off show
+    ledController.setState(StatusLed::SHOW, LedState::OFF) ;
 }

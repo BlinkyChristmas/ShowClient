@@ -17,6 +17,7 @@
 class Client ;
 
 using ClientPointer = std::shared_ptr<Client> ;
+using ClientStop = std::function<void(ClientPointer)>;
 using PacketFunction = std::function<bool(ClientPointer,PacketPointer)> ;
 using PacketRoutines = std::unordered_map<PacketType::PacketID, PacketFunction> ;
 class Client : public std::enable_shared_from_this<Client> {
@@ -30,7 +31,7 @@ class Client : public std::enable_shared_from_this<Client> {
     std::thread connectThread ;
     auto runConnection() -> void ;
     PacketRoutines packetRoutines ;
-    
+    ClientStop stopCallback ;
     auto closeCallback(ConnectionPointer conn) -> void ;
     auto processCallback(PacketPointer packet , ConnectionPointer conn) -> bool ;
     
@@ -49,6 +50,6 @@ public:
     auto expire(int seconds) -> bool ;
     auto clearReadTime() -> void ;
     auto clearWriteTime() -> void ;
-
+    auto setStopCallback(ClientStop function) -> void ;
 };
 #endif /* Client_hpp */

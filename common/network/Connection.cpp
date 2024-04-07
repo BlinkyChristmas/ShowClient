@@ -300,3 +300,14 @@ auto Connection::send(const Packet &packet) -> bool {
         return false ;
     }
 }
+
+//======================================================================
+auto Connection::shutdown() -> void {
+    if (netSocket.is_open()){
+        try{
+            asio::error_code ec ;
+            netSocket.shutdown(asio::ip::tcp::socket::shutdown_both, ec) ;
+        }
+        catch(...){}
+    }
+}

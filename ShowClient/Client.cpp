@@ -18,7 +18,13 @@ auto Client::runConnection() -> void {
 auto Client::closeCallback(ConnectionPointer conn) -> void {
     // anything we need to do ?
     DBGMSG(std::cout, "Disconnected from: "s + this->ip()) ;
-    
+    try {
+        if (stopCallback!=nullptr){
+            stopCallback(this->shared_from_this());
+        }
+        connection->shutdown() ;
+    }
+    catch(...){}
 }
 // =======================================================================
 auto Client::processCallback(std::shared_ptr<Packet> packet , ConnectionPointer conn) -> bool {
@@ -35,7 +41,7 @@ auto Client::processCallback(std::shared_ptr<Packet> packet , ConnectionPointer 
 
 
 // =======================================================================
-Client::Client(const std::string & name, const PacketRoutines &routines) {
+Client::Client(const std::string & name, const PacketRoutines &routines):stopCallback(nullptr) {
     connection = std::make_shared<Connection>(client_context) ;
     connection->setCloseCallback(std::bind(&Client::closeCallback,this,std::placeholders::_1));
     connection->setPacketRoutine(std::bind(&Client::processCallback,this,std::placeholders::_1,std::placeholders::_2));
@@ -78,10 +84,12 @@ auto Client::is_open() const -> bool {
 
 // =======================================================================
 auto Client::close() -> void {
-    if (connection == nullptr) {
-        return  ;
+    if (connection != nullptr) {
+        connection->shutdown() ;
+        connection->close() ;
     }
-    connection->close() ;
+    
+   
 }
 
 // =======================================================================
@@ -105,6 +113,9 @@ auto Client::connect(const std::string &ip, std::uint16_t port, std::uint16_t bi
     }
     if (connection->connect(endpoint) ) {
         // We connected, what should we do?
+        connection->clearReadTime();
+        connection->clearWriteTime() ;
+
         auto packet = IdentPacket(connection->handle) ;
         connection->send(packet) ;
         connection->read() ;
@@ -139,4 +150,8 @@ auto Client::clearReadTime() -> void {
 // =======================================================================
 auto Client::clearWriteTime() -> void {
     connection->clearWriteTime() ;
+}
+// =======================================================================
+auto Client::setStopCallback(ClientStop function) -> void {
+    stopCallback = function ;
 }

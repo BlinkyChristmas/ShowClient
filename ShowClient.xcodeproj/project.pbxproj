@@ -34,6 +34,12 @@
 		56E975EB2BC17B9C00AA1B50 /* BlinkPru.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975E62BC17B9C00AA1B50 /* BlinkPru.cpp */; };
 		56E975EE2BC17D5300AA1B50 /* StatusController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975EC2BC17D5300AA1B50 /* StatusController.cpp */; };
 		56E975F12BC1905100AA1B50 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975EF2BC1905100AA1B50 /* Client.cpp */; };
+		56E976232BC3253100AA1B50 /* lightfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976152BC3253100AA1B50 /* lightfile.cpp */; };
+		56E976242BC3253100AA1B50 /* lightheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976172BC3253100AA1B50 /* lightheader.cpp */; };
+		56E976252BC3253100AA1B50 /* chunkheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761A2BC3253100AA1B50 /* chunkheader.cpp */; };
+		56E976262BC3253100AA1B50 /* fileheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761C2BC3253100AA1B50 /* fileheader.cpp */; };
+		56E976272BC3253100AA1B50 /* mwavfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761E2BC3253100AA1B50 /* mwavfile.cpp */; };
+		56E976282BC3253100AA1B50 /* wavfmtchunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -105,6 +111,22 @@
 		56E975EF2BC1905100AA1B50 /* Client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
 		56E975F02BC1905100AA1B50 /* Client.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Client.hpp; sourceTree = "<group>"; };
 		56E976042BC230C800AA1B50 /* client.cfg */ = {isa = PBXFileReference; lastKnownFileType = text; path = client.cfg; sourceTree = "<group>"; };
+		56E976112BC3226600AA1B50 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		56E976122BC3226600AA1B50 /* BUILDING.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BUILDING.txt; sourceTree = "<group>"; };
+		56E976132BC3226600AA1B50 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		56E976142BC3226600AA1B50 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		56E976152BC3253100AA1B50 /* lightfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lightfile.cpp; sourceTree = "<group>"; };
+		56E976162BC3253100AA1B50 /* lightfile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lightfile.hpp; sourceTree = "<group>"; };
+		56E976172BC3253100AA1B50 /* lightheader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lightheader.cpp; sourceTree = "<group>"; };
+		56E976182BC3253100AA1B50 /* lightheader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lightheader.hpp; sourceTree = "<group>"; };
+		56E9761A2BC3253100AA1B50 /* chunkheader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chunkheader.cpp; sourceTree = "<group>"; };
+		56E9761B2BC3253100AA1B50 /* chunkheader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = chunkheader.hpp; sourceTree = "<group>"; };
+		56E9761C2BC3253100AA1B50 /* fileheader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileheader.cpp; sourceTree = "<group>"; };
+		56E9761D2BC3253100AA1B50 /* fileheader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fileheader.hpp; sourceTree = "<group>"; };
+		56E9761E2BC3253100AA1B50 /* mwavfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mwavfile.cpp; sourceTree = "<group>"; };
+		56E9761F2BC3253100AA1B50 /* mwavfile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mwavfile.hpp; sourceTree = "<group>"; };
+		56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wavfmtchunk.cpp; sourceTree = "<group>"; };
+		56E976212BC3253100AA1B50 /* wavfmtchunk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wavfmtchunk.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +145,10 @@
 		56E975442BC15DD800AA1B50 = {
 			isa = PBXGroup;
 			children = (
+				56E976142BC3226600AA1B50 /* AUTHORS */,
+				56E976122BC3226600AA1B50 /* BUILDING.txt */,
+				56E976132BC3226600AA1B50 /* CMakeLists.txt */,
+				56E976112BC3226600AA1B50 /* LICENSE */,
 				56E976052BC230C800AA1B50 /* examples */,
 				56E9758B2BC15EDE00AA1B50 /* thirdparty */,
 				56E9757B2BC15EC200AA1B50 /* common */,
@@ -143,16 +169,18 @@
 		56E9754F2BC15DD800AA1B50 /* ShowClient */ = {
 			isa = PBXGroup;
 			children = (
+				56E976192BC3253100AA1B50 /* lightfile */,
+				56E976222BC3253100AA1B50 /* wavfile */,
 				56E975E82BC17B9C00AA1B50 /* bone */,
-				56E975502BC15DD800AA1B50 /* main.cpp */,
-				56E975EC2BC17D5300AA1B50 /* StatusController.cpp */,
-				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
-				56E975DC2BC174F700AA1B50 /* ClientConfiguration.cpp */,
-				56E975DD2BC174F700AA1B50 /* ClientConfiguration.hpp */,
-				56E975E02BC176A800AA1B50 /* PRUConfig.cpp */,
-				56E975DF2BC176A800AA1B50 /* PRUConfig.hpp */,
 				56E975EF2BC1905100AA1B50 /* Client.cpp */,
 				56E975F02BC1905100AA1B50 /* Client.hpp */,
+				56E975DC2BC174F700AA1B50 /* ClientConfiguration.cpp */,
+				56E975DD2BC174F700AA1B50 /* ClientConfiguration.hpp */,
+				56E975502BC15DD800AA1B50 /* main.cpp */,
+				56E975E02BC176A800AA1B50 /* PRUConfig.cpp */,
+				56E975DF2BC176A800AA1B50 /* PRUConfig.hpp */,
+				56E975EC2BC17D5300AA1B50 /* StatusController.cpp */,
+				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
 			);
 			path = ShowClient;
 			sourceTree = "<group>";
@@ -278,6 +306,32 @@
 			path = examples;
 			sourceTree = "<group>";
 		};
+		56E976192BC3253100AA1B50 /* lightfile */ = {
+			isa = PBXGroup;
+			children = (
+				56E976152BC3253100AA1B50 /* lightfile.cpp */,
+				56E976162BC3253100AA1B50 /* lightfile.hpp */,
+				56E976172BC3253100AA1B50 /* lightheader.cpp */,
+				56E976182BC3253100AA1B50 /* lightheader.hpp */,
+			);
+			path = lightfile;
+			sourceTree = "<group>";
+		};
+		56E976222BC3253100AA1B50 /* wavfile */ = {
+			isa = PBXGroup;
+			children = (
+				56E9761A2BC3253100AA1B50 /* chunkheader.cpp */,
+				56E9761B2BC3253100AA1B50 /* chunkheader.hpp */,
+				56E9761C2BC3253100AA1B50 /* fileheader.cpp */,
+				56E9761D2BC3253100AA1B50 /* fileheader.hpp */,
+				56E9761E2BC3253100AA1B50 /* mwavfile.cpp */,
+				56E9761F2BC3253100AA1B50 /* mwavfile.hpp */,
+				56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */,
+				56E976212BC3253100AA1B50 /* wavfmtchunk.hpp */,
+			);
+			path = wavfile;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -338,20 +392,26 @@
 			files = (
 				56E975EB2BC17B9C00AA1B50 /* BlinkPru.cpp in Sources */,
 				56E975512BC15DD800AA1B50 /* main.cpp in Sources */,
+				56E976252BC3253100AA1B50 /* chunkheader.cpp in Sources */,
 				56E975892BC15EC200AA1B50 /* mapfile.cpp in Sources */,
 				56E9757D2BC15EC200AA1B50 /* FrameTimer.cpp in Sources */,
 				56E975852BC15EC200AA1B50 /* PlayPacket.cpp in Sources */,
 				56E975EE2BC17D5300AA1B50 /* StatusController.cpp in Sources */,
+				56E976242BC3253100AA1B50 /* lightheader.cpp in Sources */,
+				56E976282BC3253100AA1B50 /* wavfmtchunk.cpp in Sources */,
 				56E975802BC15EC200AA1B50 /* IdentPacket.cpp in Sources */,
 				56E975E92BC17B9C00AA1B50 /* BeagleLed.cpp in Sources */,
 				56E975832BC15EC200AA1B50 /* Packet.cpp in Sources */,
 				56E975882BC15EC200AA1B50 /* buffer.cpp in Sources */,
+				56E976272BC3253100AA1B50 /* mwavfile.cpp in Sources */,
 				56E975872BC15EC200AA1B50 /* SyncPacket.cpp in Sources */,
 				56E975822BC15EC200AA1B50 /* NopPacket.cpp in Sources */,
 				56E9758F2BC15F5100AA1B50 /* RtAudio.cpp in Sources */,
 				56E9757F2BC15EC200AA1B50 /* ErrorPacket.cpp in Sources */,
 				56E9758A2BC15EC200AA1B50 /* timeutil.cpp in Sources */,
+				56E976262BC3253100AA1B50 /* fileheader.cpp in Sources */,
 				56E975812BC15EC200AA1B50 /* LoadPacket.cpp in Sources */,
+				56E976232BC3253100AA1B50 /* lightfile.cpp in Sources */,
 				56E975862BC15EC200AA1B50 /* ShowPacket.cpp in Sources */,
 				56E975842BC15EC200AA1B50 /* PacketType.cpp in Sources */,
 				56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */,

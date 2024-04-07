@@ -77,6 +77,8 @@ public:
     auto clearWriteTime() -> void ;
 
     auto send(const Packet &packet) -> bool ;
+    
+    auto shutdown() -> void ;
 };
 
 
