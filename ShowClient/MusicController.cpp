@@ -81,15 +81,19 @@ auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
         device = MusicController::getDefaultDevice() ;
     }
     if (device == 0) {
+        DBGMSG(std::cout, "Return false because: Could not find a default device"s);
+
+        errorState = true ;
+        return false ;
+    }
+    // Make sure this device exists ?
+    if (!MusicController::deviceExists(device)) {
+        DBGMSG(std::cout, "Return false because: Does not exist device: "s + std::to_string(device));
+
         errorState = true ;
         return false ;
     }
     mydevice = device ;
-    // Make sure this device exists ?
-    if (!MusicController::deviceExists(device)) {
-        errorState = true ;
-        return false ;
-    }
     // Device exists, we are set and ready
     if (soundDac.isStreamOpen()) {
         this->stop(false) ;
@@ -102,6 +106,8 @@ auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
         return false ;
     }
     if (status == RTAUDIO_INVALID_USE) {
+        DBGMSG(std::cout, "Return false because: RTAUDIO_INVALID_USE");
+
         errorState = true ;
         return false ;
     }
@@ -199,6 +205,7 @@ auto MusicController::start(std::int32_t frame  ) -> bool {
         }
         soundDac.startStream() ;
     }
+    
     return soundDac.isStreamRunning() ;
 }
 
