@@ -1,0 +1,30 @@
+
+
+// ****************************************************************************
+// eMMC → microSD
+// ****************************************************************************
+Copy configuration file:
+    sudo cp -v /etc/beagle-flasher/beaglebone-black-emmc-to-microsd /etc/default/beagle-flasher
+Then enable the “flasher” and reboot the board to have it flash the microSD:
+    sudo enable-beagle-flasher
+    
+Note:
+    sudo beagle-flasher it'll copy eMMC -> microsd with out a reboot.. versus the enable-beagle-flasher
+
+
+after you make the SD card, you then reboot onto the SD card.
+
+Then:
+
+// ****************************************************************************
+// microSD → eMMC: (this is how the default flasher is configured)
+// ****************************************************************************
+
+Copy configuration file:
+    sudo cp -v /etc/beagle-flasher/beaglebone-black-microsd-to-emmc /etc/default/beagle-flasher
+Then enable the “flasher” and reboot the board to have it flash the eMMC:
+
+    sudo enable-beagle-flasher
+
+
+

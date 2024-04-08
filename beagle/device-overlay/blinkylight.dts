@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright (C) 2015 Texas Instruments Incorporated - https://www.ti.com/
+ * Modified by Charles Kerr
+ * Based off: AM335X-PRU-RPROC-PRUCAPE-00A0.dts
+ */
+
+/dts-v1/;
+/plugin/;
+
+/*
+ * Helper to show loaded overlays under: /proc/device-tree/chosen/overlays/
+ */
+&{/chosen} {
+	overlays {
+		blinkylight.kernel = __TIMESTAMP__;
+	};
+};
+
+/*
+ * Free up the pins used by the cape from the pinmux helpers.
+ */
+&ocp {
+    P8_46_pinmux { status = "disabled"; };  /* P8_46: lcd_data1, OMAP_MUX_MODE5 | AM33XX_PIN_OUTPUT, PRU CAPE Audio Clk, HDMI Conf. */
+    P8_12_pinmux { status = "disabled"; };    /* P8_12:GPIO:44  */
+};
+
+&am33xx_pinmux {
+    pru_cape_bone_pins: pru_cape_bone_pins {
+        pinctrl-single,pins = <
+            0x30 0x06  /* P8_12 GPIO:44 $PINS:12 MODE 6 -pru0 R30_14 */
+            0xA4 0x05  /* P8_46 GPIO:71 $PINS:41 MODE 5 - pru1 R30_1 */
+        >;
+    };
+};
+
+
+&pruss_tm {
+	status = "okay";
+};
+
+&pruss {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&pru_cape_bone_pins>;
+};
+
+/*
+ * The following PRU options are just the default, but added heare for end users to modify.
+ */
+
+&pru0 {
+	firmware-name = "blinkylight-fw";
+    state = "start";
+};
+
+&pru1 {
+	firmware-name = "blinkylight-fw";
+    state = "start";
+
+};
+
+&pruss_uart {
+	status = "disabled";
+};
+
+&pruss_mdio {
+	status = "disabled";
+};

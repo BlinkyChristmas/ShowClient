@@ -1,0 +1,35 @@
+
+// **********************************************************************************
+// Acquiring the image to flash
+// **********************************************************************************
+
+Daily images are: https://rcn-ee.net/rootfs/
+and Minimal images can be found: https://rcn-ee.net/rootfs/debian-armhf-12-bookworm-minimal-v5.10-ti/
+
+Note, these are not "flasher" images, but we will make it that way
+You have a choice of a 5.x or 6.x kernel. The choice will impact the TI tools you download later.
+// **********************************************************************************
+// Creating the SD card
+// **********************************************************************************
+
+Once you have it, ensure it has been "uncompressed" (should be an img, not igm.xz)
+(you can uncompress it by just double clicking on it in macOS finder)
+
+Insert an SD card (at least 8Gb) into the your SD Card reader, and format it to msdos fat.
+
+Open diskutil and find the physical disk your SD reader is (mine is disk10).
+I dismount (but not eject) the SD card. In diskutil, select the formatted card in the left column, and right click, selecting dismount.
+
+At a command prompt enter:
+     sudo dd if=am335x-debian-12.4-minimal-armhf-2023-12-30-2gb.img of=/dev/rdisk10 bs=1M status=progress
+    
+    Subsituting uyour file name of the image, and the disk # for the of= parameter.
+
+// **********************************************************************************
+// Boot on the SD card
+// **********************************************************************************
+
+Insert the SD card into the BeagleBone , and while holding the "option button (one on the typeA usb connector side) apply power. Continue to press the button until the lights go out. It will then start flickering as it boots.
+
+You have now booted on the SD card, we need to make it a flasher image
+

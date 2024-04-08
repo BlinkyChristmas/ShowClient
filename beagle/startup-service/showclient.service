@@ -1,0 +1,15 @@
+[Unit]
+Description=Starts the show client
+After=pru-led.service
+Wants=multi-user.target
+
+[Service]
+Type=idle
+User=root
+WorkingDirectory=/root/startup
+ExecStart=/root/startup/showclient.sh
+
+[Install]
+After=pru-led.service
+WantedBy=multi-user.target
+

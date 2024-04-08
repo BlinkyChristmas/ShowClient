@@ -1,0 +1,22 @@
+
+// **********************************************************************************
+// Making the SD card a "flasher"
+// **********************************************************************************
+
+1. Copy configuration file:
+    cp -v /etc/beagle-flasher/beaglebone-black-microsd-to-emmc /etc/default/beagle-flasher
+    
+2. Then enable the “flasher” and reboot the board to have it flash the eMMC:
+    enable-beagle-flasher
+
+3. Shutdown the system:  shutdown -h now
+
+4. Reboot the BeagleBone, holding the "option" key to boot off the SD card.
+    Let up the button when the lights go off after being all on.
+    It should then start flashing the BeagleBone
+    
+Note: It is not clear, but I think it not, if the fstab setting is maintained once flashed to the BeagleBone.  If not, then
+    one would need to modify the /etc/fstab after the flash, to add the following to the bottom:
+  
+      /dev/mmcblk0p1 /media  auto auto,rw,async,user,nofail 0 0
+
