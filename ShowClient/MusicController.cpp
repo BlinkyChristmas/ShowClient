@@ -72,6 +72,7 @@ MusicController::~MusicController() {
 
 // ======================================================================
 auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
+    DBGMSG(std::cout, "We think our device is "s + std::to_string(device)) ;
     if (!is_enabled){
         return true ;
     }
