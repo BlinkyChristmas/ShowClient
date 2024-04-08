@@ -77,6 +77,7 @@ MusicController musicController ;
 std::shared_ptr<Client> client  = nullptr ;
 // ====================================================================
 auto runLoop(ClientConfiguration &config) -> bool {
+    ledController.clear() ;
     PacketRoutines routines ;
     routines.insert_or_assign(PacketType::LOAD,std::bind(&processLoad,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::SYNC,std::bind(&processSync,std::placeholders::_1,std::placeholders::_2)) ;

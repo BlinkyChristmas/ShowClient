@@ -40,8 +40,8 @@ class MusicController {
     std::filesystem::path musicPath ;
     std::string musicExtension ;
     
+ public:
     auto shouldPlay() const ->bool ;
-public:
     static auto getSoundDevices() -> std::vector<std::pair<int,std::string>> ;
     static auto getDefaultDevice() -> int ;
     static auto deviceExists(int device) -> bool ;

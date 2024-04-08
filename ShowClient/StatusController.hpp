@@ -22,7 +22,7 @@ public:
     auto clear() -> void ;
     auto flash() -> void ;
     auto describe(StatusLed led) const -> std::string ;
-    auto setState(StatusLed led, LedState state) -> void ;
+    auto setState(StatusLed led, LedState state,bool force = false ) -> void ;
 };
 
 #endif /* StatusController_hpp */

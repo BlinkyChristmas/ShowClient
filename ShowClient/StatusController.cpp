@@ -39,7 +39,8 @@ auto StatusController::operator[](StatusLed led) -> BeagleLed& {
 // ==================================================================
 auto StatusController::clear() -> void {
     for (auto &entry:leds) {
-        entry.setState(LedState::OFF);
+
+        entry.setState(LedState::OFF,true);
     }
 }
 
@@ -62,6 +63,6 @@ auto StatusController::describe(StatusLed led) const -> std::string {
 }
 
 // ==================================================================
-auto StatusController::setState(StatusLed led, LedState state) -> void {
-    this->operator[](led).setState(state);
+auto StatusController::setState(StatusLed led, LedState state,bool force) -> void {
+    this->operator[](led).setState(state,force);
 }

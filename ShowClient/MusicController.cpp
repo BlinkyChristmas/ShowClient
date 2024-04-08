@@ -22,7 +22,7 @@ auto MusicController::rtCallback(void *outputBuffer, void *inputBuffer, unsigned
 
 // ======================================================================
 auto MusicController::shouldPlay() const ->bool {
-    return is_enabled && !errorState ;
+    return is_enabled && !errorState && musicFile.isLoaded() ;
 }
 
 
@@ -166,11 +166,12 @@ auto MusicController::stop(bool close ) -> void {
 
 // ======================================================================
 auto MusicController::load(const std::filesystem::path &path) -> bool {
-    if (shouldPlay()){
+    errorState = false ;
+    if (isEnabled()){
         if (this->isPlaying()) {
             this->stop(true) ;
         }
-        errorState = musicFile.load(path) ;
+        errorState = !musicFile.load(path) ;
     }
     return shouldPlay() ;
 }
