@@ -178,6 +178,10 @@ auto MusicController::load(const std::filesystem::path &path) -> bool {
 // ======================================================================
 auto MusicController::load(const std::string &musicname) -> bool {
     auto path = musicPath / std::filesystem::path(musicname+musicExtension) ;
+    if (!std::filesystem::exists(path)){
+        DBGMSG(std::cout, "File does not exist: "s + path.string()) ;
+        return false ;
+    }
     return load(path);
 }
 
