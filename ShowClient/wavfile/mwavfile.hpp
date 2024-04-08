@@ -62,6 +62,8 @@ private:
     const std::uint8_t *ptrToData ;
     std::uint32_t  dataSize ;
     
+    std::string filename ;
+    
 public:
     MWAVFile()  ;
     MWAVFile( const std::filesystem::path &filepath) ;
@@ -71,6 +73,7 @@ public:
     auto close() -> void ;
     
     auto isLoaded() const -> bool ;
+    auto fileName() const -> std::string ;
     
     auto setFrame(std::int32_t frame) -> bool ;
     

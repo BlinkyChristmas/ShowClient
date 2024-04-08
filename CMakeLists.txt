@@ -22,6 +22,8 @@ add_executable(ShowClient
     ./ShowClient/PRUConfig.hpp
     ./ShowClient/StatusController.cpp
     ./ShowClient/StatusController.hpp
+    ./ShowClient/MusicController.cpp
+    ./ShowClient/MusicController.hpp
 
     ./ShowClient/wavfile/chunkheader.cpp
     ./ShowClient/wavfile/chunkheader.hpp

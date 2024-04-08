@@ -13,6 +13,7 @@
 
 #include "ClientConfiguration.hpp"
 #include "StatusController.hpp"
+#include "MusicController.hpp"
 #include "Client.hpp"
 
 using namespace std::string_literals ;
@@ -61,12 +62,19 @@ int main(int argc, const char * argv[]) {
 // Our main runloop
 // ============================================================================================================
 
+auto initialConnect(ClientPointer client) -> void ;
+
+auto musicError(MusicPointer music) -> void ;
+
 auto processLoad(ClientPointer connection,PacketPointer packet) -> bool;
 auto processSync(ClientPointer connection,PacketPointer packet) -> bool;
 auto processPlay(ClientPointer connection,PacketPointer packet) -> bool;
 auto processShow(ClientPointer connection,PacketPointer packet) -> bool;
 auto processNop(ClientPointer connection,PacketPointer packet) -> bool;
 auto stopCallback(ClientPointer client) -> void ;
+
+MusicController musicController ;
+std::shared_ptr<Client> client  = nullptr ;
 // ====================================================================
 auto runLoop(ClientConfiguration &config) -> bool {
     PacketRoutines routines ;
@@ -76,13 +84,22 @@ auto runLoop(ClientConfiguration &config) -> bool {
     routines.insert_or_assign(PacketType::SHOW,std::bind(&processShow,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::NOP,std::bind(&processNop,std::placeholders::_1,std::placeholders::_2)) ;
     
-    std::shared_ptr<Client> client = std::make_shared<Client>(config.name,routines) ;
+    client = std::make_shared<Client>(config.name,routines) ;
     client->setStopCallback(std::bind(&stopCallback,std::placeholders::_1));
+    client->setConnectdBeforeRead(std::bind(&initialConnect,std::placeholders::_1));
+    musicController.setEnabled(config.useAudio) ;
+    musicController.setDevice(config.audioDevice);
+    musicController.setMusicInformation(config.musicPath, config.musicExtension);
+    musicController.setMusicErrorCallback(std::bind(&musicError,std::placeholders::_1));
+    
     while (config.runSpan.inRange()) {
         ledController.setState(StatusLed::RUN, LedState::ON) ;
         try {
             if (config.refresh()) {
                 // We shoud set anything we need to because the config file changed
+                musicController.setEnabled(config.useAudio) ;
+                musicController.setDevice(config.audioDevice);
+                musicController.setMusicInformation(config.musicPath, config.musicExtension);
             }
         }
         catch(...) {
@@ -150,6 +167,9 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
     auto music = payload->musicName() ;
     auto light = payload->lightName() ;
     DBGMSG(std::cout, util::format("Load: %s, %s",music.c_str(),light.c_str()));
+    if (musicController.isEnabled()){
+        musicController.load(music);
+    }
     return true ;
 }
 
@@ -158,7 +178,7 @@ auto processSync(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<SyncPacket*>(packet.get()) ;
     
     auto frame = payload->syncFrame() ;
-    
+    musicController.setSync(frame);
     return true ;
 }
 
@@ -169,7 +189,20 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     auto frame = payload->frame() ;
     
     ledController.setState(StatusLed::PLAY, (state?LedState::ON: LedState::OFF)) ;
-    
+    if (state) {
+        if (musicController.isEnabled()){
+            if (!musicController.start(frame)) {
+                auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.currentLoaded());
+                client->send(packet);
+                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+
+            }
+        }
+    }
+    else {
+        musicController.stop() ;
+    }
+            
     return true ;
 }
 
@@ -196,6 +229,26 @@ auto stopCallback(ClientPointer client) -> void {
     // We stopped, so we have some cleanup, but lets do a few things
     // We should turn of playing
     ledController.setState(StatusLed::PLAY, LedState::OFF) ;
+    musicController.stop() ;
     // We should turn off show
     ledController.setState(StatusLed::SHOW, LedState::OFF) ;
+}
+
+// ================================================================================================
+auto musicError(MusicPointer music) -> void {
+    ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.currentLoaded());
+    client->send(packet) ;
+    DBGMSG(std::cerr, "Audio error detected");
+    musicController.stop() ;
+}
+
+// ================================================================================================
+auto initialConnect(ClientPointer client) -> void {
+    if (!musicController.initialize(musicController.device()) ) {
+        auto errorPacket = ErrorPacket(ErrorPacket::CatType::AUDIO,"") ;
+        client->send(errorPacket);
+        DBGMSG(std::cerr, "Audio error detected on intial connect");
+        ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+    }
 }

@@ -72,6 +72,7 @@ MWAVFile::~MWAVFile() {
 }
 //======================================================================
 auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
+    filename = filepath.stem();
     this->close() ;
     ptrToData = nullptr ;
     dataSize = 0 ;
@@ -147,6 +148,13 @@ auto  MWAVFile::isLoaded() const -> bool {
     return memoryMap.ptr != nullptr ;
 }
 
+//======================================================================
+auto  MWAVFile::fileName() const -> std::string {
+    if (!isLoaded()) {
+        return ""s ;
+    }
+    return filename ;
+}
 
 //======================================================================
 auto MWAVFile::setFrame(std::int32_t frame) -> bool {

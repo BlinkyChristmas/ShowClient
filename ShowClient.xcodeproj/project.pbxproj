@@ -40,6 +40,7 @@
 		56E976262BC3253100AA1B50 /* fileheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761C2BC3253100AA1B50 /* fileheader.cpp */; };
 		56E976272BC3253100AA1B50 /* mwavfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761E2BC3253100AA1B50 /* mwavfile.cpp */; };
 		56E976282BC3253100AA1B50 /* wavfmtchunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */; };
+		56E9762B2BC37EE300AA1B50 /* MusicController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976292BC37EE300AA1B50 /* MusicController.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -127,6 +128,8 @@
 		56E9761F2BC3253100AA1B50 /* mwavfile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mwavfile.hpp; sourceTree = "<group>"; };
 		56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wavfmtchunk.cpp; sourceTree = "<group>"; };
 		56E976212BC3253100AA1B50 /* wavfmtchunk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wavfmtchunk.hpp; sourceTree = "<group>"; };
+		56E976292BC37EE300AA1B50 /* MusicController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MusicController.cpp; sourceTree = "<group>"; };
+		56E9762A2BC37EE300AA1B50 /* MusicController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MusicController.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +184,8 @@
 				56E975DF2BC176A800AA1B50 /* PRUConfig.hpp */,
 				56E975EC2BC17D5300AA1B50 /* StatusController.cpp */,
 				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
+				56E976292BC37EE300AA1B50 /* MusicController.cpp */,
+				56E9762A2BC37EE300AA1B50 /* MusicController.hpp */,
 			);
 			path = ShowClient;
 			sourceTree = "<group>";
@@ -399,6 +404,7 @@
 				56E975EE2BC17D5300AA1B50 /* StatusController.cpp in Sources */,
 				56E976242BC3253100AA1B50 /* lightheader.cpp in Sources */,
 				56E976282BC3253100AA1B50 /* wavfmtchunk.cpp in Sources */,
+				56E9762B2BC37EE300AA1B50 /* MusicController.cpp in Sources */,
 				56E975802BC15EC200AA1B50 /* IdentPacket.cpp in Sources */,
 				56E975E92BC17B9C00AA1B50 /* BeagleLed.cpp in Sources */,
 				56E975832BC15EC200AA1B50 /* Packet.cpp in Sources */,
@@ -582,6 +588,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CF264WE69M;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					ASIO_STANDALONE,
+					__MACOSX_CORE__,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

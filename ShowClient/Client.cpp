@@ -41,7 +41,7 @@ auto Client::processCallback(std::shared_ptr<Packet> packet , ConnectionPointer 
 
 
 // =======================================================================
-Client::Client(const std::string & name, const PacketRoutines &routines):stopCallback(nullptr) {
+Client::Client(const std::string & name, const PacketRoutines &routines):stopCallback(nullptr),connectBeforeRead(nullptr) {
     connection = std::make_shared<Connection>(client_context) ;
     connection->setCloseCallback(std::bind(&Client::closeCallback,this,std::placeholders::_1));
     connection->setPacketRoutine(std::bind(&Client::processCallback,this,std::placeholders::_1,std::placeholders::_2));
@@ -118,6 +118,9 @@ auto Client::connect(const std::string &ip, std::uint16_t port, std::uint16_t bi
 
         auto packet = IdentPacket(connection->handle) ;
         connection->send(packet) ;
+        if (connectBeforeRead != nullptr){
+            connectBeforeRead(this->shared_from_this());
+        }
         connection->read() ;
         return true ;
     }
@@ -155,3 +158,9 @@ auto Client::clearWriteTime() -> void {
 auto Client::setStopCallback(ClientStop function) -> void {
     stopCallback = function ;
 }
+
+// =======================================================================
+auto Client::setConnectdBeforeRead(ConnectBeforeRead function) -> void {
+    connectBeforeRead = function ;
+}
+
