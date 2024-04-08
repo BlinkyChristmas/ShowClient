@@ -98,6 +98,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
         try {
             if (config.refresh()) {
                 // We shoud set anything we need to because the config file changed
+                DBGMSG(std::cout, "setting use audio to: "s + std::to_string(config.useAudio));
                 musicController.setEnabled(config.useAudio) ;
                 musicController.setDevice(config.audioDevice);
                 musicController.setMusicInformation(config.musicPath, config.musicExtension);
@@ -192,7 +193,15 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     ledController.setState(StatusLed::PLAY, (state?LedState::ON: LedState::OFF)) ;
     if (state) {
         if (musicController.isEnabled()){
-            if (!musicController.start(frame)) {
+            if (musicController.hasError()){
+                auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.currentLoaded());
+                DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
+                client->send(packet);
+                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+
+            }
+            else if (!musicController.start(frame)) {
+                DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
                 auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.currentLoaded());
                 client->send(packet);
                 ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
@@ -237,11 +246,11 @@ auto stopCallback(ClientPointer client) -> void {
 
 // ================================================================================================
 auto musicError(MusicPointer music) -> void {
-    ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+    DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
     auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.currentLoaded());
     client->send(packet) ;
-    DBGMSG(std::cerr, "Audio error detected");
     musicController.stop() ;
+    ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
 }
 
 // ================================================================================================

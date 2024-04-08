@@ -72,7 +72,10 @@ MusicController::~MusicController() {
 
 // ======================================================================
 auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
-    DBGMSG(std::cout, "We think our device is "s + std::to_string(device)) ;
+    if (soundDac.isStreamOpen()){
+        soundDac.closeStream();
+    }
+    //DBGMSG(std::cout, "We think our device is "s + std::to_string(device)) ;
     if (!is_enabled){
         return true ;
     }
@@ -80,16 +83,17 @@ auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
     if (device == 0) {
         // get the default device
         device = MusicController::getDefaultDevice() ;
+        //DBGMSG(std::cout, "Default device is: "s + std::to_string(device)) ;
     }
     if (device == 0) {
-        DBGMSG(std::cout, "Return false because: Could not find a default device"s);
-
+        //DBGMSG(std::cout, "Return false because: Could not find a default device"s);
+        mydevice = 0 ;
         errorState = true ;
         return false ;
     }
     // Make sure this device exists ?
     if (!MusicController::deviceExists(device)) {
-        DBGMSG(std::cout, "Return false because: Does not exist device: "s + std::to_string(device));
+        //DBGMSG(std::cout, "Return false because: Does not exist device: "s + std::to_string(device));
 
         errorState = true ;
         return false ;
@@ -107,7 +111,7 @@ auto MusicController::initialize(int device, std::uint32_t sampleRate )-> bool {
         return false ;
     }
     if (status == RTAUDIO_INVALID_USE) {
-        DBGMSG(std::cout, "Return false because: RTAUDIO_INVALID_USE");
+        //DBGMSG(std::cout, "Return false because: RTAUDIO_INVALID_USE");
 
         errorState = true ;
         return false ;
@@ -146,7 +150,7 @@ auto MusicController::isEnabled() const -> bool {
 
 // ======================================================================
 auto MusicController::currentLoaded() const -> std::string {
-    return musicFile.fileName() ;
+    return musicname  ;
 }
 
 // ======================================================================
@@ -174,6 +178,10 @@ auto MusicController::stop(bool close ) -> void {
 // ======================================================================
 auto MusicController::load(const std::filesystem::path &path) -> bool {
     errorState = false ;
+    musicname = path.stem();
+    if (musicFile.isLoaded()){
+        musicFile.close() ;
+    }
     if (isEnabled()){
         if (this->isPlaying()) {
             this->stop(true) ;
@@ -185,9 +193,15 @@ auto MusicController::load(const std::filesystem::path &path) -> bool {
 
 // ======================================================================
 auto MusicController::load(const std::string &musicname) -> bool {
+    this->musicname = musicname ;
+    if (musicFile.isLoaded()){
+        musicFile.close() ;
+    }
+
     auto path = musicPath / std::filesystem::path(musicname+musicExtension) ;
     if (!std::filesystem::exists(path)){
         DBGMSG(std::cout, "File does not exist: "s + path.string()) ;
+        errorState = true ;
         return false ;
     }
     return load(path);

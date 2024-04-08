@@ -39,7 +39,7 @@ class MusicController {
     
     std::filesystem::path musicPath ;
     std::string musicExtension ;
-    
+    std::string musicname ;
  public:
     auto shouldPlay() const ->bool ;
     static auto getSoundDevices() -> std::vector<std::pair<int,std::string>> ;
