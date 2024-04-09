@@ -54,7 +54,6 @@ auto BaseConfiguration::load(const std::filesystem::path &path) -> bool {
 // ==================================================================================
 auto BaseConfiguration::refresh() -> bool {
     if (hasBeenUpdated(configuration_file) && !configuration_file.empty()) {
-        DBGMSG(std::cout, "Attempting to refresh file "s);
         if (!this->load(configuration_file) ) {
             throw std::runtime_error("Unable to process: "s + configuration_file.string());
         }

@@ -36,7 +36,7 @@ auto LightFile::loadFile(const std::filesystem::path &lightfile) -> bool {
             return false ;
         }
         try {
-            DBGMSG(std::cout,util::sysTimeToString(util::ourclock::now())+": "s +  "Loading light header: "s + lightfile.string()) ;
+//            DBGMSG(std::cout,util::sysTimeToString(util::ourclock::now())+": "s +  "Loading light header: "s + lightfile.string()) ;
             lightHeader.load(reinterpret_cast<const char *>(lightData.ptr)) ;
             //std::cout << "Mapped file: " << reinterpret_cast<std::uint64_t>(ptr) << " size: " << lightData.size << std::endl;
         }
@@ -87,7 +87,7 @@ auto LightFile::copy(std::uint32_t frame,  unsigned char *buffer, int offset, in
         return 0 ;
     }
     if (length == 0) {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought length requested was 0, so setting to frame length"s);
+//        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought length requested was 0, so setting to frame length"s);
         length = lightHeader.frameLength ;
     }
     if ( (offset + length) > lightHeader.frameLength) {
@@ -102,10 +102,10 @@ auto LightFile::copy(std::uint32_t frame,  unsigned char *buffer, int offset, in
             length = static_cast<int>(lightData.size) - dataoffset ;
         }
         if (length > 0) {
-            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copying "s + std::to_string(length) + " from light file from offset: "s + std::to_string(dataoffset) + " (frame: "s + std::to_string(frame) +" FrameLength: "s + std::to_string(lightHeader.frameLength) + " cfg offset: "s + std::to_string(offset));
+//            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copying "s + std::to_string(length) + " from light file from offset: "s + std::to_string(dataoffset) + " (frame: "s + std::to_string(frame) +" FrameLength: "s + std::to_string(lightHeader.frameLength) + " cfg offset: "s + std::to_string(offset));
             std::memcpy(buffer, lightData.ptr + dataoffset, length);
             
-            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copy complete") ;
+//            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copy complete") ;
         }
         else {
             length = 0 ;

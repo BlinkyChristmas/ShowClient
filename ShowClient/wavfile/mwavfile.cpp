@@ -106,7 +106,7 @@ auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
         offset += 8 ;
         formatChunk.load(ptr+offset) ;
         if (!formatChunk.valid()){
-            DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Seems to be not a PCM (uncompressed) or 441000 format: "s + filepath.string());
+            DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Seems to be not a PCM (uncompressed) or 44100 format: "s + filepath.string());
             this->memoryMap.unmap() ;
             return false ;
         }
