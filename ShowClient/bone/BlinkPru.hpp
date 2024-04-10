@@ -13,7 +13,6 @@ enum class PruModes {
 };
 
 class BlinkPru : public BeaglePru {
-    static const std::string BLINK_FIRMWARE ;
     static constexpr auto INDEX_TYPE = 0 ;
     static constexpr auto INDEX_BITREG = 4 ;
     static constexpr auto INDEX_DATAREADY = 8 ;
@@ -26,6 +25,8 @@ class BlinkPru : public BeaglePru {
     int length ;
     
 public:
+    static const std::string BLINK_FIRMWARE ;
+
     BlinkPru(PruNumber pruNumber) ;
     auto setMode(PruModes mode) -> bool ;
     auto mode() const -> PruModes ;
