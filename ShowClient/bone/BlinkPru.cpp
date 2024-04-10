@@ -6,7 +6,7 @@
 const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
 
 // =====================================================================================
-BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber){
+BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber),offset(0),length(0){
 #if defined(BEAGLE)
     this->load(BLINK_FIRMWARE);
     this->start() ;
@@ -26,6 +26,7 @@ auto BlinkPru::setMode(PruModes mode) -> bool {
     auto size = (mode == PruModes::DMX? 512: 3072);
     auto outmode = static_cast<int>(mode) ;
     auto buffer = std::vector<unsigned char>(3072, 0 );
+    this->length = size ;
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address+ INDEX_TYPE) ;
     std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + INDEX_BITREG) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + INDEX_OUTPUTCOUNT) ;
@@ -69,8 +70,8 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
         return false ;
     }
-    if (offset + length > 3072) {
-        length = 3072 - offset ;
+    if (offset + length > this->length) {
+        length = this->length - offset ;
     }
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
@@ -78,9 +79,13 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #endif 
 }
 
+// =====================================================================================
+auto BlinkPru::setData(const std::uint8_t *data, int length ) -> bool {
+    return this->setData(data, length, this->offset);
+}
+
 // ======================================================================================
 auto BlinkPru::setConfig(const PRUConfig &config)->bool {
-    
     auto prumode = PruModes::SSD ;
     if (config.mode == PRUConfig::MODE_DMX){
         prumode = PruModes::DMX ;
@@ -89,5 +94,7 @@ auto BlinkPru::setConfig(const PRUConfig &config)->bool {
         prumode = PruModes::WS2812 ;
     }
     this->setMode(prumode);
+    this->offset = config.offset ;
     return true ;
 }
+

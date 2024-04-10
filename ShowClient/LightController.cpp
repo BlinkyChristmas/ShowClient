@@ -20,12 +20,28 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
             auto lock = std::lock_guard(frameAccess);
             current_frame += 1 ;
         }
+        updateLight();
         auto time = timer->expiry() ;
         timer->expires_at(time + std::chrono::milliseconds(framePeriod)) ;
         timer->async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,timer) );
     }
 
 }
+
+// ==================================================================================================
+auto LightController::updateLight() -> void {
+#if defined(BEAGLE)
+    auto frame = currentFrame ;
+    if (file_mode){
+        auto data = lightFile.dataForFrame(frame) ;
+        if (data != nullptr){
+            pru0.setData(data, lightFile.frameLength());
+            pru1.setData(data, lightFile.frameLength());
+        }
+    }
+#endif
+}
+
 
 // ===============================================================================
 LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD) {
@@ -121,7 +137,7 @@ auto LightController::loadLight(const std::string &name) -> bool {
         lightFile.clear();
     }
     has_error = !lightFile.loadFile(path) ;
-    DBGMSG(std::cout, "loading light: "s + name + " was succeful? "s + std::to_string(has_error) ) ;
+    DBGMSG(std::cout, "loading light: "s + name + " was succesful? "s + std::to_string(!has_error) ) ;
     return !has_error ;
     
 }

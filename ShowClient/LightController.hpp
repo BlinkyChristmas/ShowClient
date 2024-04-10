@@ -46,6 +46,7 @@ class LightController {
     PRUConfig config0 ;
     PRUConfig config1 ;
     std::string current_loaded ;
+    auto updateLight() -> void ;
     
  public:
     LightController() ;
