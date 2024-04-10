@@ -138,6 +138,12 @@
     <ClCompile Include="ShowClient\lightfile\lightheader.cpp">
       <Filter>Source Files\ShowClient\lightfile</Filter>
     </ClCompile>
+    <ClCompile Include="ShowClient\LightController.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowClient\MusicController.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShowClient\Client.hpp">
@@ -235,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="ShowClient\lightfile\lightheader.hpp">
       <Filter>Source Files\ShowClient\lightfile</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\LightController.hpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\MusicController.hpp">
+      <Filter>Source Files\ShowClient</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

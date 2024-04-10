@@ -178,7 +178,7 @@ auto MusicController::stop(bool close ) -> void {
 // ======================================================================
 auto MusicController::load(const std::filesystem::path &path) -> bool {
     errorState = false ;
-    musicname = path.stem();
+    musicname = path.stem().string();
     if (musicFile.isLoaded()){
         musicFile.close() ;
     }

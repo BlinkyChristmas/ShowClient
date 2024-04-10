@@ -31,9 +31,11 @@
     <ClCompile Include="ShowClient\bone\BlinkPru.cpp" />
     <ClCompile Include="ShowClient\Client.cpp" />
     <ClCompile Include="ShowClient\ClientConfiguration.cpp" />
+    <ClCompile Include="ShowClient\LightController.cpp" />
     <ClCompile Include="ShowClient\lightfile\lightfile.cpp" />
     <ClCompile Include="ShowClient\lightfile\lightheader.cpp" />
     <ClCompile Include="ShowClient\main.cpp" />
+    <ClCompile Include="ShowClient\MusicController.cpp" />
     <ClCompile Include="ShowClient\PRUConfig.cpp" />
     <ClCompile Include="ShowClient\StatusController.cpp" />
     <ClCompile Include="ShowClient\wavfile\chunkheader.cpp" />
@@ -66,8 +68,10 @@
     <ClInclude Include="ShowClient\bone\BlinkPru.hpp" />
     <ClInclude Include="ShowClient\Client.hpp" />
     <ClInclude Include="ShowClient\ClientConfiguration.hpp" />
+    <ClInclude Include="ShowClient\LightController.hpp" />
     <ClInclude Include="ShowClient\lightfile\lightfile.hpp" />
     <ClInclude Include="ShowClient\lightfile\lightheader.hpp" />
+    <ClInclude Include="ShowClient\MusicController.hpp" />
     <ClInclude Include="ShowClient\PRUConfig.hpp" />
     <ClInclude Include="ShowClient\StatusController.hpp" />
     <ClInclude Include="ShowClient\wavfile\chunkheader.hpp" />
@@ -117,13 +121,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28;$(ProjectDir)\ShowClient</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);dsound.lib;ole32.lib</AdditionalDependencies>
-   </Link>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -135,7 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\thirdparty;$(ProjectDir)\thirdparty\asio-1.28;$(ProjectDir)\ShowClient</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

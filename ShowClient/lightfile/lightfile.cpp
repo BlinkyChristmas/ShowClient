@@ -90,7 +90,7 @@ auto LightFile::copy(std::uint32_t frame,  unsigned char *buffer, int offset, in
 //        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought length requested was 0, so setting to frame length"s);
         length = lightHeader.frameLength ;
     }
-    if ( (offset + length) > lightHeader.frameLength) {
+    if ( (offset + length) > static_cast<int>(lightHeader.frameLength)) {
        
         //std::cout << "length: " << length << " offset: " << offset  << " combined exceeds framelength, resetting to : "<< lightHeader.frameLength - offset << std::endl;
         length = lightHeader.frameLength - offset ;

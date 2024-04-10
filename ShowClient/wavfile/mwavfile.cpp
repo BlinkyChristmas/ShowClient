@@ -72,7 +72,7 @@ MWAVFile::~MWAVFile() {
 }
 //======================================================================
 auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
-    filename = filepath.stem();
+    filename = filepath.stem().string();
     this->close() ;
     ptrToData = nullptr ;
     dataSize = 0 ;
