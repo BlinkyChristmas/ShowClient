@@ -120,9 +120,9 @@ auto LightController::loadLight(const std::string &name) -> bool {
     if (lightFile.isLoaded()){
         lightFile.clear();
     }
-    has_error = lightFile.loadFile(path) ;
+    has_error = !lightFile.loadFile(path) ;
     DBGMSG(std::cout, "loading light: "s + name + " was succeful? "s + std::to_string(has_error) ) ;
-    return has_error ;
+    return !has_error ;
     
 }
 
