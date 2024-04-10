@@ -156,6 +156,7 @@ target_include_directories(ShowClient
         ${PROJECT_SOURCE_DIR}/common/
         ${PROJECT_SOURCE_DIR}/thirdparty/
         ${PROJECT_SOURCE_DIR}/thirdparty/asio-1.28/
+        ${PROJECT_SOURCE_DIR}/ShowClient/
 )
 
 
