@@ -103,8 +103,12 @@ auto BeaglePru::setState(const std::string &state) -> bool {
     auto path = util::format(firmware_state,static_cast<int>(pru_number)+1) ;
     auto output = std::ofstream(path) ;
     if (!output.is_open()){
+        DBGMSG(std::cerr, "Unable to open state for pru: "s );
+
         return false ;
     }
+    DBGMSG(std::cout, "Writing to pru state: "s + state );
+
     output << state ;
     output.close();
     return true ;
@@ -225,6 +229,7 @@ auto BeaglePru::start() -> bool {
 #if !defined(BEAGLE)
     return true ;
 #else
+    DBGMSG(std::cout, "Checking isRunning state: "s + std::to_string(this->isRunning()));
     if (!this->isRunning()) {
         return setState("start");
     }
