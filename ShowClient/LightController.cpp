@@ -162,7 +162,6 @@ auto LightController::start(int frame, int period ) -> bool {
             currentFrame = frame ;
            
         }
-        DBGMSG(std::cout,"Light start setting timer");
 
         timer.expires_at(std::chrono::steady_clock::now() + std::chrono::milliseconds(framePeriod));
         timer.async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,&timer) );
