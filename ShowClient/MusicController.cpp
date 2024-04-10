@@ -211,8 +211,11 @@ auto MusicController::load(const std::string &musicname) -> bool {
 auto MusicController::start(std::int32_t frame  ) -> bool {
     errorState = false ;
     if (shouldPlay()) {
-        current_frame = frame ;
-        musicFile.setFrame(frame) ;
+        {
+            auto lock = std::lock_guard(frameAccess);
+            current_frame = frame ;
+            musicFile.setFrame(frame) ;
+        }
         // Now, start the playing
         if (!initialize(mydevice, musicFile.sampleRate())){
             errorState = true ;

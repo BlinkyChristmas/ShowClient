@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56134E602BC6005100D79BCA /* LightController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56134E5E2BC6005100D79BCA /* LightController.cpp */; };
 		56E975512BC15DD800AA1B50 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975502BC15DD800AA1B50 /* main.cpp */; };
 		56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975572BC15EC200AA1B50 /* Connection.cpp */; };
 		56E9757D2BC15EC200AA1B50 /* FrameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975592BC15EC200AA1B50 /* FrameTimer.cpp */; };
@@ -56,6 +57,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		56134E5E2BC6005100D79BCA /* LightController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightController.cpp; sourceTree = "<group>"; };
+		56134E5F2BC6005100D79BCA /* LightController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightController.hpp; sourceTree = "<group>"; };
 		56E9754D2BC15DD800AA1B50 /* ShowClient */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ShowClient; sourceTree = BUILT_PRODUCTS_DIR; };
 		56E975502BC15DD800AA1B50 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		56E975572BC15EC200AA1B50 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
 				56E976292BC37EE300AA1B50 /* MusicController.cpp */,
 				56E9762A2BC37EE300AA1B50 /* MusicController.hpp */,
+				56134E5E2BC6005100D79BCA /* LightController.cpp */,
+				56134E5F2BC6005100D79BCA /* LightController.hpp */,
 			);
 			path = ShowClient;
 			sourceTree = "<group>";
@@ -423,6 +428,7 @@
 				56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */,
 				56E9757E2BC15EC200AA1B50 /* FrameValue.cpp in Sources */,
 				56E975DE2BC174F700AA1B50 /* ClientConfiguration.cpp in Sources */,
+				56134E602BC6005100D79BCA /* LightController.cpp in Sources */,
 				56E975EA2BC17B9C00AA1B50 /* BeaglePru.cpp in Sources */,
 				56E975F12BC1905100AA1B50 /* Client.cpp in Sources */,
 				56E975DB2BC1747A00AA1B50 /* BaseConfiguration.cpp in Sources */,

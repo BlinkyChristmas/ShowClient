@@ -4,6 +4,7 @@
 #define BlinkPru_hpp
 
 #include "BeaglePru.hpp"
+#include "PRUConfig.hpp"
 
 enum class PruModes {
     SSD,DMX,WS2812,UNKNOWN
@@ -25,5 +26,6 @@ public:
     auto setMode(PruModes mode) -> bool ;
     auto mode() const -> PruModes ;
     auto setData(const std::uint8_t *data, int length, int offset = 0 ) -> bool ;
+    auto setConfig(const PRUConfig &config)->bool ;
 };
 #endif /* BlinkPru_hpp */

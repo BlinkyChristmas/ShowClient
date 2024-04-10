@@ -14,6 +14,7 @@
 #include "ClientConfiguration.hpp"
 #include "StatusController.hpp"
 #include "MusicController.hpp"
+#include "LightController.hpp"
 #include "Client.hpp"
 
 using namespace std::string_literals ;
@@ -74,6 +75,8 @@ auto processNop(ClientPointer connection,PacketPointer packet) -> bool;
 auto stopCallback(ClientPointer client) -> void ;
 
 MusicController musicController ;
+LightController lightController ;
+
 std::shared_ptr<Client> client  = nullptr ;
 // ====================================================================
 auto runLoop(ClientConfiguration &config) -> bool {
@@ -92,7 +95,9 @@ auto runLoop(ClientConfiguration &config) -> bool {
     musicController.setDevice(config.audioDevice);
     musicController.setMusicInformation(config.musicPath, config.musicExtension);
     musicController.setMusicErrorCallback(std::bind(&musicError,std::placeholders::_1));
-    
+    lightController.setPRUInfo(config.pruSetting[0], config.pruSetting[1]) ;
+    lightController.setEnabled(config.useLight) ;
+    lightController.setLightInfo(config.lightPath, config.lightExtension);
     while (config.runSpan.inRange()) {
         ledController.setState(StatusLed::RUN, LedState::ON) ;
         try {
@@ -101,6 +106,9 @@ auto runLoop(ClientConfiguration &config) -> bool {
                 musicController.setEnabled(config.useAudio) ;
                 musicController.setDevice(config.audioDevice);
                 musicController.setMusicInformation(config.musicPath, config.musicExtension);
+                lightController.setEnabled(config.useLight) ;
+                lightController.setLightInfo(config.lightPath, config.lightExtension);
+
             }
         }
         catch(...) {
@@ -171,6 +179,9 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
     if (musicController.isEnabled()){
         musicController.load(music);
     }
+    if (lightController.isEnabled()) {
+        lightController.loadLight(light) ;
+    }
     return true ;
 }
 
@@ -180,6 +191,7 @@ auto processSync(ClientPointer connection,PacketPointer packet) -> bool {
     
     auto frame = payload->syncFrame() ;
     musicController.setSync(frame);
+    lightController.setSync(frame);
     return true ;
 }
 
@@ -207,9 +219,23 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
 
             }
         }
+        if (lightController.isEnabled()){
+            if (lightController.hasError()){
+                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, lightController.currentLoaded());
+                DBGMSG(std::cout, "Error on "s + lightController.currentLoaded());
+                client->send(packet);
+                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+            }
+            else if (!lightController.start(frame)) {
+                
+                
+            }
+        }
+        
     }
     else {
         musicController.stop() ;
+        lightController.stop();
     }
             
     return true ;

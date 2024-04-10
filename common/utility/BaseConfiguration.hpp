@@ -13,7 +13,8 @@ class BaseConfiguration {
     auto parse(std::istream &input ) -> void ;
     
     virtual auto processKeyValue(const std::string &key, const std::string &value) ->void = 0;
-    
+    virtual auto beginLoad() -> void {} ;
+
 public:
     BaseConfiguration() = default ;
     virtual ~BaseConfiguration() = default ;

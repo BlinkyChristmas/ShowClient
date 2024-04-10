@@ -7,13 +7,18 @@ const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
 
 // =====================================================================================
 BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber){
+#if defined(BEAGLE)
     this->load(BLINK_FIRMWARE);
     this->start() ;
     setMode(PruModes::SSD) ;
+#endif
 }
 
 // =====================================================================================
 auto BlinkPru::setMode(PruModes mode) -> bool {
+#if !defined(BEAGLE)
+    return true ;
+#else
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
         return  false ;
     }
@@ -28,10 +33,14 @@ auto BlinkPru::setMode(PruModes mode) -> bool {
     std::copy(buffer.begin(),buffer.end(),mapped_address + INDEX_PRUOUTPUT) ;
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
     return true ;
+#endif
 }
 
 // =====================================================================================
 auto BlinkPru::mode() const -> PruModes {
+#if !defined(BEAGLE)
+    return PruModes::SSD;
+#else
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
         return  PruModes::UNKNOWN ;
     }
@@ -49,10 +58,14 @@ auto BlinkPru::mode() const -> PruModes {
     else {
         return PruModes::UNKNOWN;
     }
+#endif
 }
 
 // =====================================================================================
 auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> bool {
+#if !defined (BEAGLE)
+    return true ;
+#else
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
         return false ;
     }
@@ -62,5 +75,6 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
     return true ;
+#endif 
 }
 
