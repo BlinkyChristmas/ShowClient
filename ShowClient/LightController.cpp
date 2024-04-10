@@ -46,10 +46,10 @@ auto LightController::updateLight() -> void {
 // ===============================================================================
 LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD) {
     timerThread = std::thread(&LightController::runThread,this) ;
-    pru0.load(BlinkPru::BLINK_FIRMWARE) ;
-    pru1.load(BlinkPru::BLINK_FIRMWARE) ;
-    pru0.start();
-    pru1.start();
+    //pru0.load(BlinkPru::BLINK_FIRMWARE) ;
+    //pru1.load(BlinkPru::BLINK_FIRMWARE) ;
+    //pru0.start();
+    //pru1.start();
 }
 
 // ===============================================================================
