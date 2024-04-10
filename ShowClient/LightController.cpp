@@ -2,6 +2,11 @@
 
 #include "LightController.hpp"
 
+#include "utility/dbgutil.hpp"
+#include "utility/strutil.hpp"
+
+using namespace std::string_literals ;
+
 // ===============================================================================
 auto LightController::runThread() -> void {
     io_context.run() ;
@@ -94,6 +99,7 @@ auto LightController::setSync(int syncFrame) -> void {
 // =============================================================================
 auto LightController::loadLight(const std::string &name) -> bool {
     current_loaded = name ;
+    DBGMSG(std::cout, "Load light: "s + name ) ;
     if (!is_enabled) {
         return true ;
     }
@@ -107,12 +113,15 @@ auto LightController::loadLight(const std::string &name) -> bool {
     auto path = location / std::filesystem::path(name + extension) ;
     if (!std::filesystem::exists(path)){
         has_error = true ;
+        DBGMSG(std::cout, "Error loading light: "s + name ) ;
+
         return false ;
     }
     if (lightFile.isLoaded()){
         lightFile.clear();
     }
     has_error = lightFile.loadFile(path) ;
+    DBGMSG(std::cout, "loading light: "s + name + " was succeful? "s + std::to_string(has_error) ) ;
     return has_error ;
     
 }
@@ -123,6 +132,7 @@ auto LightController::currentLoaded() const -> const std::string& {
 }
 // ===============================================================================
 auto LightController::start(int frame, int period ) -> bool {
+    DBGMSG(std::cout,"Light start: Frame - "s + std::to_string(frame) + " Period - "s + std::to_string(period));
     framePeriod = period ;
     
     if ((lightFile.isLoaded() || !file_mode) && is_enabled){
