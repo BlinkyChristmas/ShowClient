@@ -78,3 +78,16 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #endif 
 }
 
+// ======================================================================================
+auto BlinkPru::setConfig(const PRUConfig &config)->bool {
+    
+    auto prumode = PruModes::SSD ;
+    if (config.mode == PRUConfig::MODE_DMX){
+        prumode = PruModes::DMX ;
+    }
+    else if (config.mode == PRUConfig::MODE_WS2812) {
+        prumode = PruModes::WS2812 ;
+    }
+    this->setMode(prumode);
+    return true ;
+}

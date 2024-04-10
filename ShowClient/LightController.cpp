@@ -7,6 +7,21 @@ auto LightController::runThread() -> void {
     io_context.run() ;
 }
 
+// ==================================================================================================
+auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer ) -> void {
+    if (ec != asio::error::operation_aborted) {
+        // reschedule another
+        {
+            auto lock = std::lock_guard(frameAccess);
+            current_frame += 1 ;
+        }
+        auto time = timer->expiry() ;
+        timer->expires_at(time + std::chrono::milliseconds(framePeriod)) ;
+        timer->async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,timer) );
+    }
+
+}
+
 // ===============================================================================
 LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD) {
     timerThread = std::thread(&LightController::runThread,this) ;
@@ -34,9 +49,8 @@ auto LightController::setLightInfo(const std::filesystem::path &location, const 
 
 // ===============================================================================
 auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void {
-    this->config0 = config0 ;
-    this->config1 = config1 ;
-    
+    pru0.setConfig(config0);
+    pru1.setConfig(config1);
 }
 
 // ===============================================================================
@@ -46,6 +60,35 @@ auto LightController::setEnabled(bool value) -> void {
 // ===============================================================================
 auto LightController::isEnabled() const -> bool {
     return is_enabled ;
+}
+
+// ===============================================================================
+auto LightController::hasError() const -> bool {
+    return has_error ;
+}
+
+// ===============================================================================
+auto LightController::setSync(int syncFrame) -> void {
+    auto lock = std::lock_guard(frameAccess);
+    auto delta = current_frame - syncFrame ;
+    if (std::abs(delta) < 3) {
+        return ;
+    }
+    if (std::abs(delta) < 6) {
+        if (delta > 0) {
+            current_frame -= 1 ;
+            
+        }
+        else {
+            current_frame += 1 ;
+            
+        }
+    }
+    else {
+
+        current_frame = syncFrame ;
+    }
+
 }
 
 // =============================================================================
@@ -101,47 +144,6 @@ auto LightController::stop() -> void {
     {
         auto lock = std::lock_guard(frameAccess) ;
         currentFrame = 0 ;
-    }
-
-}
-// ===============================================================================
-auto LightController::setSync(int syncFrame) -> void {
-    auto lock = std::lock_guard(frameAccess);
-    auto delta = current_frame - syncFrame ;
-    if (std::abs(delta) < 3) {
-        return ;
-    }
-    if (std::abs(delta) < 6) {
-        if (delta > 0) {
-            current_frame -= 1 ;
-            
-        }
-        else {
-            current_frame += 1 ;
-            
-        }
-    }
-    else {
-
-        current_frame = syncFrame ;
-    }
-
-}
-// ===============================================================================
-auto LightController::hasError() const -> bool {
-    return has_error ;
-}
-// ==================================================================================================
-auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer ) -> void {
-    if (ec != asio::error::operation_aborted) {
-        // reschedule another
-        {
-            auto lock = std::lock_guard(frameAccess);
-            current_frame += 1 ;
-        }
-        auto time = timer->expiry() ;
-        timer->expires_at(time + std::chrono::milliseconds(framePeriod)) ;
-        timer->async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,timer) );
     }
 
 }
