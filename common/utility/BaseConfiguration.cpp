@@ -39,6 +39,7 @@ auto BaseConfiguration::parse(std::istream &input ) -> void  {
 
 // ==================================================================================
 auto BaseConfiguration::load(const std::filesystem::path &path) -> bool {
+    configuration_file = path ;
     if (!std::filesystem::exists(path)) {
         return false ;
     }
@@ -47,7 +48,7 @@ auto BaseConfiguration::load(const std::filesystem::path &path) -> bool {
     if (!input.is_open()) {
         return false ;
     }
-    configuration_file = path ;
+    beginLoad() ;
     parse(input) ;
     input.close() ;
     return true ;
