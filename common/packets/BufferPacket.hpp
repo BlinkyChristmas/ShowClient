@@ -28,7 +28,7 @@ public:
     BufferPacket() ;
     BufferPacket(const std::vector<std::uint8_t> &data);
     auto setPacketData(const std::vector<std::uint8_t> &data) -> void ;
-    auto packetData() const -> std::vector<std::uint8_t> ;
+    auto packetData() const  -> std::vector<std::uint8_t> ;
 };
 
 #endif /* BufferPacket_hpp */

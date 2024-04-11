@@ -117,6 +117,10 @@ namespace util {
         /// - Returns: Reference to vector
         auto bufferData() -> std::vector<std::uint8_t>& { return data;}
         //=================================================================================
+        /// Return a reference to the underlying vector
+        /// - Returns: Reference to vector
+        auto bufferData() const -> const std::vector<std::uint8_t>& { return data; }
+        //=================================================================================
         /// Determines the pointer to the data
         /// - Returns: pointer to data
         auto raw() const -> const std::uint8_t * ;

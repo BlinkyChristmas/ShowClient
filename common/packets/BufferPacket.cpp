@@ -12,17 +12,17 @@ BufferPacket::BufferPacket(const std::vector<std::uint8_t> &data) : BufferPacket
     setPacketData(data) ;
 }
 //======================================================================
-auto BufferPacket::setPacketData(const std::vector<std::uint8_t> &data) -> void {
-    this->resize(data.size() + Packet::PACKETHEADERSIZE);
-    this->setLength(data.size() + Packet::PACKETHEADERSIZE);
-    std::copy(data.begin(),data.end(),this->bufferData().begin()+Packet::PACKETHEADERSIZE) ;
+auto BufferPacket::setPacketData(const std::vector<std::uint8_t> &packetdata) -> void {
+    this->resize(packetdata.size() + Packet::PACKETHEADERSIZE);
+    this->setLength(static_cast<std::uint32_t>(packetdata.size()) + Packet::PACKETHEADERSIZE);
+    std::copy(packetdata.begin(), packetdata.end(),this->bufferData().begin()+Packet::PACKETHEADERSIZE) ;
 
 }
 
 //======================================================================
-auto BufferPacket::packetData() const  -> std::vector<std::uint8_t>  {
-    auto data = std::vector<std::uint8_t>(this->length() - Packet::PACKETHEADERSIZE,0) ;
-    std::copy(this->bufferData().begin() + Packet::PACKETHEADERSIZE, this->bufferData().end(),data.begin() );
-    return data ;
+auto BufferPacket::packetData() const   -> std::vector<std::uint8_t>  {
+    auto packetdata = std::vector<std::uint8_t>(this->length() - Packet::PACKETHEADERSIZE,0) ;
+    std::copy(this->bufferData().begin() + Packet::PACKETHEADERSIZE, this->bufferData().end(), packetdata.begin() );
+    return packetdata;
 }
 

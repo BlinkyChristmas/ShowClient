@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="common\network\Connection.cpp" />
     <ClCompile Include="common\network\FrameValue.cpp" />
+    <ClCompile Include="common\packets\BufferPacket.cpp" />
     <ClCompile Include="common\packets\ErrorPacket.cpp" />
     <ClCompile Include="common\packets\IdentPacket.cpp" />
     <ClCompile Include="common\packets\LoadPacket.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="common\network\Connection.hpp" />
     <ClInclude Include="common\network\FrameValue.hpp" />
     <ClInclude Include="common\packets\allpackets.hpp" />
+    <ClInclude Include="common\packets\BufferPacket.hpp" />
     <ClInclude Include="common\packets\ErrorPacket.hpp" />
     <ClInclude Include="common\packets\IdentPacket.hpp" />
     <ClInclude Include="common\packets\LoadPacket.hpp" />
