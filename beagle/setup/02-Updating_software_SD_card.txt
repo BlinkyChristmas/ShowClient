@@ -157,7 +157,7 @@ Save the file
     git clone git://git.ti.com/pru-software-support-package/pru-software-support-package.git
     
     NOTE: If using kernel 5, then
-    git clone --depth=1 --branch v5.9.0 git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+    git clone --depth=1 --branch v6.1.0 git://git.ti.com/pru-software-support-package/pru-software-support-package.git
     
 4. Change to the support package directory: cd pru-software-support-package
 5. Build it: make  (this may error out on the pru cape, that is ok)
