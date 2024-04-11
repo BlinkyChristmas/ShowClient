@@ -9,6 +9,7 @@
 using namespace std::string_literals ;
 // ================================================================================
 auto BaseConfiguration::hasBeenUpdated(const std::filesystem::path &path) const -> bool {
+    if (!std::filesystem::exists(path)){ return false ;}
     auto lastwrite = std::filesystem::last_write_time(path) ;
     
     if ( std::chrono::duration_cast<std::chrono::seconds>(lastwrite - lastRead).count() > 0 ){
