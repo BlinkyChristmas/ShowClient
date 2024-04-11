@@ -12,7 +12,7 @@
 struct PacketType {
     static const std::vector<std::string> PACKETNAME ;
     enum PacketID : std::uint32_t {
-        UNKNOWN = 0, IDENT, SYNC, LOAD, NOP,SHOW,PLAY,MYERROR
+        UNKNOWN = 0, IDENT, SYNC, LOAD, NOP,SHOW,PLAY,MYERROR,BUFFER
     };
     
     static auto nameForPacket(PacketID packID) -> const std::string& ;

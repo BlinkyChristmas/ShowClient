@@ -23,8 +23,7 @@ class BlinkPru : public BeaglePru {
 
     int offset ;
     int length ;
-    
-public:
+ public:
     static const std::string BLINK_FIRMWARE ;
 
     BlinkPru(PruNumber pruNumber) ;

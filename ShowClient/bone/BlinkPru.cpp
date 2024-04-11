@@ -5,6 +5,7 @@
 #include <vector>
 const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
 
+
 // =====================================================================================
 BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber),offset(0),length(0){
 #if defined(BEAGLE)
@@ -19,16 +20,11 @@ auto BlinkPru::setMode(PruModes mode) -> bool {
 #if !defined(BEAGLE)
     return true ;
 #else
-    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
-        return  false ;
-    }
-    auto bit = std::int32_t((static_cast<int>(pru_number) == 0 ? 14 : 1)) ; // PRU 0 is on bit 14, pru 1 is on bit 1 ;
     auto size = (mode == PruModes::DMX? 512: 3072);
     auto outmode = static_cast<int>(mode) ;
     auto buffer = std::vector<unsigned char>(3072, 0 );
     this->length = size ;
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address+ INDEX_TYPE) ;
-    std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + INDEX_BITREG) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + INDEX_OUTPUTCOUNT) ;
     std::copy(reinterpret_cast<const unsigned char*>(&zero),reinterpret_cast<const unsigned char*>(&zero)+4, mapped_address + INDEX_DATAREADY);
     std::copy(buffer.begin(),buffer.end(),mapped_address + INDEX_PRUOUTPUT) ;

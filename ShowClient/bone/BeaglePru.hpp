@@ -10,8 +10,6 @@ enum class PruNumber {
   zero=0,one=1,invalid=2
 };
 
-
-
 class BeaglePru {
 protected:
     static const std::string firmware_location ;

@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 #if defined(BEAGLE)
 #include <sys/mman.h>
@@ -62,6 +63,17 @@ auto BeaglePru::mapPRU() -> bool {
         return false ;
     }
     mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
+    auto bit = std::int32_t((static_cast<int>(pru_number) == 0 ? 14 : 1)) ; // PRU 0 is on bit 14, pru 1 is on bit 1 ;
+    auto size = 3072;
+    auto zero = 0 ;
+    auto outmode = 0 ;
+    auto buffer = std::vector<unsigned char>(3072, 0 );
+    std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address) ;
+    std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + 4) ;
+    std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + 12) ;
+    std::copy(reinterpret_cast<const unsigned char*>(&zero),reinterpret_cast<const unsigned char*>(&zero)+4, mapped_address + 8);
+    std::copy(buffer.begin(),buffer.end(),mapped_address + 16) ;
+
 #endif
     return true ;
 }

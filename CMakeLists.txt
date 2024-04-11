@@ -77,6 +77,8 @@ add_executable(ShowClient
     ./common/packets/ShowPacket.hpp
     ./common/packets/SyncPacket.cpp
     ./common/packets/SyncPacket.hpp
+    ./common/packets/BufferPacket.cpp
+    ./common/packets/BufferPacket.hpp
 
     ./thirdparty/rtaudio-6.0.1/RtAudio.cpp
     ./thirdparty/rtaudio-6.0.1/RtAudio.h
