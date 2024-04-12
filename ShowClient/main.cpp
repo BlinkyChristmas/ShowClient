@@ -265,9 +265,9 @@ auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool{
     auto payload = static_cast<BufferPacket*>(packet.get()) ;
     auto length = payload->length()  - 8 ;
     auto data = std::vector<std::uint8_t>(length,0) ;
-    std::copy(payload+8,payload+8+length,data.data()) ;
-    lightController.loadBuffer(data);
-
+    
+    lightController.loadBuffer(payload->packetData());
+    return true ;
 }
 // ================================================================================================
 auto stopCallback(ClientPointer client) -> void {

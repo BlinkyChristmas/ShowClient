@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		56134E602BC6005100D79BCA /* LightController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56134E5E2BC6005100D79BCA /* LightController.cpp */; };
+		56AC2F562BC95A31005349C2 /* BufferPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 566435D52BC7F16A0093C309 /* BufferPacket.cpp */; };
 		56E975512BC15DD800AA1B50 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975502BC15DD800AA1B50 /* main.cpp */; };
 		56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975572BC15EC200AA1B50 /* Connection.cpp */; };
 		56E9757D2BC15EC200AA1B50 /* FrameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975592BC15EC200AA1B50 /* FrameTimer.cpp */; };
@@ -505,6 +506,7 @@
 				56E976262BC3253100AA1B50 /* fileheader.cpp in Sources */,
 				56E975812BC15EC200AA1B50 /* LoadPacket.cpp in Sources */,
 				56E976232BC3253100AA1B50 /* lightfile.cpp in Sources */,
+				56AC2F562BC95A31005349C2 /* BufferPacket.cpp in Sources */,
 				56E975862BC15EC200AA1B50 /* ShowPacket.cpp in Sources */,
 				56E975842BC15EC200AA1B50 /* PacketType.cpp in Sources */,
 				56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */,
