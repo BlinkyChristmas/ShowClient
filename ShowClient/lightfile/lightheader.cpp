@@ -38,7 +38,7 @@ auto LightHeader::load(const char *ptr) -> void {
      std::copy(ptr,ptr+4,reinterpret_cast<char*>(&signature)) ;
     // Lets check our signature
     if ((signature &0xff) == 0) {
-        DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming old format for header");
+        //DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming old format for header");
         // we are going to "assume old format"?
         float check = 0.0 ;
         std::copy(ptr+1,ptr+5,reinterpret_cast<char*>(&check));
@@ -58,14 +58,14 @@ auto LightHeader::load(const char *ptr) -> void {
         return ;
     }
     else if (signature == SIGNATURE) {
-        DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming new format for header");
+        //DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming new format for header");
         std::copy(ptr+4,ptr+8,reinterpret_cast<char*>(&version)) ;
         std::copy(ptr+8,ptr+12,reinterpret_cast<char*>(&offsetToData)) ;
         std::copy(ptr+12,ptr+16,reinterpret_cast<char*>(&sampleRate)) ;
         std::copy(ptr+16,ptr+20,reinterpret_cast<char*>(&frameCount)) ;
-        DBGMSG(std::cout, "Frame count is : "s + std::to_string(frameCount));
+        //DBGMSG(std::cout, "Frame count is : "s + std::to_string(frameCount));
         std::copy(ptr+20,ptr+24,reinterpret_cast<char*>(&frameLength)) ;
-        DBGMSG(std::cout, "Frame Length is : "s + std::to_string(frameLength));
+        //DBGMSG(std::cout, "Frame Length is : "s + std::to_string(frameLength));
         auto buffer = std::vector<char>(NAMESIZE+1,0) ;
         std::copy(ptr+24,ptr+24+NAMESIZE,buffer.data()) ;
         sourceName = buffer.data() ;
