@@ -72,6 +72,7 @@ auto processSync(ClientPointer connection,PacketPointer packet) -> bool;
 auto processPlay(ClientPointer connection,PacketPointer packet) -> bool;
 auto processShow(ClientPointer connection,PacketPointer packet) -> bool;
 auto processNop(ClientPointer connection,PacketPointer packet) -> bool;
+auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool;
 auto stopCallback(ClientPointer client) -> void ;
 
 MusicController musicController ;
@@ -87,7 +88,8 @@ auto runLoop(ClientConfiguration &config) -> bool {
     routines.insert_or_assign(PacketType::PLAY,std::bind(&processPlay,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::SHOW,std::bind(&processShow,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::NOP,std::bind(&processNop,std::placeholders::_1,std::placeholders::_2)) ;
-    
+    routines.insert_or_assign(PacketType::BUFFER,std::bind(&processBuffer,std::placeholders::_1,std::placeholders::_2)) ;
+
     client = std::make_shared<Client>(config.name,routines) ;
     client->setStopCallback(std::bind(&stopCallback,std::placeholders::_1));
     client->setConnectdBeforeRead(std::bind(&initialConnect,std::placeholders::_1));
@@ -258,7 +260,15 @@ auto processNop(ClientPointer connection,PacketPointer packet) -> bool {
     }
     return true ;
 }
+// ==============================================================================================
+auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool{
+    auto payload = static_cast<BufferPacket*>(packet.get()) ;
+    auto length = payload->length()  - 8 ;
+    auto data = std::vector<std::uint8_t>(length,0) ;
+    std::copy(payload+8,payload+8+length,data.data()) ;
+    lightController.loadBuffer(data);
 
+}
 // ================================================================================================
 auto stopCallback(ClientPointer client) -> void {
     // We stopped, so we have some cleanup, but lets do a few things

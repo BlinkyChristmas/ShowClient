@@ -35,7 +35,8 @@ class LightController {
     
     bool file_mode ;
     bool is_enabled ;
-    
+    bool is_loaded ;
+
     bool has_error ;
     int current_frame ;
     
@@ -47,6 +48,7 @@ class LightController {
     PRUConfig config1 ;
     std::string current_loaded ;
     auto updateLight() -> void ;
+    std::vector<std::uint8_t> data_buffer ;
     
  public:
     LightController() ;
@@ -62,6 +64,8 @@ class LightController {
     auto setSync(int syncFrame) -> void ;
 
     auto loadLight(const std::string &name) -> bool ;
+    auto loadBuffer(const std::vector<std::uint8_t> &data) -> void ;
+    
     auto currentLoaded() const -> const std::string& ;
 
     auto start(int frame,int period = FRAMEPERIOD) -> bool ;

@@ -19,4 +19,5 @@
 #include "ShowPacket.hpp"
 #include "SyncPacket.hpp"
 #include "ErrorPacket.hpp"
+#include "BufferPacket.hpp"
 #endif /* allpackets_hpp */

@@ -32,19 +32,26 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
 auto LightController::updateLight() -> void {
 #if defined(BEAGLE)
     auto frame = currentFrame ;
+    const std::uint8_t* data = nullptr ;
+    std::int32_t length = 0 ;
     if (file_mode){
-        auto data = lightFile.dataForFrame(frame) ;
-        if (data != nullptr){
-            pru0.setData(data, lightFile.frameLength());
-            pru1.setData(data, lightFile.frameLength());
-        }
+        data = lightFile.dataForFrame(frame) ;
+        length = lightFile.frameLength();
+    }
+    else {
+        data = data_buffer.data() ;
+        length = static_cast<int>(data_buffer.size()) ;
+    }
+    if (data != nullptr){
+        pru0.setData(data, lightFile.frameLength());
+        pru1.setData(data, lightFile.frameLength());
     }
 #endif
 }
 
 
 // ===============================================================================
-LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD) {
+LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD),is_loaded(false) {
     timerThread = std::thread(&LightController::runThread,this) ;
 }
 
@@ -138,6 +145,9 @@ auto LightController::setSync(int syncFrame) -> void {
 // =============================================================================
 auto LightController::loadLight(const std::string &name) -> bool {
     current_loaded = name ;
+    data_buffer = std::vector<std::uint8_t>();
+    file_mode = true ;
+
     DBGMSG(std::cout, "Load light: "s + name ) ;
     if (!is_enabled) {
         return true ;
@@ -148,7 +158,6 @@ auto LightController::loadLight(const std::string &name) -> bool {
         currentFrame = 0 ;
     }
     has_error = false ;
-    file_mode = true ;
     auto path = location / std::filesystem::path(name + extension) ;
     if (!std::filesystem::exists(path)){
         has_error = true ;
@@ -162,9 +171,14 @@ auto LightController::loadLight(const std::string &name) -> bool {
     has_error = !lightFile.loadFile(path) ;
     DBGMSG(std::cout, "loading light: "s + name + " was succesful? "s + std::to_string(!has_error) ) ;
     return !has_error ;
-    
 }
-
+// =============================================================================
+auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> void{
+    data_buffer = data ;
+    file_mode = false ;
+    has_error = false ;
+    current_loaded = "data buffer" ;
+}
 // ===============================================================================
 auto LightController::currentLoaded() const -> const std::string& {
     return current_loaded ;
@@ -174,7 +188,7 @@ auto LightController::start(int frame, int period ) -> bool {
     DBGMSG(std::cout,"Light start: Frame - "s + std::to_string(frame) + " Period - "s + std::to_string(period));
     framePeriod = period ;
     
-    if ((lightFile.isLoaded() || !file_mode) && is_enabled){
+    if ((lightFile.isLoaded()  || !file_mode) && is_enabled){
         try{ timer.cancel();}catch(...){} ;
         {
             auto lock = std::lock_guard(frameAccess) ;
