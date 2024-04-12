@@ -132,10 +132,17 @@ auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8
             std::vector<std::uint8_t>()  ;
         }
     }
-    auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) ;
-    auto data = std::vector<std::uint8_t>(0,this->frameLength());
-    DBGMSG(std::cout, "made vector of size: "s + std::to_string(data.size()));
-    std::copy(lightData.ptr + dataoffset,lightData.ptr + dataoffset+data.size(),data.data());
+    auto data = std::vector<std::uint8_t>();
+    if (!isLoaded()){
+        DBGMSG(std::cerr, "Not loaded but data request for frame: "s + std::to_string(frame) );
+    }
+    else 
+    {
+        auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) ;
+        data = std::vector<std::uint8_t>(0,this->frameLength());
+        DBGMSG(std::cout, "made vector of size: "s + std::to_string(data.size()));
+        std::copy(lightData.ptr + dataoffset,lightData.ptr + dataoffset+data.size(),data.data());
+    }
     return data ;
 }
 
