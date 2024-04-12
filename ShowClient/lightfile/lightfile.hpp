@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <vector>
 
 #include "utility/mapfile.hpp"
 #include "lightheader.hpp"
