@@ -44,7 +44,7 @@ auto BeaglePru::mapPRU() -> bool {
         // we have to unmap it
         unmapPRU() ;
     }
-    DBGMSG(std::cout, "Determine address");
+    //DBGMSG(std::cout, "Determine address");
     // Now we get to map the memory of the PRU (the 4K memory region)
     off_t prumem = (pru_number == PruNumber::zero ? 0x4a300000 : 0x4a302000) ; // These are the two region address
     auto fd = ::open("/dev/mem", O_RDWR | O_SYNC) ;
@@ -53,7 +53,7 @@ auto BeaglePru::mapPRU() -> bool {
         DBGMSG(std::cerr, "Unable to open memory for pru: "s + std::to_string(static_cast<int>(pru_number)));
         return false ;
     }
-    DBGMSG(std::cout, "MMAP pru");
+    //DBGMSG(std::cout, "MMAP pru");
     auto temp = mmap(0,PRUMAPSIZE,PROT_READ | PROT_WRITE, MAP_SHARED, fd, prumem) ;
     ::close(fd) ;
     if (temp == MAP_FAILED ) {
@@ -62,7 +62,7 @@ auto BeaglePru::mapPRU() -> bool {
         return false ;
     }
     mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
-    DBGMSG(std::cout, "Determine bit for pru");
+    //DBGMSG(std::cout, "Determine bit for pru");
     auto bit = std::int32_t((static_cast<int>(pru_number) == 0 ? 14 : 1)) ; // PRU 0 is on bit 14, pru 1 is on bit 1 ;
     auto size = 3072;
     auto zero = 0 ;
@@ -70,7 +70,7 @@ auto BeaglePru::mapPRU() -> bool {
     auto buffer = std::vector<unsigned char>(3072, 0 );
     mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
 
-    DBGMSG(std::cout, "Setting mode");
+    //DBGMSG(std::cout, "Setting mode");
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address) ;
     std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + 4) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + 12) ;
@@ -103,7 +103,7 @@ auto BeaglePru::state() const -> std::string  {
     buffer[input.gcount()] = 0 ;
     input.close();
     std::string prustate = buffer.data() ;
-    DBGMSG(std::cout, "State is '"s+prustate+"'");
+    //DBGMSG(std::cout, "State is '"s+prustate+"'");
     return prustate ;
 #endif
 }
