@@ -63,9 +63,9 @@ auto LightHeader::load(const char *ptr) -> void {
         std::copy(ptr+8,ptr+12,reinterpret_cast<char*>(&offsetToData)) ;
         std::copy(ptr+12,ptr+16,reinterpret_cast<char*>(&sampleRate)) ;
         std::copy(ptr+16,ptr+20,reinterpret_cast<char*>(&frameCount)) ;
-        //DBGMSG(std::cout, "Frame count is : "s + std::to_string(frameCount));
+        DBGMSG(std::cout, "Frame count is : "s + std::to_string(frameCount));
         std::copy(ptr+20,ptr+24,reinterpret_cast<char*>(&frameLength)) ;
-        //DBGMSG(std::cout, "Frame Length is : "s + std::to_string(frameLength));
+        DBGMSG(std::cout, "Frame Length is : "s + std::to_string(frameLength));
         auto buffer = std::vector<char>(NAMESIZE+1,0) ;
         std::copy(ptr+24,ptr+24+NAMESIZE,buffer.data()) ;
         sourceName = buffer.data() ;

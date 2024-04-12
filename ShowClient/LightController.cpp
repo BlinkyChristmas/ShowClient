@@ -20,7 +20,7 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
             auto lock = std::lock_guard(frameAccess);
            
             currentFrame += 1 ;
-            DBGMSG(std::cout, "Updated frame to "s + std::to_string(currentFrame));
+            
         }
         updateLight();
         auto time = timer->expiry() ;
@@ -34,12 +34,12 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
 auto LightController::updateLight() -> void {
 #if defined(BEAGLE)
     auto frame = currentFrame ;
-    DBGMSG(std::cout, "Frame is now: "s + std::to_string(frame));
+    
     auto data = std::vector<std::uint8_t>() ;
     std::int32_t length = 0 ;
     if (file_mode){
         data = lightFile.dataForFrame(frame) ;
-        DBGMSG(std::cout, "Acquired data for frame: "s + std::to_string(frame) + " of size: "s + std::to_string(data.size()));
+        //DBGMSG(std::cout, "Acquired data for frame: "s + std::to_string(frame) + " of size: "s + std::to_string(data.size()));
     }
     else {
         //data = data_buffer.data() ;
