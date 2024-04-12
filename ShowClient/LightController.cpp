@@ -139,7 +139,7 @@ auto LightController::setSync(int syncFrame) -> void {
         }
     }
     else {
-
+        DBGMSG(std::cout, "Resetting from to sync: "s + std::to_string(syncFrame));
         current_frame = syncFrame ;
     }
 
