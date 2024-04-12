@@ -38,7 +38,6 @@ class LightController {
     bool is_loaded ;
 
     bool has_error ;
-    int current_frame ;
     
     std::filesystem::path location ;
     std::string extension ;

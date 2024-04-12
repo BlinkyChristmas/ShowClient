@@ -18,7 +18,8 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
         // reschedule another
         {
             auto lock = std::lock_guard(frameAccess);
-            current_frame += 1 ;
+           
+            currentFrame += 1 ;
             DBGMSG(std::cout, "Updated frame to "s + std::to_string(currentFrame));
         }
         updateLight();
@@ -54,7 +55,7 @@ auto LightController::updateLight() -> void {
 
 
 // ===============================================================================
-LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD),is_loaded(false) {
+LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false),  framePeriod(FRAMEPERIOD),is_loaded(false) {
     timerThread = std::thread(&LightController::runThread,this) ;
 }
 
@@ -124,23 +125,23 @@ auto LightController::hasError() const -> bool {
 // ===============================================================================
 auto LightController::setSync(int syncFrame) -> void {
     auto lock = std::lock_guard(frameAccess);
-    auto delta = current_frame - syncFrame ;
+    auto delta = currentFrame - syncFrame ;
     if (std::abs(delta) < 3) {
         return ;
     }
     if (std::abs(delta) < 6) {
         if (delta > 0) {
-            current_frame -= 1 ;
+            currentFrame -= 1 ;
             
         }
         else {
-            current_frame += 1 ;
+            currentFrame += 1 ;
             
         }
     }
     else {
         DBGMSG(std::cout, "Resetting from to sync: "s + std::to_string(syncFrame));
-        current_frame = syncFrame ;
+        currentFrame = syncFrame ;
     }
 
 }
