@@ -3,6 +3,10 @@
 #include "BlinkPru.hpp"
 #include <algorithm>
 #include <vector>
+#include "utility/dbgutil.hpp"
+
+using namespace std::string_literals;
+
 const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
 
 
