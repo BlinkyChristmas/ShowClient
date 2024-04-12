@@ -13,7 +13,7 @@ using namespace std::string_literals ;
 
 // ========================================================================
 const std::vector<std::string> PacketType::PACKETNAME{
-    "UNKNOWN"s,"IDENT"s,"SYNC"s, "LOAD"s, "NOP"s,"SHOW"s,"PLAY"s,"ERROR"s
+    "UNKNOWN"s,"IDENT"s,"SYNC"s, "LOAD"s, "NOP"s,"SHOW"s,"PLAY"s,"ERROR"s,"BUFFER"s
 };
 
 // ========================================================================
