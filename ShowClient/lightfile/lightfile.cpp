@@ -138,9 +138,10 @@ auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8
     }
     else
     {
-        auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) ;
+        DBGMSG(std::cout, "We think framelength is: "s + std::to_string(this->frameLength()));
+        auto dataoffset = lightHeader.offsetToData  + (frame * this->frameLength()) ;
         data = std::vector<std::uint8_t>(0,this->frameLength());
-        DBGMSG(std::cout, "made vector of size: "s + std::to_string(data.size()));
+        
         std::copy(lightData.ptr + dataoffset,lightData.ptr + dataoffset+data.size(),data.data());
     }
     return data ;
