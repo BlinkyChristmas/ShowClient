@@ -51,7 +51,7 @@ public:
     auto frameLength() const -> std::int32_t ;
     
     auto copy(std::int32_t frame,  unsigned char *buffer, int offset = 0 , int length = 0)  -> int ;
-    auto dataForFrame(std::int32_t frame) -> const std::uint8_t* ;
+    auto dataForFrame(std::int32_t frame) const -> std::vector<std::uint8_t> ;
     auto clear(bool nothrow = false) -> void ;
 };
 

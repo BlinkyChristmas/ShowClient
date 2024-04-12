@@ -120,20 +120,22 @@ auto LightFile::copy(std::int32_t frame,  unsigned char *buffer, int offset, int
 }
 
 //======================================================================
-auto LightFile::dataForFrame(std::int32_t frame) -> const std::uint8_t* {
+auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8_t> {
     if (lightData.ptr == nullptr) {
         
-        return nullptr ;
+        return std::vector<std::uint8_t>() ;
     }
     if (frame >= lightHeader.frameCount) {
        
         frame = lightHeader.frameCount - 1 ;
         if (frame < 0 ) {
-            return nullptr  ;
+            std::vector<std::uint8_t>()  ;
         }
     }
     auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) ;
-    return const_cast<const std::uint8_t*>(lightData.ptr + dataoffset) ;
+    auto data = std::vector<std::uint8_t>(0,this->frameLength());
+    std::copy(lightData.ptr + dataoffset,lightData.ptr + dataoffset+lightHeader.frameLength,data.data());
+    return data ;
 }
 
 //======================================================================

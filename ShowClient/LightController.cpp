@@ -32,19 +32,19 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
 auto LightController::updateLight() -> void {
 #if defined(BEAGLE)
     auto frame = currentFrame ;
-    const std::uint8_t* data = nullptr ;
+    auto data = std::vector<std::uint8_t>() ;
     std::int32_t length = 0 ;
     if (file_mode){
         data = lightFile.dataForFrame(frame) ;
-        length = lightFile.frameLength();
+        
     }
     else {
-        data = data_buffer.data() ;
-        length = static_cast<int>(data_buffer.size()) ;
+        //data = data_buffer.data() ;
+        //length = static_cast<int>(data_buffer.size()) ;
     }
-    if (data != nullptr){
-        pru0.setData(data, lightFile.frameLength());
-        pru1.setData(data, lightFile.frameLength());
+    if (!data.empty()){
+        pru0.setData(data.data(), data.size());
+        pru1.setData(data.data(), data.size());
     }
 #endif
 }
