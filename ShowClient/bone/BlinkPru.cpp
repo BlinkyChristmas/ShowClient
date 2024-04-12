@@ -7,7 +7,7 @@
 
 using namespace std::string_literals;
 
-const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
+const std::string BlinkPru::BLINK_FIRMWARE = "blinkylight.fw" ;
 
 
 // =====================================================================================
