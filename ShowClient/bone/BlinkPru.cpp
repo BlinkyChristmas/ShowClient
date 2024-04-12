@@ -40,7 +40,7 @@ auto BlinkPru::mode() const -> PruModes {
 #if !defined(BEAGLE)
     return PruModes::SSD;
 #else
-    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || !isValid()) {
+    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) ) {
         return  PruModes::UNKNOWN ;
     }
     auto mode = std::int32_t(0) ;
