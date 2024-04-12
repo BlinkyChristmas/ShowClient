@@ -76,8 +76,7 @@ auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &confi
 
 // ===============================================================================
 auto LightController::setEnabled(bool value) -> void {
-    is_enabled = value ;
-    if (isEnabled()) {
+    if (value) {
         // Lets check our firmware
 #if defined (BEAGLE)
         if(!pru0.checkFirmware()) {
@@ -93,6 +92,7 @@ auto LightController::setEnabled(bool value) -> void {
             std::runtime_error("Incorrect state in pru 1: "s + pru1.state());
         }
 #endif
+        is_enabled = value ;
     }
 }
 // ===============================================================================
