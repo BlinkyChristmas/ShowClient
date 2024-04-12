@@ -75,7 +75,7 @@ auto LightFile::frameLength() const -> std::int32_t {
 auto LightFile::copy(std::int32_t frame,  unsigned char *buffer, int offset, int length )  -> int {
     //std::cout <<"Before copy, length is: "s << std::to_string(length) << std::endl;
     if (lightData.ptr == nullptr) {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought l;ight data ptr was null"s);
+        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought light data ptr was null"s);
         return 0 ;
     }
     if (buffer == nullptr) {
@@ -133,12 +133,7 @@ auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8
         }
     }
     auto data = std::vector<std::uint8_t>();
-    if (!isLoaded()){
-        DBGMSG(std::cerr, "Not loaded but data request for frame: "s + std::to_string(frame) );
-    }
-    else
-    {
-        DBGMSG(std::cout, "We think framelength is: "s + std::to_string(this->frameLength()));
+    if (isLoaded()){
         auto dataoffset = lightHeader.offsetToData  + (frame * this->frameLength()) ;
         data = std::vector<std::uint8_t>(0,this->frameLength());
         
