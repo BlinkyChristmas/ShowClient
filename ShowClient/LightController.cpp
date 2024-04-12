@@ -87,7 +87,7 @@ auto LightController::setEnabled(bool value) -> void {
         if (!pru0.checkState()) {
             std::runtime_error("Incorrect state in pru 0: "s + pru0.state());
         }
-        DBGMSG(std::cout, "checking firmware for pru 1);
+        DBGMSG(std::cout, "checking firmware for pru 1");
         if(!pru1.checkFirmware()) {
             std::runtime_error("Incorrect firmware in pru 1: "s + pru1.firmware());
         }
