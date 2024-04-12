@@ -209,5 +209,8 @@ auto LightController::stop() -> void {
         auto lock = std::lock_guard(frameAccess) ;
         currentFrame = 0 ;
     }
+    lightFile.clear();
+    file_mode = true ;
+    
 
 }
