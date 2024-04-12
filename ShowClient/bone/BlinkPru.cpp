@@ -109,6 +109,8 @@ auto BlinkPru::checkFirmware() -> bool {
 auto BlinkPru::checkState() -> bool {
 #if defined(BEAGLE)
     DBGMSG(std::cout, "State is: "s + this->state());
+    auto rvalue = this->state() == "running" ;
+    DBGMSG(std::cout, "checkState returning: "s + std::to_string(rvalue));
     return this->state() == "running" ;
 #else
     return true ;

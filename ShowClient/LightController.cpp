@@ -85,6 +85,7 @@ auto LightController::setEnabled(bool value) -> void {
         }
         DBGMSG(std::cout, "checking state for pru 0");
         if (!pru0.checkState()) {
+            DBGMSG(std::cout, "Throwing check state exception for pru 0");
             std::runtime_error("Incorrect state in pru 0: "s + pru0.state());
         }
         DBGMSG(std::cout, "checking firmware for pru 1");
@@ -93,6 +94,7 @@ auto LightController::setEnabled(bool value) -> void {
         }
         DBGMSG(std::cout, "checking state for pru 1");
         if (!pru1.checkState()) {
+            DBGMSG(std::cout, "Throwing check state exception for pru 1");
             std::runtime_error("Incorrect state in pru 1: "s + pru1.state());
         }
 #endif
