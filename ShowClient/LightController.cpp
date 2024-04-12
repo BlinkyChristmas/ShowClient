@@ -43,6 +43,7 @@ auto LightController::updateLight() -> void {
         //length = static_cast<int>(data_buffer.size()) ;
     }
     if (!data.empty()){
+        DBGMSG(std::cout, "Writing to pru");
         pru0.setData(data.data(), data.size());
         pru1.setData(data.data(), data.size());
     }
