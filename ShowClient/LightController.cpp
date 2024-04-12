@@ -19,6 +19,7 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
         {
             auto lock = std::lock_guard(frameAccess);
             current_frame += 1 ;
+            DBGMSG(std::cout, "Updated frame to "s + std::to_string(currentFrame));
         }
         updateLight();
         auto time = timer->expiry() ;
