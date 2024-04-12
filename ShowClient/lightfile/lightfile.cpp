@@ -136,7 +136,7 @@ auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8
     if (!isLoaded()){
         DBGMSG(std::cerr, "Not loaded but data request for frame: "s + std::to_string(frame) );
     }
-    else 
+    else
     {
         auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) ;
         data = std::vector<std::uint8_t>(0,this->frameLength());
