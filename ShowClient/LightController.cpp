@@ -36,14 +36,14 @@ auto LightController::updateLight() -> void {
     std::int32_t length = 0 ;
     if (file_mode){
         data = lightFile.dataForFrame(frame) ;
-        
+        DBGMSG(std::cout, "Acquired data for frame: "s + std::to_string(frame) + " of size: "s + std::to_string(data.size()));
     }
     else {
         //data = data_buffer.data() ;
         //length = static_cast<int>(data_buffer.size()) ;
     }
     if (!data.empty()){
-        DBGMSG(std::cout, "Writing to pru");
+        DBGMSG(std::cout, "Writing to pru: "s + std::to_string(data.size()));
         pru0.setData(data.data(), data.size());
         pru1.setData(data.data(), data.size());
     }
