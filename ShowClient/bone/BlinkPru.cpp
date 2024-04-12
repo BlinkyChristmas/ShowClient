@@ -99,7 +99,7 @@ auto BlinkPru::setConfig(const PRUConfig &config)->bool {
 // ======================================================================================
 auto BlinkPru::checkFirmware() -> bool {
 #if defined(BEAGLE)
-    DBGMSG(std::cout, "Firmware is: "s + this->firmware());
+    DBGMSG(std::cout, "Firmware is: '"s + this->firmware()+"' and we want: '"s + BLINK_FIRMWARE+"'"s);
     return this->firmware() == BLINK_FIRMWARE ;
 #else
     return true ;
