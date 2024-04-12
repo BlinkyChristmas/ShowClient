@@ -6,7 +6,6 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-
 #if defined(BEAGLE)
 #include <sys/mman.h>
 #include <fcntl.h>
@@ -35,7 +34,6 @@ auto BeaglePru::unmapPRU() -> void {
         mapped_address = nullptr ;
     }
 }
-
 // ==============================================================================
 auto BeaglePru::mapPRU() -> bool {
     if (pru_number != PruNumber::zero &&  pru_number != PruNumber::one) {
@@ -46,7 +44,7 @@ auto BeaglePru::mapPRU() -> bool {
         // we have to unmap it
         unmapPRU() ;
     }
-    
+    DBGMSG(std::cout, "Determine address");
     // Now we get to map the memory of the PRU (the 4K memory region)
     off_t prumem = (pru_number == PruNumber::zero ? 0x4a300000 : 0x4a302000) ; // These are the two region address
     auto fd = ::open("/dev/mem", O_RDWR | O_SYNC) ;
@@ -55,6 +53,7 @@ auto BeaglePru::mapPRU() -> bool {
         DBGMSG(std::cerr, "Unable to open memory for pru: "s + std::to_string(static_cast<int>(pru_number)));
         return false ;
     }
+    DBGMSG(std::cout, "MMAP pru");
     auto temp = mmap(0,PRUMAPSIZE,PROT_READ | PROT_WRITE, MAP_SHARED, fd, prumem) ;
     ::close(fd) ;
     if (temp == MAP_FAILED ) {
@@ -63,11 +62,15 @@ auto BeaglePru::mapPRU() -> bool {
         return false ;
     }
     mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
+    DBGMSG(std::cout, "Determine bit for pru");
     auto bit = std::int32_t((static_cast<int>(pru_number) == 0 ? 14 : 1)) ; // PRU 0 is on bit 14, pru 1 is on bit 1 ;
     auto size = 3072;
     auto zero = 0 ;
     auto outmode = 0 ;
     auto buffer = std::vector<unsigned char>(3072, 0 );
+    mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
+
+    DBGMSG(std::cout, "Setting mode");
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address) ;
     std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + 4) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + 12) ;
@@ -79,60 +82,41 @@ auto BeaglePru::mapPRU() -> bool {
 }
 
 // =============================================================================
-auto BeaglePru::isState(const std::string &state) const -> bool {
+auto BeaglePru::state() const -> std::string  {
     if (pru_number != PruNumber::zero &&  pru_number != PruNumber::one) {
-        return false ;
+        throw std::runtime_error("Invalid pru number to obain state information");
     }
 #if !defined(BEAGLE)
-    return true ;
+    return "" ;
 #else
     auto path = util::format(firmware_state,static_cast<int>(pru_number)+1) ;
     auto input = std::ifstream(path) ;
     if (!input.is_open()) {
-        return false ;
+        throw std::runtime_error("Unable to obtain state information: "s+path);
+ ;
     }
     auto buffer = std::vector<char>(1024,0) ;
     input.getline(buffer.data(), buffer.size()-1) ;
     if (input.gcount() == 0) {
-        return false ;
+        throw std::runtime_error("Unable to read state information from: "s+path);
     }
     buffer[input.gcount()] = 0 ;
     input.close();
     std::string prustate = buffer.data() ;
     DBGMSG(std::cout, "State is '"s+prustate+"'");
-    return prustate == state ;
+    return prustate ;
 #endif
 }
 
-// =============================================================================
-auto BeaglePru::setState(const std::string &state) -> bool {
-    if (pru_number != PruNumber::zero &&  pru_number != PruNumber::one) {
-        return  false ;
-    }
-#if !defined(BEAGLE)
-    return true ;
-#else
-    auto path = util::format(firmware_state,static_cast<int>(pru_number)+1) ;
-    auto output = std::ofstream(path) ;
-    if (!output.is_open()){
-        DBGMSG(std::cerr, "Unable to open state for pru: "s );
-
-        return false ;
-    }
-    DBGMSG(std::cout, "Writing to pru state: "s + state );
-
-    output << state ;
-    output.close();
-    return true ;
-#endif
-}
 
 // ==============================================================================
 BeaglePru::BeaglePru(PruNumber pruNumber):pru_number(pruNumber),mapped_address(nullptr){
 #if defined(BEAGLE)
     if (pru_number == PruNumber::zero || pru_number == PruNumber::one) {
-
+        DBGMSG(std::cout, "Mapping PRU");
         if (!mapPRU()) {
+            DBGMSG(std::cerr, "Error Mapping PRU");
+
             throw std::runtime_error("Unable to map pru: "s + std::to_string(static_cast<int>(pru_number))) ;
         }
     }
@@ -146,29 +130,6 @@ BeaglePru::~BeaglePru() {
 #endif
 }
 
-// =============================================================================
-auto BeaglePru::open() -> bool {
-#if !defined(BEAGLE)
-    return true ;
-#else
-    return mapPRU();
-#endif
-}
-// =============================================================================
-auto BeaglePru::close() -> void {
-#if defined(BEAGLE)
-    return unmapPRU() ;
-#endif
-}
-
-// =========================================================================================================
-auto BeaglePru::isValid() const -> bool {
-#if !defined(BEAGLE)
-    return true ;
-#else
-    return mapped_address != nullptr ;
-#endif
-}
 
 // =========================================================================================================
 auto BeaglePru::address() -> std::uint8_t* {
@@ -176,41 +137,6 @@ auto BeaglePru::address() -> std::uint8_t* {
     return mapped_address ;
 }
 
-// =========================================================================================================
-auto BeaglePru::isOffline() const -> bool {
-    return isState(offline_state);
-}
-// =========================================================================================================
-auto BeaglePru::isRunning() const -> bool {
-    return isState(runing_state);
-    
-}
-// =========================================================================================================
-auto BeaglePru::load(const std::string &firmware) -> bool {
-    
-    if (pru_number != PruNumber::zero &&  pru_number != PruNumber::one) {
-        return  false ;
-    }
-#if !defined(BEAGLE)
-    return true ;
-#else
-    if (this->firmware() == firmware){
-        return true ;
-    }
-    if (this->isRunning()){
-        this->stop();
-    }
-    
-    auto firmpath = util::format(firmware_location, static_cast<int>(pru_number)+1) ;
-    auto output = std::ofstream(firmpath) ;
-    if (!output.is_open()) {
-        return false ;
-    }
-    output << firmware ;
-    output.close();
-    return true ;
-#endif
-}
 // =========================================================================================================
 auto BeaglePru::firmware() const -> std::string {
     if (pru_number != PruNumber::zero &&  pru_number != PruNumber::one) {
@@ -222,12 +148,13 @@ auto BeaglePru::firmware() const -> std::string {
     auto firmpath = util::format(firmware_location, static_cast<int>(pru_number)+1) ;
     auto input = std::ifstream(firmpath) ;
     if (!input.is_open()) {
+        throw std::runtime_error("Unable to obtain firmware from: "s + firmpath);
         return ""s ;
     }
     auto buffer = std::vector<char>(1024,0) ;
     input.getline(buffer.data(), buffer.size()-1) ;
     if (input.gcount() == 0) {
-        return ""s ;
+        throw std::runtime_error("Unable to read firmware from: "s + firmpath);
     }
     buffer[input.gcount()] = 0 ;
     input.close();
@@ -236,27 +163,3 @@ auto BeaglePru::firmware() const -> std::string {
 #endif
 }
 
-// =========================================================================================================
-auto BeaglePru::start() -> bool {
-#if !defined(BEAGLE)
-    return true ;
-#else
-    DBGMSG(std::cout, "Checking isRunning state: "s + std::to_string(this->isRunning()));
-    if (!this->isRunning()) {
-        return setState("start");
-    }
-    return true ;
-#endif
-}
-
-// =========================================================================================================
-auto BeaglePru::stop() -> bool {
-#if !defined(BEAGLE)
-    return true ;
-#else
-    if (!this->isOffline()) {
-        return setState(halt_state) ;
-    }
-    return true ;
-#endif
-}

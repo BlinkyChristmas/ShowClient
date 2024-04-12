@@ -31,25 +31,13 @@ protected:
     
     auto mapPRU() -> bool ;
     auto unmapPRU() -> void ;
-    
-    auto isState(const std::string &state) const -> bool ;
-    auto setState(const std::string &state) -> bool ;
-    
 public:
     BeaglePru(PruNumber pruNumber);
     virtual ~BeaglePru() ;
-    auto open() -> bool ;
-    auto close() -> void ;
 
-    auto isValid() const -> bool ;
     auto address() -> std::uint8_t* ;
-    
-    auto isOffline() const -> bool ;
-    auto isRunning() const -> bool ;
-    auto load(const std::string &firmware) -> bool ;
     auto firmware() const -> std::string ;
-    auto start() -> bool ;
-    auto stop() -> bool ;
+    auto state() const -> std::string ;
 };
 
 #endif /* BeaglePru_hpp */

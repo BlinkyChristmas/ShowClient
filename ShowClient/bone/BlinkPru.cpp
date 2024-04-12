@@ -9,8 +9,6 @@ const std::string BlinkPru::BLINK_FIRMWARE = "blinkylights.fw" ;
 // =====================================================================================
 BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber),offset(0),length(0){
 #if defined(BEAGLE)
-    this->load(BLINK_FIRMWARE);
-    this->start() ;
     setMode(PruModes::SSD) ;
 #endif
 }
@@ -94,3 +92,22 @@ auto BlinkPru::setConfig(const PRUConfig &config)->bool {
     return true ;
 }
 
+// ======================================================================================
+auto BlinkPru::checkFirmware() -> bool {
+#if defined(BEAGLE)
+    DBGMSG(std::cout, "Firmware is: "s + this->firmware());
+    return this->firmware() == BLINK_FIRMWARE ;
+#else
+    return true ;
+#endif
+}
+// ======================================================================================
+auto BlinkPru::checkState() -> bool {
+#if defined(BEAGLE)
+    DBGMSG(std::cout, "State is: "s + this->state());
+    return this->state() == "running" ;
+#else
+    return true ;
+#endif
+
+}

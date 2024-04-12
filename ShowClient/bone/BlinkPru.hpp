@@ -33,6 +33,8 @@ class BlinkPru : public BeaglePru {
     auto setData(const std::uint8_t *data, int length ) -> bool ;
     auto setConfig(const PRUConfig &config)->bool ;
     auto destination() const -> std::pair<std::uint8_t*,int> ;
+    auto checkFirmware() -> bool ;
+    auto checkState() -> bool ;
     
 };
 #endif /* BlinkPru_hpp */

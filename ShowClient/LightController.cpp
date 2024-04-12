@@ -46,10 +46,6 @@ auto LightController::updateLight() -> void {
 // ===============================================================================
 LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false), current_frame(0), framePeriod(FRAMEPERIOD) {
     timerThread = std::thread(&LightController::runThread,this) ;
-    //pru0.load(BlinkPru::BLINK_FIRMWARE) ;
-    //pru1.load(BlinkPru::BLINK_FIRMWARE) ;
-    //pru0.start();
-    //pru1.start();
 }
 
 // ===============================================================================
@@ -81,6 +77,23 @@ auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &confi
 // ===============================================================================
 auto LightController::setEnabled(bool value) -> void {
     is_enabled = value ;
+    if (isEnabled()) {
+        // Lets check our firmware
+#if defined (BEAGLE)
+        if(!pru0.checkFirmware()) {
+            std::runtime_error("Incorrect firmware in pru 0: "s + pru0.firmware());
+        }
+        if (!pru0.checkState()) {
+            std::runtime_error("Incorrect state in pru 0: "s + pru0.state());
+        }
+        if(!pru1.checkFirmware()) {
+            std::runtime_error("Incorrect firmware in pru 1: "s + pru1.firmware());
+        }
+        if (!pru1.checkState()) {
+            std::runtime_error("Incorrect state in pru 1: "s + pru1.state());
+        }
+#endif
+    }
 }
 // ===============================================================================
 auto LightController::isEnabled() const -> bool {
