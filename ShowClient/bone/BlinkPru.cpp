@@ -66,6 +66,8 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #if !defined (BEAGLE)
     return true ;
 #else
+    DBGMSG(std::cout, "Asked to copy "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
+
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || mapped_address == nullptr  || data == nullptr || length == 0) {
         return false ;
     }
@@ -128,6 +130,6 @@ auto BlinkPru::clear() -> void {
         DBGMSG(std::cout, "PRU data length was zero!");
         return ;
     }
-    DBGMSG(std::cout, "Clearing pru buffer");
-    setData(buffer.data(),length);
+    DBGMSG(std::cout, "Clearing pru buffer with: "s + std::to_string(buffer.size()) + " bytes"s);
+    setData(buffer.data(),static_cast<int>(buffer.size()));
 }
