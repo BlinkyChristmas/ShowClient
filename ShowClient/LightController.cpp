@@ -160,8 +160,9 @@ auto LightController::load(const std::string &name) -> bool {
         has_error = true ;
         return false ;
     }
-    has_error = !lightFile.loadFile(path) ;
-    return !has_error ;
+    is_loaded = lightFile.loadFile(path) ;
+    has_error = !is_loaded ;
+    return is_loaded;
 }
 // ===============================================================================
 auto LightController::start(int frame, int period ) -> bool {
