@@ -140,6 +140,7 @@ auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> bool 
     }
     file_mode = false ;
     data_buffer = data ;
+    is_loaded = true ;
     return true ;
 }
 
