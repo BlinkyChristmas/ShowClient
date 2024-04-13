@@ -65,7 +65,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #if !defined (BEAGLE)
     return true ;
 #else
-    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || mapped_address == nullptr ) {
+    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || mapped_address == nullptr  || data == nullptr || length == 0) {
         return false ;
     }
     if (offset + length > this->length) {
@@ -123,5 +123,6 @@ auto BlinkPru::checkState() -> bool {
 // ======================================================================================
 auto BlinkPru::clear() -> void {
     auto buffer = std::vector<std::uint8_t>(0,length) ;
+    DBGMSG(std::cout, "Clearing pru buffer");
     setData(buffer.data(),length);
 }
