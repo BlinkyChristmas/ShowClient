@@ -18,6 +18,11 @@ BlinkPru::BlinkPru(PruNumber pruNumber):BeaglePru(pruNumber),offset(0),length(0)
 }
 
 // =====================================================================================
+BlinkPru::~BlinkPru(){
+    this->clear();
+}
+
+// =====================================================================================
 auto BlinkPru::setMode(PruModes mode) -> bool {
 #if !defined(BEAGLE)
     return true ;
@@ -76,7 +81,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     }
     DBGMSG(std::cout, "Coping "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
-    DBGMSG(std::cout, "Setting data ready flag"s);
+    //DBGMSG(std::cout, "Setting data ready flag"s);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
     return true ;
 #endif 
@@ -130,6 +135,6 @@ auto BlinkPru::clear() -> void {
         DBGMSG(std::cout, "PRU data length was zero!");
         return ;
     }
-    DBGMSG(std::cout, "Clearing pru buffer with: "s + std::to_string(buffer.size()) + " bytes"s);
+    //DBGMSG(std::cout, "Clearing pru buffer with: "s + std::to_string(buffer.size()) + " bytes"s);
     setData(buffer.data(),static_cast<int>(buffer.size()));
 }

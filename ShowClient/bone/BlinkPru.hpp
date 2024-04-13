@@ -27,6 +27,8 @@ class BlinkPru : public BeaglePru {
     static const std::string BLINK_FIRMWARE ;
 
     BlinkPru(PruNumber pruNumber) ;
+    ~BlinkPru();
+    
     auto setMode(PruModes mode) -> bool ;
     auto mode() const -> PruModes ;
     auto setData(const std::uint8_t *data, int length, int offset  ) -> bool ;
