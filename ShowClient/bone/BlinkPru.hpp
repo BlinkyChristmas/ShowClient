@@ -35,6 +35,7 @@ class BlinkPru : public BeaglePru {
     auto destination() const -> std::pair<std::uint8_t*,int> ;
     auto checkFirmware() -> bool ;
     auto checkState() -> bool ;
+    auto clear() -> void ;
     
 };
 #endif /* BlinkPru_hpp */

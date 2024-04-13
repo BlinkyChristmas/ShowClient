@@ -73,6 +73,10 @@ auto LightController::clearLoaded() -> void {
     file_mode = true ;
     is_loaded = false ;
     has_error = false ;
+#if defined(BEAGLE)
+    pru0.clear();
+    pru1.clear();
+#endif
 }
 
 // ===============================================================================

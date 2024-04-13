@@ -71,6 +71,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     if (offset + length > this->length) {
         length = this->length - offset ;
     }
+    DBGMSG(std::cout, "Coping "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
     return true ;
@@ -116,4 +117,10 @@ auto BlinkPru::checkState() -> bool {
     return true ;
 #endif
 
+}
+
+// ======================================================================================
+auto BlinkPru::clear() -> void {
+    auto buffer = std::vector<std::uint8_t>(0,length) ;
+    setData(buffer.data(),length);
 }
