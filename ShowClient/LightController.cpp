@@ -140,6 +140,7 @@ auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> bool 
     }
     file_mode = false ;
     data_buffer = data ;
+    DBGMSG(std::cout, "Buffer loaded was: "s + std::to_string(data_buffer.size()));
     is_loaded = true ;
     return true ;
 }
@@ -170,18 +171,21 @@ auto LightController::start(int frame, int period ) -> bool {
         // We are going to respond yes, because we swallow this if we are not enabled
         is_playing = true ;
     }
-    else if (!has_error && is_loaded){
-        try{ timer.cancel();}catch(...){} ;
-        {
-            auto lock = std::lock_guard(frame_access) ;
-            current_frame = frame ;
-            
-        }
-        
-        timer.expires_at(std::chrono::steady_clock::now() + std::chrono::milliseconds(framePeriod));
-        timer.async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,&timer) );
+    
+    else if (has_error){
+        return false ;
     }
-    return has_error ;
+    try{ timer.cancel();}catch(...){} ;
+    {
+        auto lock = std::lock_guard(frame_access) ;
+        current_frame = frame ;
+        
+    }
+    
+    timer.expires_at(std::chrono::steady_clock::now() + std::chrono::milliseconds(framePeriod));
+    timer.async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,&timer) );
+    is_playing = true ;
+    return is_playing ;
 }
 // ===============================================================================
 auto LightController::stop() -> void {
