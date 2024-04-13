@@ -30,7 +30,7 @@ auto BlinkPru::setMode(PruModes mode) -> bool {
     auto size = (mode == PruModes::DMX? 512: 3072);
     auto outmode = static_cast<int>(mode) ;
     auto buffer = std::vector<unsigned char>(3072, 0 );
-    DBGMSG(std::cout, "Setting pru length to "s + std::to_string(size));
+    //DBGMSG(std::cout, "Setting pru length to "s + std::to_string(size));
     this->length = size ;
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address+ INDEX_TYPE) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + INDEX_OUTPUTCOUNT) ;
@@ -71,7 +71,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #if !defined (BEAGLE)
     return true ;
 #else
-    DBGMSG(std::cout, "Asked to copy "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
+    //DBGMSG(std::cout, "Asked to copy "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
 
     if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || mapped_address == nullptr  || data == nullptr || length == 0) {
         return false ;
@@ -79,7 +79,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     if (offset + length > this->length) {
         length = this->length - offset ;
     }
-    DBGMSG(std::cout, "Coping "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
+    //DBGMSG(std::cout, "Coping "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
     //DBGMSG(std::cout, "Setting data ready flag"s);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
