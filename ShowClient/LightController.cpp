@@ -194,13 +194,5 @@ auto LightController::stop() -> void {
 
 // ===============================================================================
 auto LightController::clear() -> void {
-    if (is_playing) {
-        this->stop() ;
-    }
-    if (lightFile.isLoaded()){
-        lightFile.clear() ;
-    }
-    data_buffer = std::vector<std::uint8_t>() ;
-    is_loaded = false ;
-    has_error = false ;
+    clearLoaded();
 }
