@@ -43,7 +43,7 @@ auto LightHeader::load(const char *ptr) -> void {
         float check = 0.0 ;
         std::copy(ptr+1,ptr+5,reinterpret_cast<char*>(&check));
         if ( int(check*1000) != 37) {
-            DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Bad sample rate in older format");
+            DBGMSG(std::cout,   "Bad frame period in older format");
             throw std::runtime_error("Unsupported light format");
         }
         // we need the frame acount and frame length
@@ -58,7 +58,7 @@ auto LightHeader::load(const char *ptr) -> void {
         return ;
     }
     else if (signature == SIGNATURE) {
-        //DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming new format for header");
+        //DBGMSG(std::cout, "Assuming new format for header");
         std::copy(ptr+4,ptr+8,reinterpret_cast<char*>(&version)) ;
         std::copy(ptr+8,ptr+12,reinterpret_cast<char*>(&offsetToData)) ;
         std::copy(ptr+12,ptr+16,reinterpret_cast<char*>(&sampleRate)) ;
@@ -72,7 +72,7 @@ auto LightHeader::load(const char *ptr) -> void {
         offsetToData = OFFSETTODATA ;
         return ;
     }
-    DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Invalid format for header");
+    DBGMSG(std::cout, "Invalid format for header");
 
     throw std::runtime_error("Unsupported light format");
 }
@@ -81,14 +81,14 @@ auto LightHeader::load(std::istream &input) -> void {
     input.read(reinterpret_cast<char*>(&signature),4);
     // Lets check our signature
     if ((signature &0xff) == 0) {
- //       DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming old format for header");
+ //       DBGMSG(std::cout, "Assuming old format for header");
         // we are going to "assume old format"?
         float check = 0.0 ;
         input.seekg(1,std::ios::beg) ;
         
         input.read(reinterpret_cast<char*>(&check),4) ;
         if ( int(1000.0 * check) != 37) {
-            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s +  "Bad sample rate in older format");
+            DBGMSG(std::cout, "Bad frame period in older format");
             throw std::runtime_error("Unsupported light format");
         }
         // we need the frame acount and frame length
@@ -99,7 +99,7 @@ auto LightHeader::load(std::istream &input) -> void {
         return ;
     }
     else if (signature == SIGNATURE){
-        //DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Assuming new format for header");
+        //DBGMSG(std::cout,  "Assuming new format for header");
 
         input.read(reinterpret_cast<char*>(&version),4);
         input.read(reinterpret_cast<char*>(&offsetToData),4);
@@ -112,7 +112,7 @@ auto LightHeader::load(std::istream &input) -> void {
         offsetToData = OFFSETTODATA ;
         return ;
     }
-    DBGMSG(std::cout,  util::sysTimeToString(util::ourclock::now())+": "s + "Invalid format for header");
+    DBGMSG(std::cout,   "Invalid format for header");
 
     throw std::runtime_error("Unsupported light format");
 }

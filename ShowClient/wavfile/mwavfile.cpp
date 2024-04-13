@@ -90,7 +90,7 @@ auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
         auto fileHeader = FileHeader(ptr) ;
         if (!fileHeader.valid()) {
             // We should unmap and return false
-            DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Not a recognized wav file: "s + filepath.string());
+            DBGMSG(std::cerr,  "Not a recognized wav file: "s + filepath.string());
             this->memoryMap.unmap() ;
             return false ;
         }
@@ -98,7 +98,7 @@ auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
         auto chunk = ChunkHeader(ptr + offset) ;
         if (!chunk.isFormat()){
             // we have an issue, or bad assumption that format is always first)
-            DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Did not find a format chunk first: "s + filepath.string());
+            DBGMSG(std::cerr,  "Did not find a format chunk first: "s + filepath.string());
             this->memoryMap.unmap() ;
             return false ;
         }
@@ -106,7 +106,7 @@ auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
         offset += 8 ;
         formatChunk.load(ptr+offset) ;
         if (!formatChunk.valid()){
-            DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Seems to be not a PCM (uncompressed) or 44100 format: "s + filepath.string());
+            DBGMSG(std::cerr, "Seems to be not a PCM (uncompressed) or 44100 format: "s + filepath.string());
             this->memoryMap.unmap() ;
             return false ;
         }
@@ -127,7 +127,7 @@ auto MWAVFile::load(const std::filesystem::path &filepath) -> bool {
         return ptrToData != nullptr ;
     }
     catch (const std::exception &e) {
-        DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Unable to process: "s + filepath.string() + "\n"s + e.what()) ;
+        DBGMSG(std::cerr,  "Unable to process: "s + filepath.string() + "\n"s + e.what()) ;
         return false ;
     }
     catch (...){

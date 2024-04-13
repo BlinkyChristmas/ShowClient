@@ -36,14 +36,13 @@ auto LightFile::loadFile(const std::filesystem::path &lightfile) -> bool {
             return false ;
         }
         try {
-//            DBGMSG(std::cout,util::sysTimeToString(util::ourclock::now())+": "s +  "Loading light header: "s + lightfile.string()) ;
+//            DBGMSG(std::cout,"Loading light header: "s + lightfile.string()) ;
             lightHeader.load(reinterpret_cast<const char *>(lightData.ptr)) ;
-            //std::cout << "Mapped file: " << reinterpret_cast<std::uint64_t>(ptr) << " size: " << lightData.size << std::endl;
         }
         catch (...) {
             lightHeader.clear();
             lightData.unmap() ;
-            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Error Loading light header: "s + lightfile.string()) ;
+            DBGMSG(std::cout, "Error Loading light header: "s + lightfile.string()) ;
 
             return false ;
 
@@ -52,7 +51,7 @@ auto LightFile::loadFile(const std::filesystem::path &lightfile) -> bool {
     }
     catch (const std::exception &e){
         // we had some type of error
-        DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Error loading: "s + lightfile.string()+"\n"s+e.what());
+        DBGMSG(std::cerr, "Error loading: "s + lightfile.string()+"\n"s+e.what());
         return false ;
     }
 }

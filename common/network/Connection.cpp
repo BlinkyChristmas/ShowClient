@@ -286,7 +286,7 @@ auto Connection::send(const Packet &packet) -> bool {
     try {
         auto amount = asio::write(this->netSocket,asio::buffer(packet.data.data(),packet.size()),ec)  ;
         if (ec) {
-            //DBGMSG(std::cerr, util::sysTimeToString(util::ourclock::now())+": "s + "Write failed: "s + ec.message()) ;
+            //DBGMSG(std::cerr, "Write failed: "s + ec.message()) ;
             return false ;
         }
         auto status = amount == packet.size() ;

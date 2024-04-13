@@ -26,7 +26,6 @@ auto BufferPacket::setPacketData(const std::vector<std::uint8_t> &packetdata) ->
 //======================================================================
 auto BufferPacket::packetData() const   -> std::vector<std::uint8_t>  {
     auto packetdata = std::vector<std::uint8_t>(this->length() - Packet::PACKETHEADERSIZE,0) ;
-    DBGMSG(std::cout,"Buffer packet header had a length of: "s + std::to_string(this->length())+" so we thought vector was: "s + std::to_string(packetdata.size()) );
     std::copy(this->bufferData().begin() + Packet::PACKETHEADERSIZE, this->bufferData().end(), packetdata.begin() );
     return packetdata;
 }

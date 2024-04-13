@@ -140,7 +140,7 @@ auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> bool 
     }
     file_mode = false ;
     data_buffer = data ;
-    DBGMSG(std::cout, "Buffer loaded was: "s + std::to_string(data_buffer.size()));
+    //DBGMSG(std::cout, "Buffer loaded was: "s + std::to_string(data_buffer.size()));
     is_loaded = true ;
     return true ;
 }
