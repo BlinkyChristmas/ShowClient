@@ -80,8 +80,8 @@ auto LightFile::dataForFrame(std::int32_t frame) const -> const std::uint8_t* {
             frame = lightHeader.frameCount - 1 ;
         }
         if (frame >= 0){
-            auto ptr = lightHeader.offsetToData  + (frame * this->frameLength()) ;
-             rvalue = const_cast<const std::uint8_t*>(reinterpret_cast<std::uint8_t*>(ptr)) ;
+            rvalue  = lightData.ptr + lightHeader.offsetToData  + (frame * this->frameLength()) ;
+            
         }
     }
     return rvalue ;

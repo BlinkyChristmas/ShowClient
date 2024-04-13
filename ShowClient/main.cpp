@@ -148,6 +148,8 @@ auto runLoop(ClientConfiguration &config) -> bool {
                         client->shutdown() ;
 
                         client->close() ;
+                        musicController.clear();
+                        lightController.clear();
                     }
                 }
             }
