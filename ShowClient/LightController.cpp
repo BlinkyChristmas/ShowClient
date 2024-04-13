@@ -78,7 +78,7 @@ auto LightController::clearLoaded() -> void {
 // ===============================================================================
 auto LightController::updateLight(int frame ) -> void {
 #if defined(BEAGLE)
-    auto [data,length] = this->dataForFrame(frame)
+    auto [data,length] = this->dataForFrame(frame);
     if (data != nullptr && length != 0 ){
         pru0.setData(data, length);
         pru1.setData(data, length);
