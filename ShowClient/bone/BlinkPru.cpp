@@ -25,6 +25,7 @@ auto BlinkPru::setMode(PruModes mode) -> bool {
     auto size = (mode == PruModes::DMX? 512: 3072);
     auto outmode = static_cast<int>(mode) ;
     auto buffer = std::vector<unsigned char>(3072, 0 );
+    DBGMSG(std::cout, "Setting pru length to "s + std::to_string(this->length));
     this->length = size ;
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address+ INDEX_TYPE) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + INDEX_OUTPUTCOUNT) ;
@@ -123,6 +124,10 @@ auto BlinkPru::checkState() -> bool {
 // ======================================================================================
 auto BlinkPru::clear() -> void {
     auto buffer = std::vector<std::uint8_t>(0,length) ;
+    if (length <= 0){
+        DBGMSG(std::cout, "PRU data length was zero!");
+        return ;
+    }
     DBGMSG(std::cout, "Clearing pru buffer");
     setData(buffer.data(),length);
 }
