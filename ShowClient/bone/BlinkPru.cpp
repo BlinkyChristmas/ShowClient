@@ -125,7 +125,7 @@ auto BlinkPru::checkState() -> bool {
 
 // ======================================================================================
 auto BlinkPru::clear() -> void {
-    auto buffer = std::vector<std::uint8_t>(0,length) ;
+    auto buffer = std::vector<std::uint8_t>(this->length,0) ;
     if (length <= 0){
         DBGMSG(std::cout, "PRU data length was zero!");
         return ;
