@@ -65,7 +65,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
 #if !defined (BEAGLE)
     return true ;
 #else
-    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) ) {
+    if ((pru_number != PruNumber::zero &&  pru_number != PruNumber::one) || mapped_address == nullptr ) {
         return false ;
     }
     if (offset + length > this->length) {
