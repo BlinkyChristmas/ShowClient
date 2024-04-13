@@ -73,6 +73,7 @@ auto BlinkPru::setData(const std::uint8_t *data, int length, int offset ) -> boo
     }
     DBGMSG(std::cout, "Coping "s + std::to_string(length) + " bytes starting at offset: "s + std::to_string(offset));
     std::copy(data,data+length,mapped_address + INDEX_PRUOUTPUT);
+    DBGMSG(std::cout, "Setting data ready flag"s);
     std::copy(reinterpret_cast<const char*>(&one),reinterpret_cast<const char*>(&one)+4,mapped_address + INDEX_DATAREADY) ;
     return true ;
 #endif 
