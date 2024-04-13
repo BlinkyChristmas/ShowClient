@@ -15,14 +15,16 @@ auto LightController::runThread() -> void {
 // ==================================================================================================
 auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer ) -> void {
     if (ec != asio::error::operation_aborted) {
-        // reschedule another
+        auto frame = 0 ;
         {
-            auto lock = std::lock_guard(frameAccess);
-           
-            currentFrame += 1 ;
+            auto lock = std::lock_guard(frame_access);
             
+            if (file_mode) {
+                current_frame += 1 ;
+            }
+            frame = current_frame ;
         }
-        updateLight();
+        updateLight(frame);
         auto time = timer->expiry() ;
         timer->expires_at(time + std::chrono::milliseconds(framePeriod)) ;
         timer->async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,timer) );
@@ -30,63 +32,8 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
 
 }
 
-// ==================================================================================================
-auto LightController::updateLight() -> void {
-#if defined(BEAGLE)
-    auto frame = currentFrame ;
-    
-    auto data = std::vector<std::uint8_t>() ;
-    std::int32_t length = 0 ;
-    if (file_mode){
-        data = lightFile.dataForFrame(frame) ;
-        //DBGMSG(std::cout, "Acquired data for frame: "s + std::to_string(frame) + " of size: "s + std::to_string(data.size()));
-    }
-    else {
-        //data = data_buffer.data() ;
-        //length = static_cast<int>(data_buffer.size()) ;
-    }
-    if (!data.empty()){
-        DBGMSG(std::cout, "Writing to pru: "s + std::to_string(data.size()));
-        pru0.setData(data.data(), data.size());
-        pru1.setData(data.data(), data.size());
-    }
-#endif
-}
-
-
 // ===============================================================================
-LightController::LightController():timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), currentFrame(0),file_mode(true), is_enabled(false), has_error(false),  framePeriod(FRAMEPERIOD),is_loaded(false) {
-    timerThread = std::thread(&LightController::runThread,this) ;
-}
-
-// ===============================================================================
-LightController::~LightController(){
-    try {
-        timer.cancel();
-    }
-    catch(...){}
-    if (!io_context.stopped()) {
-        io_context.stop() ;
-    }
-    if (timerThread.joinable()){
-        timerThread.join();
-    }
-}
-
-// ===============================================================================
-auto LightController::setLightInfo(const std::filesystem::path &location, const std::string &extension) -> void {
-    this->location = location ;
-    this->extension = extension ;
-}
-
-// ===============================================================================
-auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void {
-    pru0.setConfig(config0);
-    pru1.setConfig(config1);
-}
-
-// ===============================================================================
-auto LightController::setEnabled(bool value) -> void {
+auto LightController::userSetEnabled(bool value) -> void {
     if (value) {
         // Lets check our firmware
 #if defined (BEAGLE)
@@ -109,112 +56,146 @@ auto LightController::setEnabled(bool value) -> void {
             throw std::runtime_error("Incorrect state in pru 1: "s + pru1.state());
         }
 #endif
-        is_enabled = value ;
     }
-}
-// ===============================================================================
-auto LightController::isEnabled() const -> bool {
-    return is_enabled ;
-}
-
-// ===============================================================================
-auto LightController::hasError() const -> bool {
-    return has_error ;
-}
-
-// ===============================================================================
-auto LightController::setSync(int syncFrame) -> void {
-    auto lock = std::lock_guard(frameAccess);
-    auto delta = currentFrame - syncFrame ;
-    if (std::abs(delta) < 3) {
-        return ;
-    }
-    if (std::abs(delta) < 6) {
-        if (delta > 0) {
-            currentFrame -= 1 ;
-            
-        }
-        else {
-            currentFrame += 1 ;
-            
-        }
-    }
-    else {
-        DBGMSG(std::cout, "Resetting from to sync: "s + std::to_string(syncFrame));
-        currentFrame = syncFrame ;
-    }
-
 }
 
 // =============================================================================
-auto LightController::loadLight(const std::string &name) -> bool {
-    current_loaded = name ;
-    data_buffer = std::vector<std::uint8_t>();
-    file_mode = true ;
-
-    DBGMSG(std::cout, "Load light: "s + name ) ;
-    if (!is_enabled) {
-        return true ;
-    }
-    try { timer.cancel() ;} catch(...){}
-    {
-        auto lock = std::lock_guard(frameAccess) ;
-        currentFrame = 0 ;
-    }
-    has_error = false ;
-    auto path = location / std::filesystem::path(name + extension) ;
-    if (!std::filesystem::exists(path)){
-        has_error = true ;
-        DBGMSG(std::cout, "Error loading light: "s + name ) ;
-
-        return false ;
+auto LightController::clearLoaded() -> void {
+    if (is_playing){
+        this->stop() ;
     }
     if (lightFile.isLoaded()){
         lightFile.clear();
     }
-    has_error = !lightFile.loadFile(path) ;
-    DBGMSG(std::cout, "loading light: "s + name + " was succesful? "s + std::to_string(!has_error) ) ;
-    return !has_error ;
-}
-// =============================================================================
-auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> void{
-    data_buffer = data ;
-    file_mode = false ;
+    data_buffer = std::vector<std::uint8_t>() ;
+
+    data_name = "" ;
+    file_mode = true ;
+    is_loaded = false ;
     has_error = false ;
-    current_loaded = "data buffer" ;
+}
+
+// ===============================================================================
+auto LightController::updateLight(int frame ) -> void {
+#if defined(BEAGLE)
+    auto [data,length] = this->dataForFrame(frame)
+    if (data != nullptr && length != 0 ){
+        pru0.setData(data, length);
+        pru1.setData(data, length);
+    }
+#endif
+}
+
+// ===============================================================================
+auto LightController::dataForFrame(int frame) -> std::pair<const std::uint8_t*,int> {
+    const std::uint8_t *ptr = nullptr ;
+    auto length = 0 ;
+    if (is_loaded){
+        if (!file_mode){
+            ptr = data_buffer.data() ;
+            length = static_cast<int>(data_buffer.size());
+        }
+        else {
+            length = lightFile.frameLength() ;
+            ptr = lightFile.dataForFrame(frame);
+        }
+    }
+    return std::make_pair(ptr, length);
 }
 // ===============================================================================
-auto LightController::currentLoaded() const -> const std::string& {
-    return current_loaded ;
+LightController::LightController():IOController(),timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), file_mode(true),   framePeriod(FRAMEPERIOD){
+    
+    timerThread = std::thread(&LightController::runThread,this) ;
+}
+
+// ===============================================================================
+LightController::~LightController(){
+    try {
+        timer.cancel();
+    }
+    catch(...){}
+    if (!io_context.stopped()) {
+        io_context.stop() ;
+    }
+    if (timerThread.joinable()){
+        timerThread.join();
+    }
+}
+
+// ===============================================================================
+auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void {
+    pru0.setConfig(config0);
+    pru1.setConfig(config1);
+}
+
+// =============================================================================
+auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> bool {
+    clearLoaded();
+    if (!is_enabled){
+        return true;
+    }
+    file_mode = false ;
+    data_buffer = data ;
+    return true ;
+}
+
+// =============================================================================
+auto LightController::load(const std::string &name) -> bool {
+    clearLoaded() ;
+    if (!is_enabled){
+        return true ;
+    }
+    if (name.empty()) {
+        // This is ok, we just are going to do nothing
+        return true ;
+    }
+    auto path = data_location / std::filesystem::path(name + data_extension) ;
+    if (!std::filesystem::exists(path)){
+        has_error = true ;
+        return false ;
+    }
+    has_error = !lightFile.loadFile(path) ;
+    return !has_error ;
 }
 // ===============================================================================
 auto LightController::start(int frame, int period ) -> bool {
-    DBGMSG(std::cout,"Light start: Frame - "s + std::to_string(frame) + " Period - "s + std::to_string(period));
     framePeriod = period ;
-    
-    if ((lightFile.isLoaded()  || !file_mode) && is_enabled){
+    is_playing = false ;
+    if ( !is_enabled ) {
+        // We are going to respond yes, because we swallow this if we are not enabled
+        is_playing = true ;
+    }
+    else if (!has_error && is_loaded){
         try{ timer.cancel();}catch(...){} ;
         {
-            auto lock = std::lock_guard(frameAccess) ;
-            currentFrame = frame ;
-           
+            auto lock = std::lock_guard(frame_access) ;
+            current_frame = frame ;
+            
         }
-
+        
         timer.expires_at(std::chrono::steady_clock::now() + std::chrono::milliseconds(framePeriod));
         timer.async_wait(std::bind(&LightController::tick,this,std::placeholders::_1,&timer) );
-
     }
-    return false ;
+    return has_error ;
 }
 // ===============================================================================
 auto LightController::stop() -> void {
-    timer.cancel() ;
-    {
-        auto lock = std::lock_guard(frameAccess) ;
-        currentFrame = 0 ;
+    if (is_playing){
+        try {timer.cancel();} catch(...){}
     }
-    lightFile.clear();
-    file_mode = true ;
-    
+    is_playing = false ;
+    has_error = false ;
+}
 
+// ===============================================================================
+auto LightController::clear() -> void {
+    if (is_playing) {
+        this->stop() ;
+    }
+    if (lightFile.isLoaded()){
+        lightFile.clear() ;
+    }
+    data_buffer = std::vector<std::uint8_t>() ;
+    is_loaded = false ;
+    has_error = false ;
 }

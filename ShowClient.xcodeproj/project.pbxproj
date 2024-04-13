@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		56134E602BC6005100D79BCA /* LightController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56134E5E2BC6005100D79BCA /* LightController.cpp */; };
 		56AC2F562BC95A31005349C2 /* BufferPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 566435D52BC7F16A0093C309 /* BufferPacket.cpp */; };
+		56AC2FA82BCA6AEB005349C2 /* IOController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56AC2FA62BCA6AEB005349C2 /* IOController.cpp */; };
 		56E975512BC15DD800AA1B50 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975502BC15DD800AA1B50 /* main.cpp */; };
 		56E9757C2BC15EC200AA1B50 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975572BC15EC200AA1B50 /* Connection.cpp */; };
 		56E9757D2BC15EC200AA1B50 /* FrameTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E975592BC15EC200AA1B50 /* FrameTimer.cpp */; };
@@ -62,6 +63,8 @@
 		56134E5F2BC6005100D79BCA /* LightController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightController.hpp; sourceTree = "<group>"; };
 		566435D52BC7F16A0093C309 /* BufferPacket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BufferPacket.cpp; sourceTree = "<group>"; };
 		566435D62BC7F16A0093C309 /* BufferPacket.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BufferPacket.hpp; sourceTree = "<group>"; };
+		56AC2FA62BCA6AEB005349C2 /* IOController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOController.cpp; sourceTree = "<group>"; };
+		56AC2FA72BCA6AEB005349C2 /* IOController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IOController.hpp; sourceTree = "<group>"; };
 		56ACA1D32BC6F61D00819071 /* AM335X-PRU-RPROC-PRUCAPE-00A0.dts.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AM335X-PRU-RPROC-PRUCAPE-00A0.dts.example"; sourceTree = "<group>"; };
 		56ACA1D42BC6F61D00819071 /* blinkylight.dts */ = {isa = PBXFileReference; lastKnownFileType = text; path = blinkylight.dts; sourceTree = "<group>"; };
 		56ACA1D52BC6F61D00819071 /* WorkingDTS.dts */ = {isa = PBXFileReference; lastKnownFileType = text; path = WorkingDTS.dts; sourceTree = "<group>"; };
@@ -270,6 +273,8 @@
 				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
 				56E976292BC37EE300AA1B50 /* MusicController.cpp */,
 				56E9762A2BC37EE300AA1B50 /* MusicController.hpp */,
+				56AC2FA62BCA6AEB005349C2 /* IOController.cpp */,
+				56AC2FA72BCA6AEB005349C2 /* IOController.hpp */,
 				56134E5E2BC6005100D79BCA /* LightController.cpp */,
 				56134E5F2BC6005100D79BCA /* LightController.hpp */,
 			);
@@ -500,6 +505,7 @@
 				56E976272BC3253100AA1B50 /* mwavfile.cpp in Sources */,
 				56E975872BC15EC200AA1B50 /* SyncPacket.cpp in Sources */,
 				56E975822BC15EC200AA1B50 /* NopPacket.cpp in Sources */,
+				56AC2FA82BCA6AEB005349C2 /* IOController.cpp in Sources */,
 				56E9758F2BC15F5100AA1B50 /* RtAudio.cpp in Sources */,
 				56E9757F2BC15EC200AA1B50 /* ErrorPacket.cpp in Sources */,
 				56E9758A2BC15EC200AA1B50 /* timeutil.cpp in Sources */,

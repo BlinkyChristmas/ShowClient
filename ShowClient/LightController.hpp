@@ -9,15 +9,16 @@
 #include <vector>
 #include <mutex>
 #include <filesystem>
+#include <utility>
 
 #include "asio.hpp"
 
 #include "bone/BlinkPru.hpp"
 #include "lightfile/lightfile.hpp"
 #include "PRUConfig.hpp"
+#include "IOController.hpp"
 
-class LightController {
-    static constexpr int FRAMEPERIOD = 37 ;
+class LightController : public IOController {
     BlinkPru pru0 ;
     BlinkPru pru1 ;
     
@@ -29,48 +30,34 @@ class LightController {
     asio::steady_timer timer ;
     auto tick(const asio::error_code &ec,asio::steady_timer* timer ) -> void ;
     
-    int currentFrame ;
-    mutable std::mutex frameAccess ;
     int framePeriod ;
     
     bool file_mode ;
-    bool is_enabled ;
-    bool is_loaded ;
-
-    bool has_error ;
-    
-    std::filesystem::path location ;
-    std::string extension ;
     
     LightFile lightFile ;
     PRUConfig config0 ;
     PRUConfig config1 ;
-    std::string current_loaded ;
-    auto updateLight() -> void ;
     std::vector<std::uint8_t> data_buffer ;
     
+    auto userSetEnabled(bool state) -> void final;
+
+    auto clearLoaded() -> void ;
+    auto updateLight(int frame) -> void ;
+    auto dataForFrame(int frame) -> std::pair<const std::uint8_t*,int> ;
  public:
     LightController() ;
     ~LightController() ;
 
-    auto setLightInfo(const std::filesystem::path &location, const std::string &extension) -> void ;
-    auto setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void ;
- 
-    auto setEnabled(bool value) -> void ;
-    auto isEnabled() const -> bool ;
-    auto hasError() const -> bool ;
-
-    auto setSync(int syncFrame) -> void ;
-
-    auto loadLight(const std::string &name) -> bool ;
-    auto loadBuffer(const std::vector<std::uint8_t> &data) -> void ;
+    // Unique onese
     
-    auto currentLoaded() const -> const std::string& ;
+    auto setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void ;
+    auto loadBuffer(const std::vector<std::uint8_t> &data) -> bool ;
+    
 
-    auto start(int frame,int period = FRAMEPERIOD) -> bool ;
-    auto stop() -> void ;
-
-//    auto copyToPRU(PruNumber number, const std::uint8_t *data, int length, int offset = 0) -> bool ;
+    auto load(const std::string &name) -> bool final ;
+    auto start(int frame,int period = IOController::FRAMEPERIOD) -> bool  final;
+    auto stop() -> void final ;
+    auto clear() -> void final ;
 };
 
 #endif /* LightController_hpp */

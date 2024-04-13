@@ -28,6 +28,7 @@ int main(int argc, const char * argv[]) {
     auto exitcode = EXIT_SUCCESS ;
     try {
         ledController.clear() ;
+        DBGMSG(std::cout, "Setting run to flash 0");
         ledController.setState(StatusLed::RUN, LedState::FLASH);
         if (argc < 2) { throw std::runtime_error("Missing configuration file!");}
         if (!configuration.load(std::filesystem::path(argv[1]))){
@@ -95,11 +96,11 @@ auto runLoop(ClientConfiguration &config) -> bool {
     client->setConnectdBeforeRead(std::bind(&initialConnect,std::placeholders::_1));
     musicController.setEnabled(config.useAudio) ;
     musicController.setDevice(config.audioDevice);
-    musicController.setMusicInformation(config.musicPath, config.musicExtension);
+    musicController.setDataInformation(config.musicPath, config.musicExtension);
     musicController.setMusicErrorCallback(std::bind(&musicError,std::placeholders::_1));
     lightController.setPRUInfo(config.pruSetting[0], config.pruSetting[1]) ;
     lightController.setEnabled(config.useLight) ;
-    lightController.setLightInfo(config.lightPath, config.lightExtension);
+    lightController.setDataInformation(config.lightPath, config.lightExtension);
     while (config.runSpan.inRange()) {
         ledController.setState(StatusLed::RUN, LedState::ON) ;
         try {
@@ -107,9 +108,9 @@ auto runLoop(ClientConfiguration &config) -> bool {
                 // We shoud set anything we need to because the config file changed
                 musicController.setEnabled(config.useAudio) ;
                 musicController.setDevice(config.audioDevice);
-                musicController.setMusicInformation(config.musicPath, config.musicExtension);
+                musicController.setDataInformation(config.musicPath, config.musicExtension);
                 lightController.setEnabled(config.useLight) ;
-                lightController.setLightInfo(config.lightPath, config.lightExtension);
+                lightController.setDataInformation(config.lightPath, config.lightExtension);
 
             }
         }
@@ -119,12 +120,14 @@ auto runLoop(ClientConfiguration &config) -> bool {
         if (config.connectTime.inRange()) {
             // We should be connected!
             if (!client->is_open()) {
+                //DBGMSG(std::cout, "Setting connect to flash 1");
                 ledController.setState(StatusLed::CONNECT, LedState::FLASH) ;
                 
                 // we are not open!
                 if (client->connect(config.serverIP, config.serverPort, config.clientPort)) {
                     // We connected!
                     DBGMSG(std::cout,"Connected to "s + config.serverIP+":"s+std::to_string(config.serverPort));
+                    //DBGMSG(std::cout, "Setting connect to ON 1");
                     ledController.setState(StatusLed::CONNECT, LedState::ON) ;
                     // We need to setup everything!
                 }
@@ -140,7 +143,12 @@ auto runLoop(ClientConfiguration &config) -> bool {
                 
                 if (client->expire(180)) {
                     // It has been three minutes since we got something, we probably should just disconnect
-                    client->close() ;
+                    
+                    if (client->is_open()) {
+                        client->shutdown() ;
+
+                        client->close() ;
+                    }
                 }
             }
         }
@@ -149,7 +157,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
             if (client->is_open()){
                 client->close() ;
                 DBGMSG(std::cout,"Disconnecting from: "s + client->ip());
-                
+                //DBGMSG(std::cout, "Setting connect to OFF 1");
                 ledController.setState(StatusLed::CONNECT, LedState::OFF) ;
             }
         }
@@ -158,6 +166,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
         
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    //DBGMSG(std::cout, "Setting run to off 1");
     ledController.setState(StatusLed::RUN, LedState::OFF) ;
     
     if (client->is_open()){
@@ -182,7 +191,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
         musicController.load(music);
     }
     if (lightController.isEnabled()) {
-        lightController.loadLight(light) ;
+        lightController.load(light) ;
     }
     return true ;
 }
@@ -192,8 +201,8 @@ auto processSync(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<SyncPacket*>(packet.get()) ;
     
     auto frame = payload->syncFrame() ;
-    musicController.setSync(frame);
-    lightController.setSync(frame);
+    musicController.syncFrame(frame);
+    lightController.syncFrame(frame);
     return true ;
 }
 
@@ -202,30 +211,33 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<PlayPacket*>(packet.get()) ;
     auto state = payload->state() ;
     auto frame = payload->frame() ;
-    
+    //DBGMSG(std::cout, "Setting play to off 1");
     ledController.setState(StatusLed::PLAY, (state?LedState::ON: LedState::OFF)) ;
     if (state) {
         if (musicController.isEnabled()){
             if (musicController.hasError()){
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.currentLoaded());
-                DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
+                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
+                DBGMSG(std::cout, "Error on "s + musicController.name());
                 client->send(packet);
+                //DBGMSG(std::cout, "Setting play to flash 2");
                 ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
 
             }
             else if (!musicController.start(frame)) {
-                DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.currentLoaded());
+                DBGMSG(std::cout, "Error on "s + musicController.name());
+                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
                 client->send(packet);
+                //DBGMSG(std::cout, "Setting play to flash 3");
                 ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
 
             }
         }
         if (lightController.isEnabled()){
             if (lightController.hasError()){
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, lightController.currentLoaded());
-                DBGMSG(std::cout, "Error on "s + lightController.currentLoaded());
+                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, lightController.name());
+                DBGMSG(std::cout, "Error on "s + lightController.name());
                 client->send(packet);
+                //DBGMSG(std::cout, "Setting play to flash 4");
                 ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
             }
             else if (!lightController.start(frame)) {
@@ -247,6 +259,7 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
 auto processShow(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<ShowPacket*>(packet.get()) ;
     auto state = payload->state() ;
+    //DBGMSG(std::cout, "Setting show to off 1");
     ledController.setState(StatusLed::SHOW, (state?LedState::ON: LedState::OFF)) ;
     return true ;
 }
@@ -273,18 +286,21 @@ auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool{
 auto stopCallback(ClientPointer client) -> void {
     // We stopped, so we have some cleanup, but lets do a few things
     // We should turn of playing
+    //DBGMSG(std::cout, "Setting play to off 5");
     ledController.setState(StatusLed::PLAY, LedState::OFF) ;
     musicController.stop() ;
     // We should turn off show
+    //DBGMSG(std::cout, "Setting show to off 2");
     ledController.setState(StatusLed::SHOW, LedState::OFF) ;
 }
 
 // ================================================================================================
 auto musicError(MusicPointer music) -> void {
-    DBGMSG(std::cout, "Error on "s + musicController.currentLoaded());
-    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.currentLoaded());
+    DBGMSG(std::cout, "Error on "s + musicController.name());
+    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
     client->send(packet) ;
     musicController.stop() ;
+    //DBGMSG(std::cout, "Setting play to flash 9");
     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
 }
 
@@ -293,6 +309,7 @@ auto initialConnect(ClientPointer client) -> void {
     if (!musicController.initialize(musicController.device()) ) {
         auto errorPacket = ErrorPacket(ErrorPacket::CatType::AUDIO,"") ;
         client->send(errorPacket);
+        //DBGMSG(std::cout, "Setting play to flash 10");
         ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
     }
 }

@@ -163,4 +163,7 @@ auto Client::setStopCallback(ClientStop function) -> void {
 auto Client::setConnectdBeforeRead(ConnectBeforeRead function) -> void {
     connectBeforeRead = function ;
 }
-
+// =======================================================================
+auto Client::shutdown()->void {
+        connection->shutdown();
+}

@@ -54,5 +54,6 @@ public:
     auto clearWriteTime() -> void ;
     auto setStopCallback(ClientStop function) -> void ;
     auto setConnectdBeforeRead(ConnectBeforeRead function) -> void ;
+    auto shutdown() ->void ;
 };
 #endif /* Client_hpp */

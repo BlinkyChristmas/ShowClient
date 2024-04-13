@@ -71,75 +71,20 @@ auto LightFile::frameLength() const -> std::int32_t {
     return static_cast<std::int32_t>(lightHeader.frameLength) ;
 }
 
-//======================================================================
-auto LightFile::copy(std::int32_t frame,  unsigned char *buffer, int offset, int length )  -> int {
-    //std::cout <<"Before copy, length is: "s << std::to_string(length) << std::endl;
-    if (lightData.ptr == nullptr) {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought light data ptr was null"s);
-        return 0 ;
-    }
-    if (buffer == nullptr) {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought buffer ptr was null"s);
-        return 0 ;
-    }
-    if (frame >= lightHeader.frameCount) {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought frame ( "s + std::to_string(frame) + " ) was larger then light file ( "s + std::to_string(lightHeader.frameCount)+ ")"s );
-        return 0 ;
-    }
-    if (length == 0) {
-//        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Light file thought length requested was 0, so setting to frame length"s);
-        length = lightHeader.frameLength ;
-    }
-    if ( (offset + length) > static_cast<int>(lightHeader.frameLength)) {
-       
-        //std::cout << "length: " << length << " offset: " << offset  << " combined exceeds framelength, resetting to : "<< lightHeader.frameLength - offset << std::endl;
-        length = lightHeader.frameLength - offset ;
-    }
-    
-    auto dataoffset = lightHeader.offsetToData  + (frame * lightHeader.frameLength) + offset;
-    if (dataoffset < lightData.size) {
-        if (dataoffset + length >= this->lightData.size) {
-            length = static_cast<int>(lightData.size) - dataoffset ;
-        }
-        if (length > 0) {
-//            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copying "s + std::to_string(length) + " from light file from offset: "s + std::to_string(dataoffset) + " (frame: "s + std::to_string(frame) +" FrameLength: "s + std::to_string(lightHeader.frameLength) + " cfg offset: "s + std::to_string(offset));
-            std::memcpy(buffer, lightData.ptr + dataoffset, length);
-            
-//            DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Copy complete") ;
-        }
-        else {
-            length = 0 ;
-        }
-        
-    }
-    else {
-        DBGMSG(std::cout, util::sysTimeToString(util::ourclock::now())+": "s + "Avoided corruption, frame: "s+std::to_string(frame));
-        return 0 ;
-    }
-    return length ;
-}
 
 //======================================================================
-auto LightFile::dataForFrame(std::int32_t frame) const -> std::vector<std::uint8_t> {
-    if (lightData.ptr == nullptr) {
-        
-        return std::vector<std::uint8_t>() ;
-    }
-    if (frame >= lightHeader.frameCount) {
-       
-        frame = lightHeader.frameCount - 1 ;
-        if (frame < 0 ) {
-            std::vector<std::uint8_t>()  ;
+auto LightFile::dataForFrame(std::int32_t frame) const -> const std::uint8_t* {
+    const std::uint8_t *rvalue = nullptr ;
+    if (lightData.ptr != nullptr ){
+        if (frame >= lightHeader.frameCount) {
+            frame = lightHeader.frameCount - 1 ;
+        }
+        if (frame >= 0){
+            auto ptr = lightHeader.offsetToData  + (frame * this->frameLength()) ;
+             rvalue = const_cast<const std::uint8_t*>(reinterpret_cast<std::uint8_t*>(ptr)) ;
         }
     }
-    auto data = std::vector<std::uint8_t>();
-    if (isLoaded()){
-        auto dataoffset = lightHeader.offsetToData  + (frame * this->frameLength()) ;
-        data = std::vector<std::uint8_t>(0,this->frameLength());
-        
-        std::copy(lightData.ptr + dataoffset,lightData.ptr + dataoffset+data.size(),data.data());
-    }
-    return data ;
+    return rvalue ;
 }
 
 //======================================================================
