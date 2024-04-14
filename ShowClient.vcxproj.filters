@@ -147,6 +147,9 @@
     <ClCompile Include="common\packets\BufferPacket.cpp">
       <Filter>Source Files\common\packets</Filter>
     </ClCompile>
+    <ClCompile Include="ShowClient\IOController.cpp">
+      <Filter>Source Files\ShowClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShowClient\Client.hpp">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="common\packets\BufferPacket.hpp">
       <Filter>Source Files\common\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowClient\IOController.hpp">
+      <Filter>Source Files\ShowClient</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

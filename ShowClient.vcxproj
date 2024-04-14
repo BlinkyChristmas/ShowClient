@@ -32,6 +32,7 @@
     <ClCompile Include="ShowClient\bone\BlinkPru.cpp" />
     <ClCompile Include="ShowClient\Client.cpp" />
     <ClCompile Include="ShowClient\ClientConfiguration.cpp" />
+    <ClCompile Include="ShowClient\IOController.cpp" />
     <ClCompile Include="ShowClient\LightController.cpp" />
     <ClCompile Include="ShowClient\lightfile\lightfile.cpp" />
     <ClCompile Include="ShowClient\lightfile\lightheader.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="ShowClient\bone\BlinkPru.hpp" />
     <ClInclude Include="ShowClient\Client.hpp" />
     <ClInclude Include="ShowClient\ClientConfiguration.hpp" />
+    <ClInclude Include="ShowClient\IOController.hpp" />
     <ClInclude Include="ShowClient\LightController.hpp" />
     <ClInclude Include="ShowClient\lightfile\lightfile.hpp" />
     <ClInclude Include="ShowClient\lightfile\lightheader.hpp" />
