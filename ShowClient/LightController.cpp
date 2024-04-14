@@ -84,6 +84,7 @@ auto LightController::updateLight(int frame ) -> void {
 #if defined(BEAGLE)
     auto [data,length] = this->dataForFrame(frame);
     if (data != nullptr && length != 0 ){
+        DBGMSG(std::cout, "We are telling pru to write: "s + std::to_string(length));
         pru0.setData(data, length);
         pru1.setData(data, length);
     }

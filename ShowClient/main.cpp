@@ -270,7 +270,7 @@ auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool{
     auto payload = static_cast<BufferPacket*>(packet.get()) ;
     auto length = payload->length()  - 8 ;
     auto data = std::vector<std::uint8_t>(length,0) ;
-    
+    DBGMSG(std::cout, "We think the buffer to load is: "s + std::to_string(length));
     lightController.loadBuffer(payload->packetData());
     musicController.clear() ;
     return true ;
