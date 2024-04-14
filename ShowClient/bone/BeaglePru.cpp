@@ -1,7 +1,6 @@
 // Copyright © 2024 Charles Kerr. All rights reserved.
 
 #include "BeaglePru.hpp"
-#define BEAGLE
 
 #include <stdexcept>
 #include <fstream>
