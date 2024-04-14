@@ -13,6 +13,9 @@ add_executable(ShowClient
     ./ShowClient/bone/BeaglePru.hpp
     ./ShowClient/bone/BlinkPru.cpp
     ./ShowClient/bone/BlinkPru.hpp
+    ./ShowClient/bone/PruModes.hpp
+    ./ShowClient/bone/PruConstants.hpp
+
 
     ./ShowClient/Client.cpp
     ./ShowClient/Client.hpp
