@@ -186,6 +186,11 @@ auto LightController::stop() -> void {
     }
     is_playing = false ;
     has_error = false ;
+#if defined(BEAGLE)
+    pru0.clear();
+    pru1.clear();
+#endif
+
 }
 
 // ===============================================================================
