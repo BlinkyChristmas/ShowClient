@@ -60,9 +60,7 @@ auto BeaglePru::mapPRU() -> bool {
     auto size = 3072;
     auto zero = 0 ;
     auto outmode = 0 ;
-    auto buffer = std::vector<unsigned char>(3072, 0 );
-    mapped_address = reinterpret_cast<std::uint8_t*>(temp) ;
-
+    this->clear(mapped_address+16,PRUMAPSIZE-16) ;
     //DBGMSG(std::cout, "Setting mode");
     std::copy(reinterpret_cast<unsigned char*>(&outmode),reinterpret_cast<unsigned char*>(&outmode)+4, mapped_address) ;
     std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + 4) ;
