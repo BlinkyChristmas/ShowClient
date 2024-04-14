@@ -6,31 +6,24 @@
 #include <string>
 #include <iostream>
 
-enum class PruNumber {
-  zero=0,one=1,invalid=2
-};
-
+#include "PruModes.hpp"
+#include "PruConstants.hpp"
 class BeaglePru {
-protected:
-    static const std::string firmware_location ;
-    static const std::string firmware_state ;
-    static const std::string runing_state ;
-    static const std::string offline_state ;
-    static const std::string halt_state ;
+public:
     
-    static constexpr size_t PRUMAPSIZE = 8192 ;
-    static constexpr auto INDEX_TYPE = 0 ;
-    static constexpr auto INDEX_BITREG = 4 ;
-    static constexpr auto INDEX_DATAREADY = 8 ;
-    static constexpr auto INDEX_OUTPUTCOUNT = 12 ;
-    static constexpr auto INDEX_PRUOUTPUT = 16 ;
- 
+protected:
+    
+    
     PruNumber pru_number ;
     
     std::uint8_t *mapped_address;
     
+    int output_size ;
+    
     auto mapPRU() -> bool ;
     auto unmapPRU() -> void ;
+    
+    auto loadData(const std::uint8_t *ptrToData, int length) const -> bool ;
 public:
     BeaglePru(PruNumber pruNumber);
     virtual ~BeaglePru() ;
@@ -38,6 +31,8 @@ public:
     auto address() -> std::uint8_t* ;
     auto firmware() const -> std::string ;
     auto state() const -> std::string ;
+    auto setData(const std::uint8_t *ptrToData, int length, int offsetInPruMemory) -> bool ;
+    auto clear(int offsetInPruMemory,int length) -> bool ;
 };
 
 #endif /* BeaglePru_hpp */

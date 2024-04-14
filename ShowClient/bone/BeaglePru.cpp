@@ -1,6 +1,7 @@
 // Copyright © 2024 Charles Kerr. All rights reserved.
 
 #include "BeaglePru.hpp"
+#define BEAGLE
 
 #include <stdexcept>
 #include <fstream>
@@ -17,13 +18,6 @@
 #include "utility/strutil.hpp"
 
 using namespace std::string_literals ;
-
-// ==============================================================================
-const std::string BeaglePru::firmware_location = "/sys/class/remoteproc/remoteproc%i/firmware"s ;
-const std::string BeaglePru::firmware_state = "/sys/class/remoteproc/remoteproc%i/state"s ;;
-const std::string BeaglePru::runing_state = "running"s;
-const std::string BeaglePru::offline_state = "offline"s;
-const std::string BeaglePru::halt_state = "stop"s;
 
 // ==============================================================================
 auto BeaglePru::unmapPRU() -> void {
@@ -46,7 +40,7 @@ auto BeaglePru::mapPRU() -> bool {
     }
     //DBGMSG(std::cout, "Determine address");
     // Now we get to map the memory of the PRU (the 4K memory region)
-    off_t prumem = (pru_number == PruNumber::zero ? 0x4a300000 : 0x4a302000) ; // These are the two region address
+    off_t prumem = (pru_number == PruNumber::zero ? PRU0_MEMORYSPACE : PRU1_MEMORYSPACE) ; // These are the two region address
     auto fd = ::open("/dev/mem", O_RDWR | O_SYNC) ;
     if (fd <0) {
         // we couldn't open it
@@ -89,7 +83,7 @@ auto BeaglePru::state() const -> std::string  {
 #if !defined(BEAGLE)
     return "" ;
 #else
-    auto path = util::format(firmware_state,static_cast<int>(pru_number)+1) ;
+    auto path = util::format(PRU_FIRMWARE_STATE,static_cast<int>(pru_number)+1) ;
     auto input = std::ifstream(path) ;
     if (!input.is_open()) {
         throw std::runtime_error("Unable to obtain state information: "s+path);
@@ -145,7 +139,7 @@ auto BeaglePru::firmware() const -> std::string {
 #if !defined(BEAGLE)
     return "blinkylight-fw" ;
 #else
-    auto firmpath = util::format(firmware_location, static_cast<int>(pru_number)+1) ;
+    auto firmpath = util::format(PRU_FIRMWARE_LOCATION, static_cast<int>(pru_number)+1) ;
     auto input = std::ifstream(firmpath) ;
     if (!input.is_open()) {
         throw std::runtime_error("Unable to obtain firmware from: "s + firmpath);
@@ -163,3 +157,25 @@ auto BeaglePru::firmware() const -> std::string {
 #endif
 }
 
+// =========================================================================================================
+auto BeaglePru::setData(const std::uint8_t *ptrToData, int length, int offsetInPruMemory) -> bool {
+#if defined(BEAGLE)
+    if (this->mapped_address == nullptr || (length + offsetInPruMemory > PRUMAPSIZE)) {
+        return false ;
+    }
+    std::copy(ptrToData,ptrToData+length,mapped_address + offsetInPruMemory) ;
+#endif
+    return true ;
+}
+// =========================================================================================================
+auto BeaglePru::clear(int offsetInPruMemory,int length) -> bool {
+#if defined(BEAGLE)
+    if (this->mapped_address == nullptr || (length + offsetInPruMemory > PRUMAPSIZE)) {
+        return false ;
+    }
+    auto buffer = std::vector<std::uint8_t>(length,0) ;
+    return setData(buffer.data(), length, offsetInPruMemory);
+#else
+    return true ;
+#endif
+}

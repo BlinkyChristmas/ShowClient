@@ -8,9 +8,9 @@
 #include "utility/strutil.hpp"
 
 using namespace std::string_literals ;
-
+#include "bone/PruConstants.hpp"
 //======================================================================
-PRUConfig::PRUConfig():pru(0),mode(0),offset(0),length(3072){
+PRUConfig::PRUConfig():pru(PruNumber::zero),mode(PruModes::SSD),length(0){
     
 }
 
@@ -21,20 +21,29 @@ PRUConfig::PRUConfig(const std::string &line):PRUConfig() {
     try {
         switch (values.size()) {
             default:
-            case 4:{
-                length = std::stoi(values[3],nullptr,0) ;
-                [[fallthrough]] ;
-            }
             case 3:{
-                offset = std::stoi(values[2],nullptr,0) ;
+                length = std::stoi(values[2],nullptr,0) ;
                 [[fallthrough]] ;
             }
             case 2:{
-                mode = std::stoi(values[1],nullptr,0) ;
+                auto utype = util::upper(values[1]) ;
+                if (utype == "SSD"){
+                    mode = PruModes::SSD ;
+                }
+                else if (utype == "DMX") {
+                    mode = PruModes::DMX ;
+                }
+                else if (utype == "WS2812") {
+                    mode = PruModes::WS2812 ;
+                }
                 [[fallthrough]] ;
             }
             case 1:{
-                pru = std::stoi(values[0],nullptr,0) ;
+                auto temp  = std::stoi(values[0],nullptr,0) ;
+                pru = PruNumber::zero ;
+                if (temp != 0) {
+                    pru = PruNumber::one;
+                }
                 [[fallthrough]] ;
             }
                 
@@ -43,15 +52,15 @@ PRUConfig::PRUConfig(const std::string &line):PRUConfig() {
         }
     }
     catch(...) {
-        pru = 0 ;
-        mode = 0 ;
-        offset = 0 ;
-        length = 3072 ;
+        pru = PruNumber::zero ;
+        mode = PruModes::SSD ;
+        length = 0 ;
     }
 }
 
+/*
 //======================================================================
 auto PRUConfig::describe() const -> std::string {
-    return std::to_string(pru) + ","s + std::to_string(mode) + ","s + std::to_string(offset) + ","s + std::to_string(length);
+    return std::to_string(pru) + ","s + std::to_string(mode) + ","s + std::to_string(length);
 }
-
+*/

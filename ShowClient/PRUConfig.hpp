@@ -6,20 +6,16 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
-
+#include "bone/PruModes.hpp"
 //======================================================================
 struct PRUConfig {
-    static constexpr auto MODE_SSD = 0 ;
-    static constexpr auto MODE_DMX = 1 ;
-    static constexpr auto MODE_WS2812 = 2 ;
     
-    int pru ;
-    int mode ;
-    int offset ;
+    PruNumber pru ;
+    PruModes mode;
     int length ;
     PRUConfig() ;
     PRUConfig(const std::string &line) ;
-    auto describe() const -> std::string ;
+    //auto describe() const -> std::string ;
 };
 
 

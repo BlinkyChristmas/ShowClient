@@ -32,8 +32,6 @@ class LightController : public IOController {
     
     int framePeriod ;
     
-    bool file_mode ;
-    
     LightFile lightFile ;
     PRUConfig config0 ;
     PRUConfig config1 ;

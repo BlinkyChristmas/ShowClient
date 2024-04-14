@@ -65,6 +65,8 @@
 		566435D62BC7F16A0093C309 /* BufferPacket.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BufferPacket.hpp; sourceTree = "<group>"; };
 		56AC2FA62BCA6AEB005349C2 /* IOController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOController.cpp; sourceTree = "<group>"; };
 		56AC2FA72BCA6AEB005349C2 /* IOController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IOController.hpp; sourceTree = "<group>"; };
+		56AC2FA92BCC3F53005349C2 /* PruModes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PruModes.hpp; sourceTree = "<group>"; };
+		56AC2FAA2BCC3FAA005349C2 /* PruConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PruConstants.hpp; sourceTree = "<group>"; };
 		56ACA1D32BC6F61D00819071 /* AM335X-PRU-RPROC-PRUCAPE-00A0.dts.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AM335X-PRU-RPROC-PRUCAPE-00A0.dts.example"; sourceTree = "<group>"; };
 		56ACA1D42BC6F61D00819071 /* blinkylight.dts */ = {isa = PBXFileReference; lastKnownFileType = text; path = blinkylight.dts; sourceTree = "<group>"; };
 		56ACA1D52BC6F61D00819071 /* WorkingDTS.dts */ = {isa = PBXFileReference; lastKnownFileType = text; path = WorkingDTS.dts; sourceTree = "<group>"; };
@@ -392,6 +394,8 @@
 				56E975E52BC17B9C00AA1B50 /* BeaglePru.hpp */,
 				56E975E62BC17B9C00AA1B50 /* BlinkPru.cpp */,
 				56E975E72BC17B9C00AA1B50 /* BlinkPru.hpp */,
+				56AC2FA92BCC3F53005349C2 /* PruModes.hpp */,
+				56AC2FAA2BCC3FAA005349C2 /* PruConstants.hpp */,
 			);
 			path = bone;
 			sourceTree = "<group>";
@@ -672,7 +676,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 52PWP3G4T7;
+				DEVELOPMENT_TEAM = CF264WE69M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -682,7 +686,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 52PWP3G4T7;
+				DEVELOPMENT_TEAM = CF264WE69M;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					ASIO_STANDALONE,

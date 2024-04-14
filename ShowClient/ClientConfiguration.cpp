@@ -81,8 +81,8 @@ auto ClientConfiguration::processKeyValue(const std::string &key, const std::str
         }
         else if (ukey == "PRU") {
             auto pru = PRUConfig(value)  ;
-            if (pru.pru >=0 && pru.pru <= 1) {
-                pruSetting.at(pru.pru) = pru ;
+            if (pru.pru == PruNumber::zero || pru.pru == PruNumber::one) {
+                pruSetting.at(static_cast<int>(pru.pru)) = pru ;
             }
         }
     }

@@ -18,10 +18,7 @@ auto LightController::tick(const asio::error_code &ec,asio::steady_timer* timer 
         auto frame = 0 ;
         {
             auto lock = std::lock_guard(frame_access);
-            
-            if (file_mode) {
-                current_frame += 1 ;
-            }
+            current_frame += 1 ;
             frame = current_frame ;
         }
         updateLight(frame);
@@ -70,7 +67,6 @@ auto LightController::clearLoaded() -> void {
     data_buffer = std::vector<std::uint8_t>() ;
 
     data_name = "" ;
-    file_mode = true ;
     is_loaded = false ;
     has_error = false ;
 #if defined(BEAGLE)
@@ -96,19 +92,13 @@ auto LightController::dataForFrame(int frame) -> std::pair<const std::uint8_t*,i
     const std::uint8_t *ptr = nullptr ;
     auto length = 0 ;
     if (is_loaded){
-        if (!file_mode){
-            ptr = data_buffer.data() ;
-            length = static_cast<int>(data_buffer.size());
-        }
-        else {
-            length = lightFile.frameLength() ;
-            ptr = lightFile.dataForFrame(frame);
-        }
+        length = lightFile.frameLength() ;
+        ptr = lightFile.dataForFrame(frame);
     }
     return std::make_pair(ptr, length);
 }
 // ===============================================================================
-LightController::LightController():IOController(),timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), file_mode(true),   framePeriod(FRAMEPERIOD){
+LightController::LightController():IOController(),timer(io_context), pru0(PruNumber::zero), pru1(PruNumber::one), framePeriod(FRAMEPERIOD){
     
     timerThread = std::thread(&LightController::runThread,this) ;
 }
@@ -135,14 +125,14 @@ auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &confi
 
 // =============================================================================
 auto LightController::loadBuffer(const std::vector<std::uint8_t> &data) -> bool {
-    clearLoaded();
     if (!is_enabled){
         return true;
     }
-    file_mode = false ;
-    data_buffer = data ;
-    //DBGMSG(std::cout, "Buffer loaded was: "s + std::to_string(data_buffer.size()));
-    is_loaded = true ;
+    if (isPlaying()){
+        return false ;
+    }
+    pru0.setData(data.data(), static_cast<int>(data.size()));
+    pru1.setData(data.data(), static_cast<int>(data.size()));
     return true ;
 }
 

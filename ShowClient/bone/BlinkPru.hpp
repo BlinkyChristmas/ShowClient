@@ -8,9 +8,8 @@
 #include <utility>
 #include <cstdint> 
 
-enum class PruModes {
-    SSD,DMX,WS2812,UNKNOWN
-};
+#include "PruModes.hpp"
+#include "PruConstants.hpp"
 
 class BlinkPru : public BeaglePru {
     static constexpr auto INDEX_TYPE = 0 ;
@@ -18,26 +17,28 @@ class BlinkPru : public BeaglePru {
     static constexpr auto INDEX_DATAREADY = 8 ;
     static constexpr auto INDEX_OUTPUTCOUNT = 12 ;
     static constexpr auto INDEX_PRUOUTPUT = 16 ;
+    static constexpr auto PRU_MAX_SPACE = PRUMAPSIZE - INDEX_PRUOUTPUT ;
+    
     static constexpr auto zero = std::int32_t(0) ;
     static constexpr auto one = std::int32_t(1) ;
 
-    int offset ;
-    int length ;
+    int length ;    
+    PruModes current_mode ;
+    int current_mode_size ;
+    
+    auto setDataReady(bool state) -> void ;
  public:
     static const std::string BLINK_FIRMWARE ;
 
     BlinkPru(PruNumber pruNumber) ;
     ~BlinkPru();
     
-    auto setMode(PruModes mode) -> bool ;
+    auto setMode(PruModes mode,int desired_length = 0) -> bool ;
     auto mode() const -> PruModes ;
-    auto setData(const std::uint8_t *data, int length, int offset  ) -> bool ;
-    auto setData(const std::uint8_t *data, int length ) -> bool ;
     auto setConfig(const PRUConfig &config)->bool ;
-    auto destination() const -> std::pair<std::uint8_t*,int> ;
     auto checkFirmware() -> bool ;
     auto checkState() -> bool ;
     auto clear() -> void ;
-    
+    auto setData(const std::uint8_t *data,int data_length) -> bool ;
 };
 #endif /* BlinkPru_hpp */
