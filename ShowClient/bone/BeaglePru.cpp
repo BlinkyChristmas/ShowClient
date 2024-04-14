@@ -66,7 +66,7 @@ auto BeaglePru::mapPRU() -> bool {
     std::copy(reinterpret_cast<unsigned char*>(&bit),reinterpret_cast<unsigned char*>(&bit)+4, mapped_address + 4) ;
     std::copy(reinterpret_cast<unsigned char*>(&size),reinterpret_cast<unsigned char*>(&size)+4, mapped_address + 12) ;
     std::copy(reinterpret_cast<const unsigned char*>(&zero),reinterpret_cast<const unsigned char*>(&zero)+4, mapped_address + 8);
-    std::copy(buffer.begin(),buffer.end(),mapped_address + 16) ;
+    
 
 #endif
     return true ;
