@@ -50,7 +50,6 @@ int main(int argc, const char * argv[]) {
     }
     if (exitcode == EXIT_FAILURE) {
         ledController.flash();
-        
     }
     else {
         ledController.clear();

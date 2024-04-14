@@ -47,7 +47,7 @@ auto StatusController::clear() -> void {
 // ==================================================================
 auto StatusController::flash() -> void {
     for (auto &entry:leds) {
-        entry.setState(LedState::OFF);
+        entry.setState(LedState::FLASH,true);
     }
 }
 
