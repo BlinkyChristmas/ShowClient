@@ -113,7 +113,7 @@ auto BeaglePru::state() const -> std::string  {
 BeaglePru::BeaglePru(PruNumber pruNumber):pru_number(pruNumber),mapped_address(nullptr){
 #if defined(BEAGLE)
     if (pru_number == PruNumber::zero || pru_number == PruNumber::one) {
-        DBGMSG(std::cout, "Mapping PRU");
+        //DBGMSG(std::cout, "Mapping PRU");
         if (!mapPRU()) {
             DBGMSG(std::cerr, "Error Mapping PRU");
 
