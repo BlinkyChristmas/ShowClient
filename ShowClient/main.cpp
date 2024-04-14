@@ -272,6 +272,7 @@ auto processBuffer(ClientPointer connection,PacketPointer packet) -> bool{
     auto data = std::vector<std::uint8_t>(length,0) ;
     
     lightController.loadBuffer(payload->packetData());
+    musicController.clear() ;
     return true ;
 }
 // ================================================================================================
