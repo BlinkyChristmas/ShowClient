@@ -151,7 +151,7 @@ auto BeagleLed::setState(LedState state,bool force) -> bool {
         setOnOff(true );
     }
     currentState = state ;
-#if !defined(BEAGLEBONE)
+#if !defined(BEAGLE)
     std::cout << this->describe() << std::endl;
 #endif
     return true ;
