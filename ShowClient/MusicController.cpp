@@ -192,10 +192,10 @@ auto MusicController::start(std::int32_t frame ,int period ) -> bool {
         return false ;
     }
     if (!is_enabled || !is_loaded){
-        DBGMSG(std::cout, "Should say ok because not enabled or not loaded");
+        
         return true ;
     }
-    DBGMSG(std::cout, "Music is loaded: "s + std::to_string(is_loaded));
+    
     {
         auto lock = std::lock_guard(frame_access);
         current_frame = frame ;
