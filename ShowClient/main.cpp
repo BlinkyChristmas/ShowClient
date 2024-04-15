@@ -236,6 +236,14 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
                     got_play_error = true ;
                 }
             }
+            else if (!load_error && musicController.hasError()) {
+                DBGMSG(std::cout, "Error on "s + musicController.name());
+                auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.name());
+                client->send(packet);
+                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+                got_play_error = true ;
+
+            }
         }
         if (lightController.isEnabled()){
             if (lightController.isLoaded()) {
@@ -245,6 +253,14 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
                     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
                     got_play_error = true ;
                 }
+            }
+            else if (!load_error && lightController.hasError()) {
+                DBGMSG(std::cout, "Error on "s + lightController.name());
+                auto packet = ErrorPacket(ErrorPacket::CatType::LIGHT, lightController.name());
+                client->send(packet);
+                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+                got_play_error = true ;
+
             }
         }
         if (!got_play_error && !load_error) {
