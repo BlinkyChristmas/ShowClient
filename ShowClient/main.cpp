@@ -176,18 +176,34 @@ auto runLoop(ClientConfiguration &config) -> bool {
 // Packet routines
 // ==============================================================================================
 
+bool load_error = false ;
+
 // ==============================================================================================
 auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<LoadPacket*>(packet.get()) ;
-    
+    load_error = false ;
+    ledController.setState(StatusLed::PLAY, LedState::OFF) ;
+
     auto music = payload->musicName() ;
     auto light = payload->lightName() ;
     //DBGMSG(std::cout, util::format("Load: %s, %s",music.c_str(),light.c_str()));
     if (musicController.isEnabled()){
-        musicController.load(music);
+        if (!musicController.load(music)) {
+            load_error = true ;
+            ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+            auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, music);
+            client->send(packet);
+            ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+        }
     }
     if (lightController.isEnabled()) {
-        lightController.load(light) ;
+        if (!lightController.load(light)) {
+            load_error = true ;
+            ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+            auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, light);
+            client->send(packet);
+            ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+       }
     }
     return true ;
 }
@@ -207,34 +223,25 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<PlayPacket*>(packet.get()) ;
     auto state = payload->state() ;
     auto frame = payload->frame() ;
-    ledController.setState(StatusLed::PLAY, (state?LedState::ON: LedState::OFF)) ;
+
     if (state) {
+        
         if (musicController.isEnabled()){
-            if (musicController.hasError()){
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
-                DBGMSG(std::cout, "Error on "s + musicController.name());
-                client->send(packet);
-                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+            if (musicController.isLoaded()){
+                if (!musicController.start(frame)) {
+                    DBGMSG(std::cout, "Error on "s + musicController.name());
+                    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
+                    client->send(packet);
+                    ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
 
-            }
-            else if (!musicController.start(frame)) {
-                DBGMSG(std::cout, "Error on "s + musicController.name());
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
-                client->send(packet);
-                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-
+                }
             }
         }
         if (lightController.isEnabled()){
-            if (lightController.hasError()){
-                auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, lightController.name());
-                DBGMSG(std::cout, "Error on "s + lightController.name());
-                client->send(packet);
-                ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-            }
-            else if (!lightController.start(frame)) {
-                
-                
+            if (lightController.isLoaded()) {
+                if (!lightController.start(frame)) {
+                   ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+                }
             }
         }
         
@@ -242,6 +249,7 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     else {
         musicController.stop() ;
         lightController.stop();
+        ledController.setState(StatusLed::PLAY, LedState::OFF) ;
     }
             
     return true ;

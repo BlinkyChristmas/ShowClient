@@ -54,7 +54,6 @@ class MusicController: public IOController  {
     auto requestData(std::uint8_t *data,std::uint32_t frameCount, double time, RtAudioStreamFlags status ) -> int ;
     auto errorCallback(RtAudioErrorType type, const std::string &errorText) -> void ;
     auto setMusicErrorCallback(MusicError function) -> void ;
-
 };
 
 #endif /* MusicController_hpp */
