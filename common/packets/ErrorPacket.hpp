@@ -25,7 +25,7 @@ class ErrorPacket : public Packet {
     
 public:
     enum CatType {
-        AUDIO,PLAY,UNKNOWN
+        INITIAL,AUDIO,LIGHT,UNKNOWN
     };
     static auto nameForCategory(CatType type) -> const std::string & ;
     static const std::unordered_map<CatType,std::string> CATNAME ;

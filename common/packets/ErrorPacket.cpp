@@ -10,7 +10,7 @@ using namespace std::string_literals ;
 
 //======================================================================
 const std::unordered_map<ErrorPacket::CatType,std::string> ErrorPacket::CATNAME {
-    {CatType::AUDIO,"AUDIO"s},{CatType::PLAY,"PLAY"s},{CatType::UNKNOWN,"UNKNOWN"s}
+    {CatType::INITIAL,"INITIAL"s},{CatType::AUDIO,"AUDIO"s},{CatType::LIGHT,"AUDIO"s},{CatType::UNKNOWN,"UNKNOWN"s}
 };
 
 //======================================================================

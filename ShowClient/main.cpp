@@ -191,7 +191,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
         if (!musicController.load(music)) {
             load_error = true ;
             ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-            auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, music);
+            auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, music);
             client->send(packet);
             ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
         }
@@ -200,7 +200,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
         if (!lightController.load(light)) {
             load_error = true ;
             ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-            auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, light);
+            auto packet = ErrorPacket(ErrorPacket::CatType::LIGHT, light);
             client->send(packet);
             ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
         }
@@ -230,7 +230,7 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
             if (musicController.isLoaded()){
                 if (!musicController.start(frame)) {
                     DBGMSG(std::cout, "Error on "s + musicController.name());
-                    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
+                    auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.name());
                     client->send(packet);
                     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
                     got_play_error = true ;
@@ -240,6 +240,8 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
         if (lightController.isEnabled()){
             if (lightController.isLoaded()) {
                 if (!lightController.start(frame)) {
+                    auto packet = ErrorPacket(ErrorPacket::CatType::LIGHT, lightController.name());
+                    client->send(packet);
                     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
                     got_play_error = true ;
                 }
@@ -298,7 +300,7 @@ auto stopCallback(ClientPointer client) -> void {
 // ================================================================================================
 auto musicError(MusicPointer music) -> void {
     DBGMSG(std::cout, "Error on "s + musicController.name());
-    auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
+    auto packet = ErrorPacket(ErrorPacket::CatType::AUDIO, musicController.name());
     client->send(packet) ;
     musicController.stop() ;
     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
