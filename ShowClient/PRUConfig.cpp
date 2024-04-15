@@ -10,7 +10,7 @@
 using namespace std::string_literals ;
 #include "bone/PruConstants.hpp"
 //======================================================================
-PRUConfig::PRUConfig():pru(PruNumber::zero),mode(PruModes::SSD),length(0){
+PRUConfig::PRUConfig():pru(PruNumber::zero),mode(PruModes::SSD),length(0),inputOffset(0){
     
 }
 
@@ -21,8 +21,12 @@ PRUConfig::PRUConfig(const std::string &line):PRUConfig() {
     try {
         switch (values.size()) {
             default:
+            case 4:{
+                length = std::stoi(values[3],nullptr,0) ;
+                [[fallthrough]] ;
+            }
             case 3:{
-                length = std::stoi(values[2],nullptr,0) ;
+                inputOffset = std::stoi(values[2],nullptr,0) ;
                 [[fallthrough]] ;
             }
             case 2:{

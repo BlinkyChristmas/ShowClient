@@ -76,13 +76,26 @@ auto LightController::clearLoaded() -> void {
 }
 
 // ===============================================================================
+auto LightController::updatePRU(BlinkPru &pru,int offset,const std::uint8_t *data,int length) -> void {
+#if defined(BEAGLE)
+    auto pru_length  = length - offset ;
+    if (pru_length <= 0 ) {
+        return ;
+    }
+    pru.setData(data+offset, pru_length);
+    
+#endif
+}
+
+// ===============================================================================
 auto LightController::updateLight(int frame ) -> void {
 #if defined(BEAGLE)
     auto [data,length] = this->dataForFrame(frame);
     if (data != nullptr && length != 0 ){
+        
         //DBGMSG(std::cout, "We are telling pru to write: "s + std::to_string(length));
-        pru0.setData(data, length);
-        pru1.setData(data, length);
+        this->updatePRU(pru0, config0.inputOffset, data, length);
+        this->updatePRU(pru1, config1.inputOffset, data, length);
     }
 #endif
 }
@@ -119,6 +132,8 @@ LightController::~LightController(){
 
 // ===============================================================================
 auto LightController::setPRUInfo(const PRUConfig &config0,const PRUConfig &config1)-> void {
+    this->config0 = config0 ;
+    this->config1 = config1 ;
     pru0.setConfig(config0);
     pru1.setConfig(config1);
 }

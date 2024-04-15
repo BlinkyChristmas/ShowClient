@@ -40,8 +40,9 @@ class LightController : public IOController {
     auto userSetEnabled(bool state) -> void final;
 
     auto clearLoaded() -> void ;
+    auto updatePRU(BlinkPru &pru,int offset,const std::uint8_t *data,int length) -> void ;
     auto updateLight(int frame) -> void ;
-    auto dataForFrame(int frame) -> std::pair<const std::uint8_t*,int> ;
+    auto dataForFrame(int frame) -> std::pair<const std::uint8_t*,int>  ;
  public:
     LightController() ;
     ~LightController() ;

@@ -13,6 +13,7 @@ struct PRUConfig {
     PruNumber pru ;
     PruModes mode;
     int length ;
+    int inputOffset ;
     PRUConfig() ;
     PRUConfig(const std::string &line) ;
     //auto describe() const -> std::string ;
