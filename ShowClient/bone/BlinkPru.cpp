@@ -49,7 +49,7 @@ auto BlinkPru::setMode(PruModes mode, int desired_length) -> bool {
         }
         default:
             length = 0 ;
-            current_mode_size = PRU_MAX_SPACE;
+            current_mode_size = PRU_MAX_SPACE ;
             current_mode = PruModes::UNKNOWN ;
 
             return false ;

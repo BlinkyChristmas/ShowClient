@@ -17,7 +17,7 @@ class BlinkPru : public BeaglePru {
     static constexpr auto INDEX_DATAREADY = 8 ;
     static constexpr auto INDEX_OUTPUTCOUNT = 12 ;
     static constexpr auto INDEX_PRUOUTPUT = 16 ;
-    static constexpr auto PRU_MAX_SPACE = PRUMAPSIZE - INDEX_PRUOUTPUT ;
+    static constexpr auto PRU_MAX_SPACE = PRUMAPSIZE - INDEX_PRUOUTPUT - 1 ;
     
     static constexpr auto zero = std::int32_t(0) ;
     static constexpr auto one = std::int32_t(1) ;

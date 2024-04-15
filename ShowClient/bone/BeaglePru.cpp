@@ -157,10 +157,11 @@ auto BeaglePru::firmware() const -> std::string {
 // =========================================================================================================
 auto BeaglePru::setData(const std::uint8_t *ptrToData, int length, int offsetInPruMemory) -> bool {
 #if defined(BEAGLE)
-    if (this->mapped_address == nullptr || (length + offsetInPruMemory > PRUMAPSIZE)) {
+    if (this->mapped_address == nullptr || (length + offsetInPruMemory >= PRUMAPSIZE)) {
+        DBGMSG(std::cout,"Was asked an invalid thing to write: Mapped address null? "s + std::to_string(this->mapped_address == nullptr) + " Length was: "s + std::to_string(length)+ " Offset was: " std::to_string(offsetInPruMemory));
         return false ;
     }
-    DBGMSG(std::cout,"Asked to copy: "s + std::to_string(length) + " to offset: "s + std::to_string(offsetInPruMemory));
+    //DBGMSG(std::cout,"Asked to copy: "s + std::to_string(length) + " to offset: "s + std::to_string(offsetInPruMemory));
     std::copy(ptrToData,ptrToData+length,mapped_address + offsetInPruMemory) ;
 #endif
     return true ;
