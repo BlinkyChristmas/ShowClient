@@ -88,7 +88,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
     routines.insert_or_assign(PacketType::SHOW,std::bind(&processShow,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::NOP,std::bind(&processNop,std::placeholders::_1,std::placeholders::_2)) ;
     routines.insert_or_assign(PacketType::BUFFER,std::bind(&processBuffer,std::placeholders::_1,std::placeholders::_2)) ;
-
+    
     client = std::make_shared<Client>(config.name,routines) ;
     client->setStopCallback(std::bind(&stopCallback,std::placeholders::_1));
     client->setConnectdBeforeRead(std::bind(&initialConnect,std::placeholders::_1));
@@ -109,7 +109,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
                 musicController.setDataInformation(config.musicPath, config.musicExtension);
                 lightController.setEnabled(config.useLight) ;
                 lightController.setDataInformation(config.lightPath, config.lightExtension);
-
+                
             }
         }
         catch(...) {
@@ -142,7 +142,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
                     
                     if (client->is_open()) {
                         client->shutdown() ;
-
+                        
                         client->close() ;
                         musicController.clear();
                         lightController.clear();
@@ -183,7 +183,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<LoadPacket*>(packet.get()) ;
     load_error = false ;
     ledController.setState(StatusLed::PLAY, LedState::OFF) ;
-
+    
     auto music = payload->musicName() ;
     auto light = payload->lightName() ;
     //DBGMSG(std::cout, util::format("Load: %s, %s",music.c_str(),light.c_str()));
@@ -203,7 +203,7 @@ auto processLoad(ClientPointer connection,PacketPointer packet) -> bool {
             auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, light);
             client->send(packet);
             ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-       }
+        }
     }
     return true ;
 }
@@ -223,9 +223,9 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
     auto payload = static_cast<PlayPacket*>(packet.get()) ;
     auto state = payload->state() ;
     auto frame = payload->frame() ;
-
+    
     if (state) {
-        
+        auto got_play_error = false ;
         if (musicController.isEnabled()){
             if (musicController.isLoaded()){
                 if (!musicController.start(frame)) {
@@ -233,25 +233,28 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
                     auto packet = ErrorPacket(ErrorPacket::CatType::PLAY, musicController.name());
                     client->send(packet);
                     ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
-
+                    got_play_error = true ;
                 }
             }
         }
         if (lightController.isEnabled()){
             if (lightController.isLoaded()) {
                 if (!lightController.start(frame)) {
-                   ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+                    ledController.setState(StatusLed::PLAY, LedState::FLASH) ;
+                    got_play_error = true ;
                 }
             }
         }
-        
+        if (!got_play_error && !load_error) {
+            ledController.setState(StatusLed::PLAY, LedState::ON) ;
+        }
     }
     else {
         musicController.stop() ;
         lightController.stop();
         ledController.setState(StatusLed::PLAY, LedState::OFF) ;
     }
-            
+    
     return true ;
 }
 
