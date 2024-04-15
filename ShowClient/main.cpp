@@ -255,6 +255,7 @@ auto processPlay(ClientPointer connection,PacketPointer packet) -> bool {
         musicController.stop() ;
         lightController.stop();
         ledController.setState(StatusLed::PLAY, LedState::OFF) ;
+        load_error = false;
     }
     
     return true ;
