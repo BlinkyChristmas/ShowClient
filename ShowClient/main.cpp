@@ -98,6 +98,7 @@ auto runLoop(ClientConfiguration &config) -> bool {
     musicController.setMusicErrorCallback(std::bind(&musicError,std::placeholders::_1));
     lightController.setPRUInfo(config.pruSetting[0], config.pruSetting[1]) ;
     lightController.setEnabled(config.useLight) ;
+    lightController.clear() ;
     lightController.setDataInformation(config.lightPath, config.lightExtension);
     while (config.runSpan.inRange()) {
         ledController.setState(StatusLed::RUN, LedState::ON) ;
@@ -118,8 +119,15 @@ auto runLoop(ClientConfiguration &config) -> bool {
         if (config.connectTime.inRange()) {
             // We should be connected!
             if (!client->is_open()) {
-                ledController.setState(StatusLed::CONNECT, LedState::FLASH) ;
                 
+                ledController.setState(StatusLed::CONNECT, LedState::FLASH) ;
+                musicController.stop() ;
+                lightController.stop() ;
+                lightController.clear() ;
+                ledController.setState(StatusLed::PLAY, LedState::OFF) ;
+                ledController.setState(StatusLed::SHOW, LedState::OFF) ;
+
+            
                 // we are not open!
                 if (client->connect(config.serverIP, config.serverPort, config.clientPort)) {
                     // We connected!
@@ -144,17 +152,21 @@ auto runLoop(ClientConfiguration &config) -> bool {
                         client->shutdown() ;
                         
                         client->close() ;
-                        musicController.clear();
-                        lightController.clear();
+                        musicController.stop();
+                        lightController.stop();
                     }
                 }
             }
         }
         else {
-            // We should not be closed down
+            // We should  be closed down
             if (client->is_open()){
                 client->close() ;
-                DBGMSG(std::cout,"Disconnecting from: "s + client->ip());
+                musicController.stop();
+                lightController.stop() ;
+                lightController.clear() ;
+                ledController.setState(StatusLed::SHOW, LedState::OFF);
+                ledController.setState(StatusLed::PLAY, LedState::OFF);
                 ledController.setState(StatusLed::CONNECT, LedState::OFF) ;
             }
         }

@@ -176,7 +176,7 @@ NOTE: The system device tree is located:
 2. Go to the directory: cd /opt/source/dtb-5.10-ti
 3. Update it: git pull
 4. Make the device overlays. Enter: make
-
+5. Install them: make install_arm
 // **********************************************************************************
 // At this point, you should have a PRU/Device overlay development environment
 // **********************************************************************************
