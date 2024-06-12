@@ -23,6 +23,18 @@ else
     fi
 fi
 done
+
+# Check to ensure we have an ethernet connection
+/root/bin/checkip.sh
+if [ $? -eq 0 ]; then
+# we failed, bomb out
+echo "No valid ip address found"
+echo  "timer"  | tee  /sys/class/leds/beaglebone\:green\:usr1/trigger
+echo "1"  | tee  /sys/class/leds/beaglebone\:green\:usr1/brightness
+echo "timer"  | tee  /sys/class/leds/beaglebone\:green\:usr2/trigger
+echo "1"  | tee  /sys/class/leds/beaglebone\:green\:usr2/brightness
+exit 0
+fi
 if [ $PRUREADY -eq 1 ]
 then
 #    echo "Starting the pru" | tee -a /root/mystartupmessage
