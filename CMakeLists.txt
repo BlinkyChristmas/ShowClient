@@ -31,6 +31,8 @@ add_executable(ShowClient
     ./ShowClient/LightController.hpp
     ./ShowClient/IOController.cpp
     ./ShowClient/IOController.hpp
+    ./ShowClient/MixerControl.hpp
+    ./ShowClient/MixerControl.cpp
 
     ./ShowClient/wavfile/chunkheader.cpp
     ./ShowClient/wavfile/chunkheader.hpp

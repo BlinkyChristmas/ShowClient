@@ -44,6 +44,7 @@
 		56E976272BC3253100AA1B50 /* mwavfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E9761E2BC3253100AA1B50 /* mwavfile.cpp */; };
 		56E976282BC3253100AA1B50 /* wavfmtchunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976202BC3253100AA1B50 /* wavfmtchunk.cpp */; };
 		56E9762B2BC37EE300AA1B50 /* MusicController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56E976292BC37EE300AA1B50 /* MusicController.cpp */; };
+		56F83CA82D42ACE0005775EE /* MixerControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56F83CA72D42ACE0005775EE /* MixerControl.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -160,6 +161,8 @@
 		56E976212BC3253100AA1B50 /* wavfmtchunk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wavfmtchunk.hpp; sourceTree = "<group>"; };
 		56E976292BC37EE300AA1B50 /* MusicController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MusicController.cpp; sourceTree = "<group>"; };
 		56E9762A2BC37EE300AA1B50 /* MusicController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MusicController.hpp; sourceTree = "<group>"; };
+		56F83CA62D42ACE0005775EE /* MixerControl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MixerControl.hpp; sourceTree = "<group>"; };
+		56F83CA72D42ACE0005775EE /* MixerControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MixerControl.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +278,8 @@
 				56E975ED2BC17D5300AA1B50 /* StatusController.hpp */,
 				56E976292BC37EE300AA1B50 /* MusicController.cpp */,
 				56E9762A2BC37EE300AA1B50 /* MusicController.hpp */,
+				56F83CA62D42ACE0005775EE /* MixerControl.hpp */,
+				56F83CA72D42ACE0005775EE /* MixerControl.cpp */,
 				56AC2FA62BCA6AEB005349C2 /* IOController.cpp */,
 				56AC2FA72BCA6AEB005349C2 /* IOController.hpp */,
 				56134E5E2BC6005100D79BCA /* LightController.cpp */,
@@ -515,6 +520,7 @@
 				56E9758A2BC15EC200AA1B50 /* timeutil.cpp in Sources */,
 				56E976262BC3253100AA1B50 /* fileheader.cpp in Sources */,
 				56E975812BC15EC200AA1B50 /* LoadPacket.cpp in Sources */,
+				56F83CA82D42ACE0005775EE /* MixerControl.cpp in Sources */,
 				56E976232BC3253100AA1B50 /* lightfile.cpp in Sources */,
 				56AC2F562BC95A31005349C2 /* BufferPacket.cpp in Sources */,
 				56E975862BC15EC200AA1B50 /* ShowPacket.cpp in Sources */,
