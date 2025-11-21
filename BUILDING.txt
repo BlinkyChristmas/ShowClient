@@ -6,6 +6,7 @@ Then enter:;
   cmake . -B ./build -DCMAKE_BUILD_TYPE=Release
         If building on the Beaglebone, and to get the PRU capability enter
   cmake . -B ./build -DCMAKE_BUILD_TYPE=Release -DBEAGLE=1
+        if building in standalone mode, add a -DSTANDALONE=1
 
   cmake --build ./build --config Release
   
