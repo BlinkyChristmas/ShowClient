@@ -8,7 +8,7 @@
 #include "utility/dbgutil.hpp"
 #include "utility/timeutil.hpp"
 #include "utility/strutil.hpp"
-
+#include "MixerControl.hpp"
 using namespace std::string_literals;
 
 /* ************************************************************************************************************************************
@@ -168,7 +168,7 @@ auto MusicController::load(const std::string &musicname) -> bool {
     }
     
     this->data_name = musicname ;
-
+    setVolume(86) ;
     auto path = data_location / std::filesystem::path(this->data_name+data_extension) ;
     return load(path);
 }

@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-auto setVolume(int card, long volume) -> long ;
+auto setVolume( long volume) -> long ;
 
 
 #endif /* MixerControl_hpp */
