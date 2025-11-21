@@ -8,7 +8,7 @@ auto setVolume(long volume) -> long {
     snd_mixer_t *handle;
     snd_mixer_elem_t *elem;
     snd_mixer_selem_id_t *sid;
-    const char * card = "Default"
+    const char * card = "Default" ;
     int err ;
     if ( (err = snd_mixer_open( &handle,0)) < 0 ) {
         std::cerr << "Error opening mixer: " << snd_strerror(err) << std::endl;
@@ -31,7 +31,7 @@ auto setVolume(long volume) -> long {
     }
     snd_mixer_selem_id_alloca(&sid);
     snd_mixer_selem_id_set_index(sid, 0);
-    snd_mixer_selem_id_set_name(sid, control);
+    snd_mixer_selem_id_set_name(sid, card);
 
     if ((elem = snd_mixer_find_selem(handle, sid)) == NULL) {
         std::cerr << "Error finding mixer control: " << snd_strerror(err) << std::endl;

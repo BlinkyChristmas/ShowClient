@@ -168,4 +168,9 @@ target_include_directories(ShowClient
         ${PROJECT_SOURCE_DIR}/ShowClient/
 )
 
+if (STANDALONE)
+    target_compile_definitions(ShowClient PRIVATE
+        SHOW_STANDALONE=1
+    )
+endif (STANDALONE)
 
