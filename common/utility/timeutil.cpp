@@ -185,6 +185,9 @@ namespace util {
     
     // ===========================================================================================
     auto HourRange::inRange(const ourclock::time_point &now ) const -> bool {
+#if defined(STANDALONE)
+        return true;
+#endif
         auto hnow = HourMinute::now() ;
         auto value = startTime <= hnow ;
         value = value &&  (endTime > hnow );
@@ -192,6 +195,9 @@ namespace util {
     }
     // ===========================================================================================
     auto HourRange::inRange(const HourMinute &value) const -> bool {
+#if defined(STANDALONE)
+        return true;
+#endif
         auto rvalue = startTime <= value ;
         rvalue = rvalue && ( this->endTime > value) ;
         return rvalue ;
@@ -297,7 +303,10 @@ namespace util {
     
     // ===========================================================================================
     auto MonthRange::inRange(const ourclock::time_point &now  ) const -> bool {
-        // first determine the month to use for the start
+#if defined(STANDALONE)
+        return true;
+#endif
+       // first determine the month to use for the start
         auto hnow = MonthDay(now) ;
         if (hnow >= startDay && hnow <= endDay) {
             return true ;
