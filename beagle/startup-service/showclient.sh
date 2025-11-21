@@ -25,6 +25,7 @@ fi
 done
 
 # Check to ensure we have an ethernet connection
+# Comment out if in standalone
 /root/bin/checkip.sh
 if [ $? -eq 0 ]; then
 # we failed, bomb out
