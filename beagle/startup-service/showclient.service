@@ -4,7 +4,7 @@ After=pru-led.service
 Wants=multi-user.target
 
 [Service]
-Type=idle
+Type=exec
 User=root
 WorkingDirectory=/root/startup
 ExecStart=/root/startup/showclient.sh
